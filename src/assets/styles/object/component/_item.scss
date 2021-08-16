@@ -1,0 +1,88 @@
+.item {
+    max-width: 400px;
+    margin: 0 auto 0 auto;
+    .item-link {
+        box-shadow: rgba(0, 0, 0, .1) 0px 1px 20px 0px;
+        padding: 20px;
+        border-radius: 2.4rem;
+        display: block;
+        transition: all .4s ease;
+        &:hover {
+            box-shadow: rgba(0, 0, 0, .14) 0px 1px 30px 0px;
+        }
+        figure {
+            margin: 0;
+            img {
+                margin: 0 0 20px 0;
+            }
+            figcaption {
+                margin: 0;
+                .title {
+                    color: $color-dark-gray;
+                    margin: 0 0 20px;
+                    * {
+                        font-weight: bold;
+                        font-size: 16px;
+                        line-height: 24px;
+                    }
+                }
+                .info {
+                    color: $color-gray;
+                    display: flex;
+                    justify-content: space-between;
+                    margin: 0 0 20px;
+                    ul {
+                        li {
+                            font-size: 12px;
+                        }
+                    }
+                }
+                .position {
+                    display: flex;
+                    justify-content: flex-end;
+                    &:not(:last-of-type) {
+                        margin: 0 0 20px;
+                    }
+                    .price {
+                        display: flex;
+                        color: $color-gray;
+                        dt {
+                            font-size: 16px;
+                            margin: 0 10px 0 0;
+                            font-weight: bold;
+                        }
+                        dd {
+                            font-size: 16px;
+                            font-weight: bold;
+                            &.tax {
+                                &::after {
+                                    content: ' + Tax';
+                                    font-size: 14px;
+                                }
+                            }
+                        }
+                    }
+                    .amazon {
+                        display: flex;
+                        align-items: center;
+                        color: $color-white;
+                        border-radius: 12px;
+                        background: $color-amazon;
+                        padding: 14px 20px;
+                        font-weight: bold;
+                        svg {
+                            width: 64px;
+                            height: auto;
+                            margin: 0 10px 0 0;
+                            fill-rule: evenodd;
+                            fill: $color-white;
+                        }
+                    }
+                }
+                p {
+                    margin: 0;
+                }
+            }
+        }
+    }
+}

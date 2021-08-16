@@ -1,0 +1,561 @@
+main {
+    &.page-post-form {
+        .mce-toolbar .mce-btn-group > div {
+            white-space: normal;
+        }
+        .inner {
+            max-width: calc(102.4rem + 12rem);
+            .switchbox {
+                margin: 0;
+                padding: 0;
+                .tab-item {
+                    width: calc(100% / 2);
+                    height: 50px;
+                    border-bottom: 0.2rem solid $color-dark-gray;
+                    background: $color-input-gray;
+                    line-height: 50px;
+                    font-size: 14px;
+                    letter-spacing: 1.4px;
+                    text-align: center;
+                    display: block;
+                    float: left;
+                    text-align: center;
+                    font-weight: bold;
+                    transition: all 0.2s ease;
+                    &:hover {
+                        opacity: 0.75;
+                    }
+                }
+                input[name="tab-item"] {
+                    display: none;
+                    &:checked + .tab-item {
+                        background-color: $color-dark-gray;
+                        color: $color-white;
+                    }
+                }
+                #original:checked ~ #original_content,
+                #template:checked ~ #template_content {
+                    display: block;
+                }
+                .form {
+                    padding: 50px 0 0;
+                    display: none;
+                    clear: both;
+                    overflow: hidden;
+                    .description {
+                        margin: 0 0 40px;
+                        a {
+                            text-decoration: underline;
+                        }
+                    }
+                    .wpuf-success {
+                        color: $color-dark-gray;
+                        background: $color-input-gray;
+                        border: none;
+                    }
+                }
+            }
+            .wpuf-form {
+                li {
+                    padding: 0;
+                    margin: 0 0 2rem;
+                    .wpuf-fields {
+                        width: 65.2rem;
+                        margin: 0 0 0 7.2rem;
+                        input.textfield,
+                        textarea.textareafield,
+                        select.category,
+                        input[type="url"] {
+                            font-size: 1.2rem;
+                            letter-spacing: .2rem;
+                            border-bottom: .2rem solid $color-dark-gray;
+                            background: $color-input-gray;
+                            padding: 2rem;
+                            width: 100%;
+                            appearance: none;
+                            border-radius: 0;
+                        }
+                        #wpuf-__1-631-pickfiles,
+                        #wpuf-__2-631-pickfiles,
+                        #wpuf-__3-631-pickfiles,
+                        #wpuf-__4-631-pickfiles,
+                        #wpuf-featured_image-631-pickfiles,
+                        #wpuf-featured_image-302-pickfiles {
+                            display: block;
+                            width: 100%;
+                            padding: 2rem;
+                            font-size: 12px;
+                            text-align: center;
+                            border: 1px solid #f0f0f0;
+                            cursor: pointer;
+                            box-shadow: none;
+                            background: none;
+                        }
+                        #wpuf-insert-image-container {
+                            .wpuf-insert-image {
+                                border-radius: 0;
+                                background: $color-white;
+                                border: solid 1px $color-input-gray;
+                                padding: 10px 15px;
+                                margin: 0 0 10px;
+                                display: inline-block;
+                                box-shadow: none;
+                            }
+                        }
+                        #html5_1dpfqmse3g0g69i77fkh9vog6_container {
+                            top: 0;
+                        }
+                        .file-selector {
+                            height: auto;
+                            border-radius: 0;
+                        }
+                        .wpuf-error-msg {
+                            color: $color-akabeni;
+                        }
+                        .wpuf-image-wrap {
+                            display: flex;
+                            width: 100%;
+                            background-image: none;
+                            background: $color-input-gray;
+                            .attachment-name {
+                                width: 138px;
+                                height: 138px;
+                                img {
+                                    object-fit: cover;
+                                }
+                            }
+                            .wpuf-file-input-wrap {
+                                width: calc(100% - 173px);
+                                margin: 0 15px 0 20px;
+                                height: 100%;
+                                input[type="text"],
+                                textarea {
+                                    width: 100%;
+                                    border: none;
+                                }
+                            }
+                            .caption {
+                                left: 10px;
+                                top: 10px;
+                                width: 26px;
+                                margin: 0;
+                                .wpuf-drag-file {
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                    .wpuf-label {
+                        width: 30rem;
+                        label {
+                            display: flex;
+                            justify-content: flex-start;
+                            align-items: center;
+                            padding: 2rem 0;
+                            .required {
+                                color: $color-akabeni;
+                                margin: 0 0 0 .4rem;
+                            }
+                        }
+                    }
+                    #wp-post_content_302-wrap {
+                        #mceu_1 {
+                            .mce-i-link {
+                                &::before {
+                                    content: '';
+                                    background: url(../images/icon/link.png) no-repeat center;
+                                    background-size: cover;
+                                    width: 18px;
+                                    height: 18px;
+                                    margin: 1px;
+                                    display: block;
+                                }
+                            }
+                        }
+                    }
+                    &.wpuf-submit {
+                        width: 65.2rem;
+                        margin: 0 0 0 auto;
+                        input {
+                            width: 100%;
+                            padding: 2rem;
+                            font-size: 12px;
+                            border: 1px solid #f0f0f0;
+                            cursor: pointer;
+                        }
+                    }
+                    &.has-error {
+                        background: transparent;
+                    }
+                }
+            }
+        }
+    }
+}
+.page-post-form {
+    #wp-link-wrap {
+        #wp-link  {
+            #link-modal-title {
+                padding: 20px 36px 20px 30px;
+                height: auto;
+                border-bottom: none;
+                line-height: 24px;
+                font-family: '游ゴシック',YuGothic,KoburinaGo-W3-83pv-RKSJ-H,Helvetica,Arial,'Hiragino Kaku Gothic ProN','ＭＳ Ｐゴシック',Meiryo,sans-serif;
+            }
+            #wp-link-close {
+                height: 65px;
+                width: 65px;
+            }
+            .howto {
+                margin: 0 0 20px;
+            }
+            #link-options {
+                .wp-link-text-field {
+                    margin: 20px 0 0;
+                }
+                label {
+                    width: 100%;
+                    display: flex;
+                    input[type=text] {
+                        margin: 0;
+                        padding: 20px;
+                        background: $color-input-gray;
+                        border-bottom: 0.2rem solid $color-dark-gray;
+                    }
+                    span {
+                        display: flex;
+                        align-items: center;
+                        width: 30%;
+                        max-width: 30%;
+                        text-align: left;
+                    }
+                }
+            }
+            .link-target {
+                margin: 20px 0 0;
+                label {
+                    max-width: 100%;
+                    #wp-link-target {
+                        margin: 3.5px 6px 0 0;
+                    }
+                }
+            }
+            #link-selector {
+                top: 65px;
+                padding: 0 30px;
+            }
+            #wplink-link-existing-content,
+            #search-panel {
+                display: none;
+            }
+            .screen-reader-text {
+                display: none;
+            }
+        }
+    }
+    #mceu_23 {
+        #mceu_21 {
+            .mce-ico { 
+                &::before {
+                    content: '';
+                    background: url(../images/icon/edit.png) no-repeat center;
+                    background-size: cover;
+                    width: 18px;
+                    height: 18px;
+                    margin: 1px;
+                    display: block;
+                }
+            }
+        }
+        #mceu_22 {
+            .mce-ico {
+                &::before {
+                    content: '';
+                    background: url(../images/icon/cancel.png) no-repeat center;
+                    background-size: cover;
+                    width: 18px;
+                    height: 18px;
+                    margin: 1px;
+                    display: block;
+                }
+            }
+        }
+    }
+    #mceu_27 {
+        background: transparent;
+        border-color: transparent;
+        box-shadow: none;
+        &:hover {
+            border-color: $color-dark-gray;
+        }
+    }
+    #mceu_16 {
+        .mce-ico { 
+            &::before {
+                content: '';
+                background: url(../images/icon/close.png) no-repeat center;
+                background-size: cover;
+                width: 18px;
+                height: 18px;
+                margin: 1px;
+                display: block;
+            }
+        }
+    }
+    #mceu_11,
+    #mceu_12,
+    #mceu_13,
+    #mceu_14,
+    #mceu_15,
+    #mceu_34,
+    #mceu_36,
+    #mceu_37,
+    #mceu_38,
+    #mceu_39,
+    #mceu_40 {
+        display: none;
+    }
+    .dashicons-admin-generic {
+        &::before {
+            content: '';
+            background: url(../images/icon/gear.svg) no-repeat center;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background-size: cover;
+        }
+    }
+    .dashicons-editor-break {
+        &::before {
+            content: '';
+            background: url(../images/icon/check.png) no-repeat center;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background-size: cover;
+        }
+    }
+    .mce-i-resize {
+        &::before {
+            content: '';
+            background: url(../images/icon/expansion.png) no-repeat center;
+            display: block;
+            width: 10px;
+            height: 10px;
+            transform: scale(-1,1);
+            background-size: cover;
+        }
+    }
+    #wp-link-close {
+        &::before {
+            content: '';
+            background: url(../images/icon/close.png) no-repeat center;
+            display: block;
+            width: 15px;
+            height: 15px;
+            margin: 0 auto;
+            background-size: cover;
+        }
+    }
+    .swal2-container {
+        .swal2-modal {
+            .swal2-title {
+                display: none;
+            }
+            .swal2-content {
+                margin: 0 0 20px;
+            }
+        }
+        .swal2-buttonswrapper {
+            .swal2-styled {
+                width: calc(50% - 10px);
+                &.swal2-styled {
+                    margin: 0 10px 0 0;
+                    background-color: $color-dark-gray;
+                    border-left-color: $color-dark-gray;
+                    border-right-color: $color-dark-gray;
+                }
+                &.swal2-cancel {
+                    margin: 0 0 0 10px;
+                }
+            }
+        }
+    }
+    .ac_results {
+        overflow: scroll;
+        max-height: 200px;
+        background: $color-white;
+    }
+}
+@media screen and (max-width: 1440px) {
+    main {
+        &.page-post-form {
+            .inner {
+                .wpuf-form {
+                    li {
+                        .wpuf-fields {
+                            width: 70%;
+                            margin: 0 0 0 7.5%;
+                        }
+                        .wpuf-label {
+                            width: 22.5%;
+                            label {
+                            }
+                        }
+                        &.wpuf-submit {
+                            width: 70%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 480px) {
+    main {
+        &.page-post-form {
+            .inner {
+                .wpuf-form {
+                    li {
+                        .wpuf-fields {
+                            width: 100%;
+                            margin: 0;
+                            overflow: hidden;
+                            input[type="text"],
+                            textarea.textareafield,
+                            select.category,
+                            input[type="url"] {
+                                font-size: 16px;
+                                transform: scale(0.85);
+                                letter-spacing: 2px;
+                                width: 115%;
+                                right: 7.5%;
+                                position: relative;
+                            }
+                            .wpuf-image-wrap {
+                                .wpuf-file-input-wrap {
+                                    overflow: hidden;
+                                    input[type="text"],
+                                    textarea {
+                                        padding: 0;
+                                        font-size: 16px;
+                                        transform: scale(0.85);
+                                        letter-spacing: 2px;
+                                        width: 115%;
+                                        right: 7.5%;
+                                        position: relative;
+                                    }
+                                }
+                            }
+                        }
+                        .wpuf-label {
+                            width: 100%;
+                            label {
+                                padding: 0;
+                                margin: 0 0 1rem;
+                            }
+                        }
+                        &.wpuf-submit {
+                            width: 100%;
+                            margin: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .page-post-form {
+        .mce-inline-toolbar-grp {
+            max-width: 84%;
+            .wp-link-input {
+                margin: 0;
+                input {
+                    font-family: '游ゴシック',YuGothic,KoburinaGo-W3-83pv-RKSJ-H,Helvetica,Arial,'Hiragino Kaku Gothic ProN','ＭＳ Ｐゴシック',Meiryo,sans-serif;
+                    font-size: 16px;
+                    line-height: 24px;
+                }
+            }
+        }
+        #wp-link-wrap {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            right: unset;
+            width: calc(100% - 40px);
+            margin: 0 auto;
+            border-radius: 20px;
+            #wp-link {
+                #link-modal-title {
+                    font-size: 16px;
+                }
+                #link-options {
+                    label {
+                        flex-wrap: wrap;
+                        flex-direction: column;
+                        span {
+                            width: 100%;
+                            max-width: 100%;
+                            padding: 0;
+                            margin: 0 0 10px;
+                        }
+                        input[type=text] {
+                            font-size: 16px;
+                            transform: scale(0.85);
+                            letter-spacing: 2px;
+                            width: 115%;
+                            right: 7.5%;
+                            position: relative;
+                        }
+                   }
+                }
+                .link-target {
+                    label {
+                        padding: 0 0 0 20px;
+                        position: relative;
+                        span {
+                            display: none !important;
+                        }
+                        #wp-link-target {
+                            margin: 3.5px 6px 0 0;
+                            position: absolute;
+                            left: 0;
+                            margin: 2.5px 0 0;
+                        }
+                    }
+                }
+                .submitbox {
+                    .button {
+                        line-height: 30px;
+                    }
+                }
+            }
+        }
+        .swal2-container {
+            .swal2-modal {
+                .swal2-title {
+                    display: none;
+                }
+                .swal2-content {
+                    margin: 0 0 20px;
+                }
+            }
+            .swal2-buttonswrapper {
+                .swal2-styled {
+                    width: calc(50% - 10px);
+                    &.swal2-styled {
+                        margin: 0 10px 0 0;
+                        background-color: $color-dark-gray;
+                        border-left-color: $color-dark-gray;
+                        border-right-color: $color-dark-gray;
+                    }
+                    &.swal2-cancel {
+                        margin: 0 0 0 10px;
+                    }
+                }
+            }
+        }
+        .ac_results {
+            max-height: 100px;
+        }
+    }
+}

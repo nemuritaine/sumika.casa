@@ -1,0 +1,20 @@
+<?php get_header(); ?>
+    article.inner 
+        .header
+            h1.title <?php the_title(); ?>
+        input#contact(type="radio", name="tab_item", checked="")
+        label.tab_item(for="contact")
+            h2 一般お問い合わせ
+        input#artist(type="radio", name="tab_item")
+        label.tab_item(for="artist")
+            h2 作家様お問い合わせ
+        input#company(type="radio", name="tab_item")
+        label.tab_item(for="company")
+            h2 企業様お問い合わせ
+        section.tab_content#contact_content
+            <?php echo do_shortcode('[contact-form-7 id="130" title="contact"]') ?>
+        section.tab_content#artist_content
+            <?php echo do_shortcode('[contact-form-7 id="171" title="artist"]') ?>
+        section.tab_content#company_content
+            <?php echo do_shortcode('[contact-form-7 id="170" title="company"]') ?>
+<?php get_footer(); ?>

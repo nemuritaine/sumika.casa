@@ -1,0 +1,23 @@
+.sns_icon {
+    img,
+    svg {
+        width: 30px;
+        height: 30px;
+    }
+    @include under(480px) {
+        display: none;
+    }
+}
+
+.icon_time {
+    &::before {
+        content: '';
+        display: inline-block;
+        background-image: url(../images/icon/time.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        width: 13px;
+        height: 13px;
+        margin: 0 6px 0 0;
+    }
+}

@@ -1,0 +1,150 @@
+main {
+    &.page-room-tour {
+        form {
+            label {
+                color: $color-dark-gray;
+                font-size: 16px;
+                display: flex;
+                flex-wrap: wrap;
+                width: 100%;
+                &:last-of-type {
+                    margin: 0 0 40px;
+                    .optional {
+                        border-bottom: 2px solid $color-dark-gray;
+                    }
+                    .wpcf7-form-control-wrap {
+                        border-bottom: 2px solid $color-dark-gray;
+                    }
+                }
+                .optional {
+                    font-size: 14px;
+                    padding: 30px 0 30px 20px;
+                    width: 30%;
+                    border-top: 2px solid $color-dark-gray;
+                    font-weight: bold;
+                    &.required {
+                        &::before {
+                            content: '必須';
+                            font-size: 10px;
+                            color: red;
+                            border-radius: 4px;
+                            padding: 3px 6px;
+                            border: solid 1px red;
+                            margin: 0 10px 0 0;
+                        }
+                    }
+                    &:not(.required) {
+                        &::before {
+                            content: '任意';
+                            font-size: 10px;
+                            color: $color-dark-gray;
+                            border-radius: 4px;
+                            padding: 3px 6px;
+                            border: solid 1px $color-dark-gray;
+                            margin: 0 10px 0 0;
+                        }
+                    }
+                }
+                .wpcf7-form-control-wrap {
+                    width: 70%;
+                    border-top: 2px solid $color-input-gray;
+                    .wpcf7-form-control {
+                        font-size: 14px;
+                        padding: 30px 0 30px 20px;
+                        height: 100%;
+                        width: 100%;
+                        border: none;
+                    }
+                }
+                .wpcf7-not-valid-tip {
+                    color: #f00;
+                    position: absolute;
+                    top: 50%;
+                    right: 0;
+                    font-size: 14px;
+                    line-height: 24px;
+                    transform: translate(0, -50%);
+                }
+            }
+            br {
+                display: none;
+            }
+            .wpcf7-list-item {
+                margin: 0;
+            }
+            .wpcf7c-conf {
+                background-color: $color-input-gray;
+            }
+            .wpcf7-mail-sent-ok,
+            .wpcf7-response-output,
+            .wpcf7-validation-errors,
+            .wpcf7-acceptance-missing {
+                border: 2px solid $color-input-gray;
+                margin: 40px 0 0 0;
+                padding: 20px;
+            }
+        }
+        .position {
+            display: flex;
+            justify-content: flex-start;
+            input[type="submit"],
+            input[type="button"] {
+                display: block;
+                cursor: pointer;
+                padding: 20px;
+                width: 300px;
+                font-size: 12px;
+                letter-spacing: 1.4px;
+                text-align: center;
+                border: 1px solid $color-input-gray;
+                background: $color-input-gray;
+            }
+        }
+    }
+}
+@media screen and (max-width: 480px) {
+    main {
+        &.page-room-tour {
+            form {
+                label {
+                    &:not(.todo) {
+                        flex-direction: column;
+                    }
+                    &:last-of-type {
+                        .optional {
+                            border-bottom: none;
+                        }
+                    }
+                    .optional {
+                        width: 100%;
+                        padding: 25px 15px 10px;
+                    }
+                    .wpcf7-form-control-wrap {
+                        width: 100%;
+                        border-top: none;
+                        overflow: hidden;
+                        .wpcf7-form-control {
+                            font-size: 16px;
+                            padding: 10px 15px 25px;
+                            width: 125%;
+                            left: -12.5%;
+                            position: relative;
+                            transform: scale(0.8);
+                        }
+                    }
+                    .wpcf7-not-valid-tip {
+                        right: 15px;
+                        font-size: 12px;
+                        transform: translate(0, calc(-50% - 8px));
+                    }
+                }
+            }
+            .position {
+                input[type="submit"],
+                input[type="button"] {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

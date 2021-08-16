@@ -1,0 +1,364 @@
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        visibility: hidden;
+    }
+    1% {
+        visibility: visible;
+    }
+    100% {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+@keyframes fadeOut {
+    0% {
+        visibility: visible;
+        opacity: 1;   
+    }
+    1% {
+        visibility: hidden;
+    }
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+.user-edit {
+    .profile {
+        span {
+            font-size: 16px;
+            margin: 0 0 24px;
+            letter-spacing: 6px;
+            padding: 0 0 12px;
+            font-family: 'Wandeln';
+            display: block;
+            text-align: center;
+            position: relative;
+            &::before,
+            &::after {
+                content: '';
+                width: 16px;
+                height: 1px;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            &::before {
+                background: $color-light-gray;
+                bottom: 5px;
+            }
+            &::after {
+                background: $color-gray;
+                bottom: 0;
+            }
+        }
+        a {
+            text-decoration: underline;
+        }
+        .paragraph {
+            padding: 30px 40px;
+            background: $color-input-gray;
+            .title {
+                margin: 0 0 10px;
+                p {
+                    font-size: 18px;
+                    line-height: 30px;
+                    letter-spacing: 2px;
+                    font-weight: 600;
+                }
+            }
+            .text {
+                dl {
+                    display: flex;
+                    dt {
+                        width: 150px;
+                        line-height: 30px;
+                    }
+                    dd {
+                        line-height: 30px;
+                        width: calc(100% - 150px);
+                        h2 {
+                            font-size: 14px;
+                            line-height: 30px;
+                            letter-spacing: 1px;
+                            font-weight: 500;
+                            margin: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .comment {
+        a {
+            text-decoration: underline;
+        }
+    }
+    .room-tour {
+        position: relative;
+        user-select: none;
+        &::before {
+            content: '';
+            visibility: visible;
+            opacity: 1;
+            position: absolute;
+            display: block;
+            bottom: 20px;
+            left: 20px;
+            background: url(../images/icon/bag.png) no-repeat;
+            background-position: 10px center;
+            background-size: 19px 19px;
+            background-color: rgba(0,0,0,.8);
+            width: 38px;
+            height: 38px;
+            border-radius: 19px;
+            transition: width .15s ease-out;
+            z-index: 1;
+        }
+        &::after {
+            content: '商品を見る';
+            font-size: 12px;
+            letter-spacing: 1.4px;
+            color: $color-white;
+            position: absolute;
+            bottom: 20px;
+            line-height: 38px;
+            left: 60px;
+            opacity: 0;
+            visibility: hidden;
+            animation: fadeOut .2s ease-out;
+            z-index: 1;
+        }
+        figcaption {
+            position: absolute;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            .filter {
+                display: block;
+                height: 100%;
+                width: 100%;
+            }
+            .item {
+                position: absolute;
+                transform: translate(-50%, -50%);
+                display: flex;
+                z-index: 100;
+                > span {
+                    background-color: rgba(255,255,255,.9);
+                    height: 16px;
+                    width: 16px;
+                    border-radius: 8px;
+                    position: absolute;
+                    top: -24px;
+                    left: 50%;
+                    transform: translate(-50%,0) scale(1);
+                    transform-origin: center;
+                    box-shadow: 2px 2px 10px 0 rgba(0,0,0,0.25);
+                }
+                &.right {
+                    > span {
+                        left: 15%;
+                    }
+                    .title {
+                        &::before {
+                            left: 15%;
+                        }
+                    }
+                }
+                &.left {
+                    > span {
+                        left: 85%;
+                    }
+                    .title {
+                        &::before {
+                            left: 85%;
+                        }
+                    }
+                }
+                .title {
+                    visibility: hidden;
+                    opacity: 0;
+                    width: 100%;
+                    max-width: 300px;
+                    padding: 10px 15px;
+                    background: rgba(0,0,0,.8);
+                    border-radius: 5px;
+                    color: $color-white;
+                    &::before {
+                        content: "";
+                        position: absolute;
+                        top: -24px;
+                        left: 50%;
+                        transform: translate(-50%, 0);
+                        border: 12px solid transparent;
+                        border-bottom: 12px solid rgba(0,0,0,.8);
+                    }
+                    h3,
+                    p {
+                        font-size: 12px;
+                        line-height: 18px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        margin: 0;
+                        font-weight: normal;
+                    }
+                }
+            }
+        }
+        &.hover {
+            &::before {
+                width: 120px;
+                transition: width .15s ease-in;
+            }
+            &::after {
+                animation: fadeIn .2s ease-in;
+                visibility: visible;
+                opacity: 1;
+            }
+        }
+        & + .paragraph {
+            margin: 24px 0 0;
+        }
+    }
+}
+@media screen and (max-width: 1279px) {
+    .user-edit {
+        .room-tour {
+            figcaption {
+                .item {
+                    .title {
+                        max-width: 250px;
+                    }
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 1023px) {
+    .user-edit {
+        .room-tour {
+            &::before {
+                width: 120px;
+            }
+            &::after {
+                content: '商品タップ';
+            }
+            figcaption {
+                .filter {
+                    
+                }
+                .item {
+                    
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 768px) {
+    .user-edit {
+        .profile {
+            .paragraph {
+                .title {
+                    p {
+                        font-size: 16px;
+                        line-height: 24px;
+                    }
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 480px) {
+    .user-edit {
+        .profile {
+            .paragraph {
+                .title {
+                    p {
+                        font-size: 16px;
+                    }
+                }
+                padding: 30px;
+                .text {
+                    dl {
+                        dt {
+                            width: 100px;
+                        }
+                        dd {
+                            width: calc(100% - 100px);
+                        }
+                    }
+                }
+            }
+        }
+        .comment {
+        }
+        .room-tour {
+            &::before {
+                height: 30px;
+                width: 30px;
+                background-size: 15px 15px;
+                bottom: 14px;
+                left: 14px;
+                border-radius: 15px;
+                background-position: 7.5px center;
+            }
+            &::after {
+                font-size: 10px;
+                line-height: 29px;
+                bottom: 14px;
+                left: 48px;
+            }
+            figcaption {
+                .item {
+                    > span {
+                        height: 14px;
+                        width: 14px;
+                        border-radius: 7px;
+                        top: -16px;
+                    }
+                    .title {
+                        max-width: 160px;
+                        padding: 5px 8px;
+                        &::before {
+                            top: -16px;
+                            border: 8px solid transparent;
+                            border-bottom: 8px solid rgba(0, 0, 0, 0.8);
+                        }
+                        h3,
+                        p {
+                            font-size: 10px;
+                        }
+                    }
+                    .price {
+                        width: 70px;
+                        &::after {
+                            width: 7px;
+                            height: 7px;
+                            right: 3px;
+                        }
+                        span {
+                            font-size: 10px;
+                            padding: 0 8px 0 0;
+                            &::before {
+                                margin: 0 2px 0 0;
+                                font-size: 10px;
+                            }
+                        }
+                    }
+                }
+            }
+            &.hover {
+                &::before {
+                    width: 100px;
+                }
+                &::after {
+                }
+            }
+        }
+    }
+}

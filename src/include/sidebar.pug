@@ -1,0 +1,42 @@
+ins.adsbygoogle(style="display:inline-block;width:300px;height:600px", data-ad-client="ca-pub-8411870945056099", data-ad-slot="9049992075")
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+article#ranking
+    <?php dynamic_sidebar('aside'); ?>
+    .header
+        .sub-title
+            span PICK UP
+        .title
+            p 人気記事
+    .wrapper
+        | <?php
+        |     setPostViews(get_the_ID());
+        |     $args = array(
+        |         'meta_key' => 'post_views_count',
+        |         'orderby' => 'meta_value_num',
+        |         'order' => 'DESC',
+        |         'post_status' => 'publish',
+        |         'post_type' => 'post',
+        |         'posts_per_page' => 3,
+        |     );
+        |     $my_query = new WP_Query($args);
+        |     if($my_query->have_posts()):
+        |     while ($my_query->have_posts()) : $my_query->the_post();
+        | ?>
+        section
+            a.content(href!="<?php the_permalink() ?>")
+                .image
+                    picture
+                        <?php if(has_post_thumbnail()): ?>
+                            img.cover.lazyload.fadein(data-src!="<?php echo get_the_post_thumbnail_url(get_the_ID(),'thumbnail'); ?>", alt!="<?php the_title(); ?>")
+                        <?php else: ?>
+                            img.cover.lazyload.fadein(src="data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7", data-src!="<?php get_bloginfo('template_url') ?>/images/common/common_eyecatch.jpg", alt!="<?php the_title(); ?>")
+                        <?php endif; ?>
+                .paragraph
+                    .title
+                        h3 <?php the_title(); ?>
+                    .date
+                        time <?php echo get_post_time('Y.m.d D H:i') ?>
+        <?php endwhile; endif; ?>
+        <?php wp_reset_postdata(); ?>
+ins.adsbygoogle(style="display:block", data-ad-client="ca-pub-8411870945056099", data-ad-slot="3212160272", data-ad-format="auto", data-full-width-responsive="true")
+<script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>

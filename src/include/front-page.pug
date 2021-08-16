@@ -1,0 +1,392 @@
+<?php if(!defined('ABSPATH')) exit; ?>
+<?php get_header(); ?>
+	#main-visual.p-page--home__hero
+		.p-page--home__hero__menu
+			.p-page--home__hero__menu__btn
+				.p-page--home__hero__menu__btn--more
+					span 詳しくみる
+				.p-page--home__hero__menu__btn--less
+					span 閉じる
+			button.p-page--home__hero__menu__btn--close
+				svg.svg-icon.icon-close(viewBox="0 0 24 24")
+					path(d="M21 4.565L19.435 3 12 10.435 4.565 3 3 4.565 10.435 12 3 19.435 4.565 21 12 13.565 19.435 21 21 19.435 13.565 12z")
+		.p-page--home__hero__index
+			.p-page--home__hero__index--current
+				.p-page--home__hero__index--num 01
+			.p-page--home__hero__index--total 02
+		.p-page--home__hero__nav
+			button.p-page--home__hero__nav__btn--prev
+				svg(role="img", viewBox="0 0 11.38 6")
+					use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="#shared__arrow")
+			button.p-page--home__hero__nav__btn--next
+				svg(role="img", viewBox="0 0 11.38 6")
+					use(xmlns:xlink="http://www.w3.org/1999/xlink", xlink:href="#shared__arrow")
+		section.p-page--home__hero__page.is-current
+			| <?php
+			| 	setPostViews(get_the_ID());
+			| 	$args = array(
+			|       'meta_key' => 'post_views_count',
+			|       'orderby' => 'meta_value_num',
+			|       'order' => 'DESC',
+			|       'post_status' => 'publish',
+			| 		'posts_per_page' => 1,
+			| 		'post_type' => 'post',
+			| 		'category_name' => 'interior'
+			| 	);
+			| 	$my_query = new WP_Query($args);
+			| 	if($my_query->have_posts()):
+			| 	while ($my_query->have_posts()) : $my_query->the_post();
+			| ?>
+			.p-page--home__hero__page__content
+				h2.p-page--home__hero__ttl Interior
+				.p-page--home__hero__txt
+					<?php if ($post->post_excerpt) { ?>
+						p <? echo $post->post_excerpt; ?>
+					| <?php } else {
+					| 	$summary = strip_tags($post->post_content);
+					| 	$summary = str_replace("\n", "", $summary);
+					| 	$summary = mb_substr($summary, 0, 120). "…";
+					| ?>
+					p <?php echo $summary; ?>
+					<?php } ?>
+			.p-page--home__hero__page__image
+				picture
+					<?php if(has_post_thumbnail()): ?>
+						img.c-ofi--cover(src!="<?php echo get_the_post_thumbnail_url(get_the_ID(),'large'); ?>", alt!="<?php the_title(); ?>")
+					<?php else: ?>
+						img.c-ofi--cover(src!="<?php get_bloginfo('template_url') ?>/images/common/common_eyecatch.jpg", alt!="<?php the_title(); ?>")
+					<?php endif; ?>
+			.p-page--home__hero__page__more
+				.p-page--home__hero__page__more__inner.is-bg1
+					span.p-page--home__hero__page__more__txt Read more
+					.read-more
+						a(href!="<?php the_permalink() ?>")
+							span.text 記事を読む
+							.icon
+								.arrow
+									span
+								.circle
+									svg(xmlns="http://www.w3.org/2000/svg")
+										circle(stroke-dashoffset="0%", stroke-dasharray="300%", cx="50%", cy="50%", r="47%", fill="none", stroke-width="1")
+			.p-page--home__hero__page__expander
+			ul.p-page--home__hero__detail
+				li.p-page--home__hero__detail__item
+					h3.p-page--home__hero__detail__ttl <?php the_title(); ?>
+				li.p-page--home__hero__detail__item
+					span.tag-lists TAG LISTS
+					ul
+						| <?php
+						| 	$count = 10;
+						| 	$tagchk = get_the_tags();
+						| 	if($tagchk) {
+						| 		$wptags = array_slice(get_the_tags(), 0, $count);
+						| 		foreach($wptags as $tag) {
+						| 			echo '<li>'.$tag->name.'</li>';
+						| 		}
+						| 	}
+						| ?>
+				li.p-page--home__hero__detail__item.is-clickable(data-gallery="gallery1")
+					.p-page--home__hero__detail__image
+						img.c-ofi--cover.lazyload(data-src!="<?php echo bloginfo('template_url') ?>/images/category/interior/symbol.jpg", alt="Some image")
+						svg.svg-icon.icon--grid(viewBox="0 0 24 24")
+							path(d="M8.982 8.982h5.988v5.988H8.982zM0 0h5.988v5.988H0zM8.982 17.965h5.988v5.988H8.982zM0 8.982h5.988v5.988H0zM0 17.965h5.988v5.988H0zM17.965 0h5.988v5.988h-5.988zM8.982 0h5.988v5.988H8.982zM17.965 8.982h5.988v5.988h-5.988zM17.965 17.965h5.988v5.988h-5.988z")
+					span.popular-articles-list 人気記事一覧を表示
+			<?php endwhile; endif; ?>
+			#gallery1.p-page--home__hero__gallery
+				| <?php
+				| 	setPostViews(get_the_ID());
+				| 	$args = array(
+				|       'meta_key' => 'post_views_count',
+				|       'orderby' => 'meta_value_num',
+				|       'order' => 'DESC',
+				|       'post_status' => 'publish',
+				| 		'posts_per_page' => 6,
+				| 		'post_type' => 'post',
+				| 		'category_name' => 'interior',
+				| 	);
+				| 	$my_query = new WP_Query($args);
+				| 	if($my_query->have_posts()):
+				| 	while ($my_query->have_posts()): $my_query->the_post();
+				| ?>
+				a.p-page--home__hero__gallery__item(href!="<?php the_permalink() ?>")
+					.p-page--home__hero__gallery__image
+						picture
+							<?php if(has_post_thumbnail()): ?>
+								img.c-ofi--cover.lazyload(src="data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7", data-src!="<?php echo get_the_post_thumbnail_url(get_the_ID(),'medium'); ?>", alt!="<?php the_title(); ?>")
+							<?php else: ?>
+								img.c-ofi--cover.lazyload(src!="<?php get_bloginfo('template_url') ?>/images/common/common_eyecatch.jpg", alt!="<?php the_title(); ?>")
+							<?php endif; ?>
+					.p-page--home__hero__gallery__ttl <?php the_title(); ?>
+				<?php endwhile; endif; wp_reset_postdata(); ?>
+		section.p-page--home__hero__page
+			| <?php
+			| 	setPostViews(get_the_ID());
+			| 	$args = array(
+			|       'meta_key' => 'post_views_count',
+			|       'orderby' => 'meta_value_num',
+			|       'order' => 'DESC',
+			|       'post_status' => 'publish',
+			| 		'posts_per_page' => 1,
+			| 		'post_type' => 'post',
+			| 		'category_name' => 'architecture'
+			| 	);
+			| 	$my_query = new WP_Query($args);
+			| 	if($my_query->have_posts()):
+			| 	while ($my_query->have_posts()) : $my_query->the_post();
+			| ?>
+			.p-page--home__hero__page__content
+				h2.p-page--home__hero__ttl Architect
+				.p-page--home__hero__txt
+					<?php if ($post->post_excerpt) { ?>
+						p <? echo $post->post_excerpt; ?>
+					| <?php } else {
+					| 	$summary = strip_tags($post->post_content);
+					| 	$summary = str_replace("\n", "", $summary);
+					| 	$summary = mb_substr($summary, 0, 120). "…";
+					| ?>
+					p <?php echo $summary; ?>
+					<?php } ?>
+			.p-page--home__hero__page__image
+				picture
+					<?php if(has_post_thumbnail()): ?>
+						img.c-ofi--cover.lazyload(src="data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7", data-src!="<?php echo get_the_post_thumbnail_url(get_the_ID(),'large'); ?>", alt!="<?php the_title(); ?>")
+					<?php else: ?>
+						img.c-ofi--cover.lazyload(src!="<?php get_bloginfo('template_url') ?>/images/common/common_eyecatch.jpg", alt!="<?php the_title(); ?>")
+					<?php endif; ?>
+			.p-page--home__hero__page__more
+				.p-page--home__hero__page__more__inner.is-bg2
+					span.p-page--home__hero__page__more__txt Read more
+					.read-more
+						.mask
+							.clip
+								a(href!="<?php the_permalink() ?>")
+									span.text 記事を読む
+									.icon
+										.arrow
+											span
+										.circle
+											svg(xmlns="http://www.w3.org/2000/svg")
+												circle(stroke-dashoffset="0%", stroke-dasharray="300%", cx="50%", cy="50%", r="47%", fill="none", stroke-width="1")
+			.p-page--home__hero__page__expander
+			ul.p-page--home__hero__detail
+				li.p-page--home__hero__detail__item
+					h3.p-page--home__hero__detail__ttl <?php the_title(); ?>
+				li.p-page--home__hero__detail__item
+					span.tag-lists TAG LISTS
+					ul
+						| <?php
+						| 	$count = 10;
+						| 	$tagchk = get_the_tags();
+						| 	if($tagchk) {
+						| 		$wptags = array_slice(get_the_tags(), 0, $count);
+						| 		foreach($wptags as $tag) {
+						| 			echo '<li>'.$tag->name.'</li>';
+						| 		}
+						| 	}
+						| ?>
+				li.p-page--home__hero__detail__item.is-clickable(data-gallery="gallery2")
+					.p-page--home__hero__detail__image
+						img.c-ofi--cover.lazyload(data-src!="<?php echo bloginfo('template_url') ?>/images/category/architecture/symbol.jpg", alt="Some image")
+						svg.svg-icon.icon--grid(viewBox="0 0 24 24")
+							path(d="M8.982 8.982h5.988v5.988H8.982zM0 0h5.988v5.988H0zM8.982 17.965h5.988v5.988H8.982zM0 8.982h5.988v5.988H0zM0 17.965h5.988v5.988H0zM17.965 0h5.988v5.988h-5.988zM8.982 0h5.988v5.988H8.982zM17.965 8.982h5.988v5.988h-5.988zM17.965 17.965h5.988v5.988h-5.988z")
+					span.popular-articles-list 人気記事一覧を表示
+			<?php endwhile; endif; wp_reset_postdata(); ?>
+			#gallery2.p-page--home__hero__gallery
+				| <?php
+				| 	setPostViews(get_the_ID());
+				| 	$args = array(
+				| 		'posts_per_page' => 6,
+				| 		'post_type' => 'post',
+				|       'meta_key' => 'post_views_count',
+				|       'orderby' => 'meta_value_num',
+				|       'order' => 'DESC',
+				|       'post_status' => 'publish',
+				| 		'category_name' => 'architecture',
+				| 	);
+				| 	$my_query = new WP_Query($args);
+				| 	if($my_query->have_posts()):
+				| 	while ($my_query->have_posts()): $my_query->the_post();
+				| ?>
+				a.p-page--home__hero__gallery__item(href!="<?php the_permalink() ?>")
+					.p-page--home__hero__gallery__image
+						picture
+							<?php if(has_post_thumbnail()): ?>
+								img.c-ofi--cover.lazyload(src="data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7", data-src!="<?php echo get_the_post_thumbnail_url(get_the_ID(),'medium'); ?>", alt!="<?php the_title(); ?>")
+							<?php else: ?>
+								img.c-ofi--cover.lazyload(src!="<?php get_bloginfo('template_url') ?>/images/common/common_eyecatch.jpg", alt!="<?php the_title(); ?>")
+							<?php endif; ?>
+					.p-page--home__hero__gallery__ttl <?php the_title(); ?>
+				<?php endwhile; endif; wp_reset_postdata(); ?>
+	#ranking.p-page--home__ranking
+		.c-inner
+			.p-page--home__header
+				span.p-page--home__ttl--en PICK UP
+				p.p-page--home__ttl--ja 人気記事
+			.p-page--home__article__wrap
+				| <?php
+				| 	setPostViews(get_the_ID());
+				| 	$args = array(
+				|       'meta_key' => 'post_views_count',
+				|       'orderby' => 'meta_value_num',
+				|       'order' => 'DESC',
+				|       'post_status' => 'publish',
+				| 		'posts_per_page' => 4,
+				| 		'post_type' => 'post',
+				| 	);
+				| 	$my_query = new WP_Query($args);
+				| 	if($my_query->have_posts()): while ($my_query->have_posts()): $my_query->the_post();
+				| ?>
+				.p-page--home__article__item
+					a.p-page--home__article__img(href!="<?php the_permalink() ?>")
+						picture
+							<?php if(has_post_thumbnail()): ?>
+								img.c-ofi--cover.lazyload.fadein(src="data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7", data-src!="<?php echo get_the_post_thumbnail_url(get_the_ID(),'full'); ?>", alt!="<?php the_title(); ?>")
+							<?php else: ?>
+								img.c-ofi--cover.lazyload.fadein(src!="<?php get_bloginfo('template_url') ?>/images/common/common_eyecatch.jpg", alt!="<?php the_title(); ?>")
+							<?php endif; ?>
+					.p-page--home__article__txt
+						ul.p-page--home__article__cat
+							<?php $categories = get_the_category($post->ID); ?>
+							<?php if ($categories): foreach ($categories as $category): ?>
+								<li class="c-cat--<?php echo $category->slug; ?>">
+									a(href!="<?php echo get_category_link($category->term_id); ?>") <?php echo $category->name; ?>
+							<?php endforeach; endif; ?>
+						a.p-page--home__article__ttl(href!="<?php the_permalink() ?>") <?php the_title(); ?>
+						time <?php echo get_post_time('Y.m.d D H:i') ?>
+				<?php endwhile; endif; wp_reset_postdata(); ?>
+	#room-tour.p-page--home__room-tour
+		.c-inner
+			.p-page--home__header
+				span.p-page--home__ttl--en ROOM TOUR
+				p.p-page--home__ttl--ja ルームツアー記事
+			.p-page--home__article__wrap.array-fade
+				| <?php
+				| 	$args = array(
+				| 		'posts_per_page' => 4,
+				| 		'orderby'=>'rand',
+				| 		'post_type' => 'post',
+				| 		'tag' => 'ルームツアー',
+				| 	);
+				| ?>
+				<?php $myquery = new WP_Query($args); ?>
+				<?php if($myquery->have_posts()): ?>
+				<?php while($myquery->have_posts()): $myquery->the_post(); ?>
+				.p-page--home__article__item.fade
+					a.p-page--home__article__img(href!="<?php the_permalink() ?>")
+						| <?php $image_id = get_post_thumbnail_id();
+						| 	$image_url = wp_get_attachment_image_src($image_id, 'large');
+						| ?>
+						picture
+							<?php if(has_post_thumbnail()): ?>
+								img.c-ofi--cover.lazyload.fadein(src="data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7", data-src!="<?php echo get_the_post_thumbnail_url(get_the_ID(),'full'); ?>", alt!="<?php the_title(); ?>")
+							<?php else: ?>
+								img.c-ofi--cover.lazyload.fadein(src!="<?php get_bloginfo('template_url') ?>/images/common/common_eyecatch.jpg", alt!="<?php the_title(); ?>")
+							<?php endif; ?>
+					.p-page--home__article__txt
+						ul.p-page--home__article__cat
+							<?php $categories = get_the_category($post->ID); ?>
+							<?php if ($categories): foreach ($categories as $category): ?>
+								<li class="c-cat--<?php echo $category->slug; ?>">
+									a(href!="<?php echo get_category_link($category->term_id); ?>") <?php echo $category->name; ?>
+							<?php endforeach; endif; ?>
+						a.p-page--home__article__ttl(href!="<?php the_permalink() ?>") <?php the_title(); ?>
+						time <?php echo get_post_time('Y.m.d D H:i') ?>
+				<?php endwhile; else: ?>
+					p まだ、投稿がありません。
+				<?php endif; wp_reset_query(); ?>
+			.p-page--home__article__btn
+				a.c-btn--square(href!="<?php echo home_url('/') ?>article/tag/ルームツアー/") VIEW MORE
+	#artist.p-page--home__artist
+		.c-inner
+			.p-page--home__header
+				span.p-page--home__ttl--en CREATOR
+				p.p-page--home__ttl--ja クリエイター
+			.p-page--home__article__wrap.array-fade
+				| <?php query_posts( array(
+				| 	'posts_per_page' => 4,
+				| 	'post_type' => 'artists',
+				| 	'taxonomy' => '',
+				| 	'term' => '',
+				| )); ?>
+				<?php if(have_posts()): while(have_posts()): the_post(); ?>
+				.p-page--home__article__item.fade
+					a.p-page--home__article__img(href!="<?php the_permalink() ?>")
+						| <?php $image_id = get_post_thumbnail_id();
+						| 	$image_url = wp_get_attachment_image_src($image_id, 'large');
+						| ?>
+						picture
+							<?php if(has_post_thumbnail()): ?>
+								img.c-ofi--cover.lazyload.fadein(src="data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7", data-src!="<?php echo get_the_post_thumbnail_url(get_the_ID(),'full'); ?>", alt!="<?php the_title(); ?>")
+							<?php else: ?>
+								img.c-ofi--cover.lazyload.fadein(src!="<?php get_bloginfo('template_url') ?>/images/common/common_eyecatch.jpg", alt!="<?php the_title(); ?>")
+							<?php endif; ?>
+					.p-page--home__article__txt
+						ul.p-page--home__article__cat
+							<?php $terms = get_the_terms($post->ID, 'artist'); ?>
+							<?php if ($terms): foreach ($terms as $term): ?>
+								<li class="c-cat--<?php echo $term->slug; ?>">
+									a(href!="<?php echo get_term_link($term->term_id); ?>") <?php echo $term->name; ?>
+							<?php endforeach; endif; ?>
+						a.p-page--home__article__ttl(href!="<?php the_permalink(); ?>") <?php the_title(); ?>
+				<?php endwhile; else: ?>
+					p まだ、投稿がありません。
+				<?php endif; wp_reset_query(); ?>
+			.p-page--home__article__btn
+				a.c-btn--square(href!="<?php echo home_url('/') ?>article/artists/") VIEW MORE
+	section#about.p-page--home__about
+		.c-inner
+			.p-page--home__header
+				span.p-page--home__ttl--en ABOUT
+				p.p-page--home__ttl--ja Sumikaについて
+			.p-page--home__about__wrap
+				.p-page--home__about__txt
+					p
+						| Sumikaは、暮らしに関する情報を「発信」「シェア」するためのWEBサイトとなっています。<br>
+						| サイトへ訪れて下さった方々が「暮らしを楽しむ」際に役立つ情報を発信していくことをテーマにサイトを運営して参りますので、ご協力の程よろしくお願いいたします。<br>
+						| Sumika 編集部
+	#latest.p-page--home__latest
+		.c-inner
+			.p-page--home__header
+				span.p-page--home__ttl--en LATEST
+				p.p-page--home__ttl--ja 新着記事
+			#js-infinite.p-page--home__article__wrap.array-fade
+				| <?php
+				| 	$page_count = 8;
+				| 	if(isSmartPhone()) {
+				| 		$page_count = 4;
+				| 	}
+				| 	$args = array(
+				| 		'posts_per_page' => $page_count,
+				| 		'post_type' => array('post', 'artist'),
+				| 		'post__not_in' => array(116),
+				| 		'taxonomy' => '',
+				| 		'term' => '',
+				| 	);
+				|   $myquery = new WP_Query($args);
+				|   if($myquery->have_posts()):
+				|   while($myquery->have_posts()): $myquery->the_post();
+				| ?>
+				.p-page--home__article__item.fade
+					a.p-page--home__article__img(href!="<?php the_permalink() ?>")
+						| <?php $image_id = get_post_thumbnail_id();
+						| 	$image_url = wp_get_attachment_image_src($image_id, 'large');
+						| ?>
+						picture
+							<?php if(has_post_thumbnail()): ?>
+								img.c-ofi--cover.lazyload.fadein(src="data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7", data-src!="<?php echo get_the_post_thumbnail_url(get_the_ID(),'full'); ?>", alt!="<?php the_title(); ?>")
+							<?php else: ?>
+								img.c-ofi--cover.lazyload.fadein(src!="<?php get_bloginfo('template_url') ?>/images/common/common_eyecatch.jpg", alt!="<?php the_title(); ?>")
+							<?php endif; ?>
+					.p-page--home__article__txt
+						ul.p-page--home__article__cat
+							<?php $categories = get_the_category($post->ID); ?>
+							<?php if ($categories): foreach ($categories as $category): ?>
+								<li class="c-cat--<?php echo $category->slug; ?>">
+									a(href!="<?php echo get_category_link($category->term_id); ?>") <?php echo $category->name; ?>
+							<?php endforeach; endif; ?>
+						a.p-page--home__article__ttl(href!="<?php the_permalink(); ?>") <?php the_title(); ?>
+						time <?php echo get_post_time('Y.m.d D H:i') ?>
+				<?php endwhile; else: ?>
+					p まだ、投稿がありません。
+				<?php endif; wp_reset_postdata(); ?>
+<?php get_footer(); ?>

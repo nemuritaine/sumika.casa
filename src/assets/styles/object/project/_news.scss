@@ -1,0 +1,9 @@
+.news_list {
+    li {
+        padding: 10px 0;
+        border-bottom: solid 1px $color-gray;
+        .news_list_date {
+            margin: 0 10px 0 0;
+        }
+    }
+}

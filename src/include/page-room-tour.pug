@@ -1,0 +1,22 @@
+<?php get_header(); ?>
+    article.inner 
+        .header
+            h1.title <?php the_title(); ?>
+        section
+            .title
+                h3 ルームツアーとは？
+            .paragraph
+                .text
+                    p ルームツアーの記事を作成して皆さんのお部屋を紹介させていただきます🌿🍃
+                    p 下記のフォームに記入していただいた内容を元に、SUMIKA編集部が記事を作成します📝
+                    p 過去に作成した記事の一覧は
+                        a(href="https://sumika.casa/article/tag/%e3%83%ab%e3%83%bc%e3%83%a0%e3%83%84%e3%82%a2%e3%83%bc/") こちら
+        section
+            .title
+                h3 注意点
+            .paragraph
+                .text
+                    p 投稿された記事は、Sumikaのインスタグラムアカウントのストーリーで紹介させていただきます🕊
+                    p 記事の作成にあたり、記事で使用する画像をユーザーのインスタグラムアカウントからSumikaのサーバーに保存させていただくことをご了承ください。
+        <?php echo do_shortcode('[contact-form-7 id="476" title="room-tour"]') ?>
+<?php get_footer(); ?>

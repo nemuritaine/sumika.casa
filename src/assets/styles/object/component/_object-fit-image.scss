@@ -1,0 +1,31 @@
+.c-ofi {
+    &--cover {
+        object-fit: cover;
+    }
+    &--contain {
+        object-fit: contain;
+    }
+}
+.cover {
+    object-fit: cover;
+}
+.contain {
+    object-fit: contain;
+}
+
+@include ie() {
+    .c-ofi {
+        &--cover {
+            font-family: 'object-fit: cover';
+        }
+        &--contain {
+            font-family: 'object-fit: contain';
+        }
+    }
+    .cover {
+        font-family: 'object-fit: cover';
+    }
+    .contain {
+        font-family: 'object-fit: contain';
+    }
+}

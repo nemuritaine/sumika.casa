@@ -1,0 +1,63 @@
+@mixin under($width) {
+    @media screen and (max-width: $width) {
+        @content;
+    }
+}
+@mixin firefox {
+    @-moz-document url-prefix() {
+        @content;
+    }
+}
+@mixin ie {
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        @content;
+    }
+}
+@mixin edge {
+    @supports (-ms-ime-align: auto) {
+        @content;
+    }
+}
+@mixin image($width, $height) {
+    @content;
+    picture {
+        width: $width;
+        position: relative;
+        overflow: hidden;
+        display: block;
+        padding: 0 0 $height;
+        @content;
+        img,
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            @content;
+        }
+    }
+}
+@mixin lazyload {
+    opacity: 0;
+    transform: scale(1.4);
+    transition: 2s .2s cubic-bezier(.19,1,.22,1);
+    &.lazyloaded {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@mixin back-contain($url) {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-image: url(#{$url});
+}
+
+@mixin back-cover($url) {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-image: url(#{$url});
+}

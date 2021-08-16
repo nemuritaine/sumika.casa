@@ -1,0 +1,148 @@
+<?php if(!defined('ABSPATH')) exit; ?>
+<?php if(!is_user_logged_in()) { setPostViews( get_the_ID() ); } ?>
+| <?php
+| 	$page = get_post(get_the_ID());
+| 	$slug = $page->post_name;
+| ?>
+<?php get_header(); ?>
+#content 
+    .inner
+        #article(data-url!="<?php the_permalink(); ?>")
+            article#column
+                section.header
+                    time#date <?php echo get_post_time('Y.m.d D H:i') ?>
+                    | <?php
+                    | 	$cat = get_the_category();
+                    | 	$cat = $cat[0];
+                    | ?>
+                    h1#title <?php the_title(); ?>
+                    #post_summary
+                        <?php if ($post->post_excerpt): ?>
+                            p <? echo $post->post_excerpt; ?>
+                        <?php else: ?>
+                            | <?php
+                            |     $summary = strip_tags($post->post_content);
+                            |     $summary = str_replace("\n", "", $summary);
+                            |     $summary = mb_substr($summary, 0, 120). "…";
+                            | ?>
+                            p <?php echo $summary; ?>
+                        <?php endif; ?>
+                    .writer
+                        | <?php
+                        |     $user_id = $post->post_author;
+                        |     $user_author = get_userdata($user_id);
+                        |     $display_name = $user_author->display_name;
+                        | ?>
+                        .image
+                            picture
+                                <?php echo get_avatar($user_id); ?>
+                        .profile
+                            <?php echo $display_name; ?>
+                    #term
+                        <div class="<?php echo $cat->slug; ?>">
+                            | <?php 
+                            | 	$category = get_the_category(); 
+                            | 	if($category[0]) {
+                            | 		echo '<a href="' . get_category_link( $category[0]->term_id ) . '"></a>';
+                            | 	}
+                            | ?>
+                <?php if(have_posts()): while(have_posts()): the_post(); ?>
+                    .eyecatch
+                        picture
+                            <?php if(has_post_thumbnail()): ?>
+                                img.cover.lazyload.fadein(src="data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7", data-src!="<?php echo get_the_post_thumbnail_url(get_the_ID(),'full'); ?>", alt!="<?php the_title(); ?>")
+                            <?php else: ?>
+                                img.cover.lazyload.fadein(src="data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7", data-src!="<?php get_bloginfo('template_url') ?>/images/common/common_eyecatch.jpg", alt!="<?php the_title(); ?>")
+                            <?php endif; ?>
+                    section.paragraph
+                        .text.user-edit
+                            <?php the_content(); ?>
+                <?php endwhile; endif; ?>
+                #writer
+                    .title
+                        span WRITER
+                    .paragraph
+                        .image
+                            picture
+                                <?php echo get_avatar(get_the_author_meta('ID'), 32); ?>
+                        .profile
+                            .user-name
+                                .name
+                                    p <?php the_author(); ?>
+                                span.profile-status
+                                    svg(xmlns="http://www.w3.org/2000/svg", x="0px", y="0px", viewBox="0 0 30 30")
+                                        path(d="M27.303,13.768l-0.909-0.545c-0.387-0.232-0.649-0.615-0.767-1.05c-0.002-0.008-0.004-0.016-0.007-0.024 c-0.121-0.439-0.085-0.907,0.136-1.306l0.515-0.927c0.526-0.948-0.148-2.115-1.232-2.133l-1.07-0.018 c-0.453-0.008-0.873-0.209-1.193-0.529c-0.003-0.003-0.007-0.007-0.01-0.01c-0.321-0.32-0.522-0.74-0.529-1.193l-0.018-1.07 C22.2,3.877,21.033,3.203,20.085,3.73l-0.927,0.515c-0.398,0.221-0.866,0.257-1.306,0.136c-0.008-0.002-0.016-0.004-0.024-0.007 c-0.435-0.119-0.818-0.38-1.05-0.767l-0.545-0.909c-0.558-0.93-1.905-0.93-2.463,0l-0.543,0.905c-0.234,0.39-0.62,0.653-1.058,0.773 c-0.005,0.001-0.009,0.003-0.014,0.004c-0.443,0.122-0.914,0.086-1.316-0.137L9.915,3.73C8.967,3.203,7.8,3.877,7.782,4.961 l-0.018,1.07C7.756,6.484,7.555,6.904,7.235,7.224c-0.003,0.003-0.007,0.007-0.01,0.01c-0.32,0.321-0.74,0.522-1.193,0.529 l-1.07,0.018C3.877,7.8,3.203,8.967,3.73,9.915l0.515,0.927c0.221,0.399,0.257,0.866,0.136,1.306 c-0.002,0.008-0.004,0.016-0.007,0.024c-0.119,0.435-0.38,0.818-0.767,1.05l-0.909,0.545c-0.93,0.558-0.93,1.906,0,2.463 l0.909,0.546c0.387,0.232,0.649,0.615,0.767,1.05c0.002,0.008,0.004,0.016,0.007,0.024c0.121,0.44,0.085,0.907-0.136,1.306 L3.73,20.085c-0.526,0.948,0.148,2.115,1.232,2.133l1.07,0.018c0.453,0.008,0.873,0.209,1.193,0.529 c0.003,0.003,0.007,0.007,0.01,0.01c0.321,0.32,0.522,0.74,0.529,1.193l0.018,1.069c0.018,1.084,1.185,1.758,2.133,1.232 l0.927-0.515c0.398-0.221,0.866-0.257,1.306-0.136c0.008,0.002,0.016,0.004,0.024,0.007c0.435,0.119,0.818,0.38,1.05,0.767 l0.545,0.909c0.558,0.93,1.905,0.93,2.463,0l0.545-0.909c0.232-0.387,0.615-0.649,1.05-0.767c0.008-0.002,0.016-0.004,0.024-0.007 c0.439-0.121,0.907-0.085,1.306,0.136l0.927,0.515c0.948,0.526,2.115-0.148,2.133-1.232l0.018-1.069 c0.008-0.453,0.209-0.873,0.529-1.193c0.003-0.003,0.007-0.007,0.01-0.01c0.32-0.321,0.74-0.522,1.193-0.529l1.07-0.018 c1.084-0.018,1.758-1.185,1.232-2.133l-0.515-0.927c-0.221-0.399-0.257-0.866-0.136-1.306c0.002-0.008,0.004-0.016,0.007-0.024 c0.119-0.435,0.38-0.818,0.767-1.05l0.909-0.546C28.232,15.674,28.232,14.326,27.303,13.768z M20.707,12.707l-6.56,6.56 c-0.188,0.188-0.442,0.293-0.707,0.293s-0.52-0.105-0.707-0.293l-3.453-3.453c-0.391-0.391-0.391-1.023,0-1.414s1.023-0.391,1.414,0 l2.746,2.746l5.853-5.853c0.391-0.391,1.023-0.391,1.414,0S21.098,12.316,20.707,12.707z")
+                            .description
+                                <?php echo wpautop(get_the_author_meta('user_description')); ?>
+                #tags
+                    span TAGS
+                    <?php the_tags('<ul><li>', '</li><li>', '</li></ul>'); ?>
+                #share
+                    span SHARE
+                    ul
+                        li
+                            a(href!="http://www.facebook.com/share.php?u=<?php echo get_the_permalink(); ?>", rel="nofollow", target="_blank") Facebook
+                        li
+                            a(href!="https://twitter.com/share?url=<?php echo get_the_permalink(); ?>&via=sumika.casa&related=sumika.casa&hashtags=sumika,住み家&text=<?php echo get_the_title(); ?>", rel="nofollow", target="_blank") Twitter
+                        li
+                            a(href!="http://b.hatena.ne.jp/add?mode=confirm&url=<?php echo get_the_permalink(); ?>&title=<?php echo get_the_title(); ?>", target="_blank", rel="nofollow") はてなブログ
+                        li
+                            a(href!="http://getpocket.com/edit?url=<?php echo get_the_permalink(); ?>&title=<?php echo get_the_title(); ?>", rel="nofollow", target="_blank") Pocket
+                        li
+                            a(href!="https://feedly.com/i/subscription/feed/<?php echo get_the_permalink(); ?>", target="_blank", rel="nofollow") Feedly
+            <?php if(!isSmartPhone()): ?>
+                aside#aside(role="complementary")
+                    .wrapper
+                        <?php get_sidebar(); ?>
+            <?php endif; ?>
+        <?php if(isSmartPhone()): ?>
+            ins.adsbygoogle(style="display:block", data-ad-client="ca-pub-8411870945056099", data-ad-slot="6023721096", data-ad-format="auto", data-full-width-responsive="true")
+            | <script>
+            | 	(adsbygoogle = window.adsbygoogle || []).push({});
+            | </script>
+            article#ranking
+                .header
+                    .sub-title
+                        span PICK UP
+                    .title
+                        p 人気記事
+                .wrapper
+                    | <?php
+                    | 	setPostViews(get_the_ID());
+                    | 	$args = array(
+                    | 		'meta_key' => 'post_views_count',
+                    | 		'orderby' => 'meta_value_num',
+                    | 		'order' => 'DESC',
+                    | 		'post_status' => 'publish',
+                    | 		'posts_per_page' => 3,
+                    | 		'post_type' => 'post',
+                    | 	);
+                    | 	$my_query = new WP_Query($args);
+                    | 	if($my_query->have_posts()):
+                    | 	while ($my_query->have_posts()) : $my_query->the_post();
+                    | ?>
+                    section
+                        a.content(href!="<?php the_permalink() ?>")
+                            .image
+                                picture
+                                    <?php if(has_post_thumbnail()): ?>
+                                        img.cover.lazyload.fadein(src="data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7", data-src!="<?php echo get_the_post_thumbnail_url(get_the_ID(),'full'); ?>", alt!="<?php the_title(); ?>")
+                                    <?php else: ?>
+                                        img.cover.lazyload.fadein(src="data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7", data-src!="<?php get_bloginfo('template_url') ?>/images/common/common_eyecatch.jpg", alt!="<?php the_title(); ?>")
+                                    <?php endif; ?>
+                            .paragraph
+                                .title
+                                    h3 <?php the_title(); ?>
+                                .date
+                                    time <?php echo get_post_time('Y.m.d D H:i') ?>
+                    <?php endwhile; endif; ?>
+                    <?php wp_reset_postdata(); ?>
+        <?php endif; ?>
+        article#relation
+            .header
+                .sub-title
+                    span RELATION
+                .title
+                    p 関連記事
+            <?php get_template_part('module-related'); ?>
+<?php get_footer(); ?>

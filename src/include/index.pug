@@ -1,0 +1,59 @@
+<?php get_header(); ?>
+	.inner
+		#article
+			article#column
+				.header
+					.title
+						h1 記事一覧
+					.sub-title
+						span all column
+				#js-infinite.wrapper
+					| <?php
+					| 	$paged = (get_query_var('paged')) ? get_query_var('paged'): 1;
+					| 	$the_query = new WP_Query(array(
+					| 		'post_status' => 'publish',
+					| 		'post_type' => get_query_var('post_type'),
+					| 		'paged' => $paged,
+					| 		'posts_per_page' => 10,
+					| 		'orderby' => 'date',
+					| 		'order' => 'DESC'
+					| 	));
+					| ?>
+					<?php if($the_query->have_posts()): ?>
+						<?php while ($the_query->have_posts()): $the_query->the_post(); ?>
+						section
+							.content
+								a.image(href!="<?php the_permalink(); ?>")
+									picture
+										| <?php
+										| 	if (has_post_thumbnail()) {
+										| 		the_post_thumbnail('medium', array('class' => 'cover lazyload'));
+										| 	} else {
+										| 		echo '<img class="cover lazyload" src="' . get_bloginfo('template_url') . '/images/common/common_eyecatch.jpg' . '" alt="thumbnail" />';
+										| 	}
+										| ?>
+								.paragraph
+									.date
+										time <?php echo get_post_time('Y.m.d D H:i') ?>
+									a.title(href!="<?php the_permalink(); ?>")
+										h2.clamp_3 <?php the_title(); ?>
+									<?php if(!isSmartPhone()): ?>
+										.user
+											picture
+												<?php echo get_avatar(get_the_author_id(), 20); ?>
+											.name <?php the_author_posts_link(); ?>
+									<?php endif; ?>
+						<?php endwhile; ?>
+					<?php else: ?>
+						p まだ投稿がありません。
+					<?php endif; wp_reset_postdata(); ?>
+				| <?php 
+				| 	global $wp_query;
+				| 	$maxpages = $wp_query->max_num_pages;
+				| 	$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+				| 	select_pagenation($maxpages, $paged);
+				| ?>
+			aside#aside(role="complementary")
+				.wrapper
+					<?php get_sidebar(); ?>
+<?php get_footer(); ?>

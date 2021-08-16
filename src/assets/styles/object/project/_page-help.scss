@@ -1,0 +1,45 @@
+main {
+    &.page-help {
+        section {
+            &:first-of-type {
+                .content {
+                    .title {
+                        width: 300px;
+                        border: 1px solid $color-input-gray;
+                        padding: 14px 20px;
+                        transition: all .2s ease-out;
+                        &:hover {
+                            background: $color-input-gray;
+                        }
+                        cursor: pointer;
+                        h5 {
+                            text-align: center;
+                        }
+                    }
+                    .image {
+                        display: none;
+                    }
+                }
+            }
+        }
+        @media screen and (max-width: 480px) {
+            section {
+                &:first-of-type {
+                    .content {
+                        .title {
+                            width: 100%;
+                            &:hover {
+                                background: $color-input-gray;
+                            }
+                        }
+                        .image {
+                            video {
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

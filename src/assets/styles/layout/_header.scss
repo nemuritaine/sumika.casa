@@ -1,0 +1,183 @@
+.l-header {
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    top: 0;
+    &__wrap {
+        width: 100%;
+        height: 100px;
+        padding: 0 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    &__logo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        svg {
+            width: 140px;
+            height: auto;
+        }
+    }
+    @include under(768px) {
+        &__wrap {
+            height: 70px;
+        }
+        &__logo {
+            svg {
+                width: 130px;
+            }
+        }
+    }
+    @include under(480px) {
+        &__wrap {
+            padding: 0 20px;
+        }
+        &__logo {
+            svg {
+                width: 100px;
+            }
+        }
+    }
+}
+
+.l-menu {
+    width: 46%;
+    height: 100%;
+    background: $color-white;
+    padding: 0;
+    margin: 0;
+    top: 0;
+    right: -46%;
+    bottom: 0;
+    overflow-y: auto;
+    position: fixed;
+    z-index: 1004;
+    &__wrap {
+        width: 100%;
+        padding: 0 50px;
+        margin: 70px auto 40px auto;
+    }
+    &__nav {
+        &__item {
+            display: flex;
+            align-items: center;
+            &:not(:last-of-type) {
+                margin: 0 0 30px 0;
+            }
+            a {
+                font-size: 24px;
+                font-weight: bold;
+                line-height: 30px;
+                letter-spacing: 4px;
+                position: relative;
+            }
+        }
+    }
+    &__btn {
+        position: fixed;
+        top: 0;
+        right: 0;
+        background: transparent;
+        width: 100px;
+        height: 100px;
+        z-index: 1003;
+        cursor: pointer;
+        transition: background 0.35s ease;
+        .hamburger {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            .hamburger-01,
+            .hamburger-02,
+            .hamburger-03 {
+                transition: all 0.35s ease-in-out;
+                transform-origin: 50% 50%;
+            }
+            .hamburger-01,
+            .hamburger-03 {
+                will-change: transform;
+            }
+            .hamburger-02 {
+                will-change: opacity;
+            }
+        }
+        &.active {
+            background: $color-black;
+            z-index: 1005;
+            .hamburger {
+                .hamburger-01 {
+                    transform: translate(6px, 6px) rotate(-45deg);
+                }
+                .hamburger-02 {
+                    opacity: 0;
+                }
+                .hamburger-03 {
+                    transform: translate(6px, -6px) rotate(45deg);
+                }
+            }
+        }
+    }
+    &__sns {
+        margin: 0 0 56px 0;
+        dl {
+            display: flex;
+            dt {
+                display: flex;
+                align-items: center;
+                margin: 0 14px 0 0;
+                font-weight: bold;
+            }
+            ul {
+                display: flex;
+            }
+            a {
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                svg {
+                    width: 24px;
+                    height: 24px;
+                    fill: $color-black;
+                }
+            }
+        }
+    }
+    @include under(768px) {
+        width: 90%;
+        right: -100%;
+        &__wrap {
+            margin: 50px auto 40px auto;
+            padding: 0 40px; 
+        }
+        &__btn {
+            width: 70px;
+            height: 70px;
+        }
+        &__nav {
+            width: 90%;
+            right: -100%;
+            li {
+                &:not(:last-of-type) {
+                    margin: 0 0 8px;
+                }
+                a {
+                    font-size: 1.6rem;
+                    letter-spacing: 3px;
+                }
+            }
+        }
+        &__sns {
+            margin: 0 0 40px;
+            dt {
+                font-size: 1.2rem;
+                margin: 0 10px 0 0;
+            }
+        }
+    }
+}

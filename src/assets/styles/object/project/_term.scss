@@ -1,0 +1,49 @@
+.c-cat {
+    a {
+        background-color: transparent;
+        transition: all .2s ease-out;
+    }
+    &--interior {
+        a {
+            color: $color-sohi;
+            border: solid 1px $color-sohi;
+            &:hover {
+                color: $color-white;
+                background-color: $color-sohi;
+            }
+        }
+    }
+    &--art {
+        a {
+            color: $color-akabeni;
+            border: solid 1px $color-akabeni;
+            &:hover {
+                color: $color-white;
+                background-color: $color-akabeni;
+            }
+        }
+    }
+    &--architecture {
+        a {
+            color: $color-fujinezumi;
+            border: solid 1px $color-fujinezumi;
+            &:hover {
+                color: $color-white;
+                background-color: $color-fujinezumi;
+            }
+        }
+    }
+    &--installation,
+    &--oil,
+    &--water-color,
+    &--japanese-style {
+        a {
+            color: $color-hai;
+            border: solid 1px $color-hai;
+            &:hover {
+                color: $color-white;
+                background-color: $color-hai;
+            }
+        }
+    }
+}

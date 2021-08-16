@@ -1,0 +1,13 @@
+<?php get_header(); ?>
+	article.inner
+		section
+			.header
+				h1.title 404 - お探しのページが見つかりませんでした
+				p.title-eng not found
+			div
+				p
+					| 申し訳ございません。お探しのページが見つかりませんでした。<br>
+					| お手数ですが、トップページよりご覧になりたいページをお探しください。
+				.btn
+					a(href!="<?php echo home_url('/'); ?>") トップページに戻る
+<?php get_footer(); ?>

@@ -1,0 +1,14 @@
+.error404 {
+    main {
+        min-height: calc(100vh - 318px);
+        padding: 100px 0 0 0;
+    }
+}
+@media screen and (max-width: 480px) {
+    .error404 {
+        main {
+            min-height: calc(100vh - 288px);
+            padding: 70px 0 0 0;
+        }
+    }
+}

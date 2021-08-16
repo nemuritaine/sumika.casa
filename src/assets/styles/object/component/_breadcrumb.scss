@@ -1,0 +1,39 @@
+.c-breadcrumb {
+    background-color: $color-dark-gray;
+    &__wrap {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    &__list {
+        height: 50px;
+        display: flex;
+        align-items: center;
+        color: $color-white;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+        li {
+            display: flex;
+            align-items: center;
+            &:not(:last-child) {
+                &::after {
+                    content: '';
+                    display: block;
+                    width: 3px;
+                    height: 3px;
+                    margin: 0 10px;
+                    border-radius: 50%;
+                    background-color: $color-white;
+                }
+            }
+        }
+        li,
+        span,
+        a {
+            white-space: nowrap;
+            color: $color-white;
+            font-size: 1.2rem;
+        }
+    }
+}

@@ -1,0 +1,21 @@
+@font-face {
+    font-family: 'Wandeln';
+    src: url("../fonts/Wandeln-Regular.woff2") format("woff2");
+}
+
+h1,
+time,
+.header .sub-title span {
+    font-family: "游明朝", YuMincho, "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "HG明朝E", "ＭＳ Ｐ明朝", "ＭＳ 明朝", serif;
+}
+h2,
+h3,
+h4,
+h5,
+h6, p, span, a, li, dt, dd, th, td, strong, label, input, textarea, div {
+    font-family: '游ゴシック',YuGothic,KoburinaGo-W3-83pv-RKSJ-H,Helvetica,Arial,'Hiragino Kaku Gothic ProN','ＭＳ Ｐゴシック',Meiryo,sans-serif;
+}
+*::before,
+*::after {
+    font-family: '游ゴシック',YuGothic,KoburinaGo-W3-83pv-RKSJ-H,Helvetica,Arial,'Hiragino Kaku Gothic ProN','ＭＳ Ｐゴシック',Meiryo,sans-serif;
+}

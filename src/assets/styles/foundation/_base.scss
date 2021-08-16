@@ -1,0 +1,217 @@
+/*--------------------------------------
+reset.css
+--------------------------------------*/
+a, abbr, acronym, address, applet, article, aside, audio, 
+b, big, blockquote, body, caption, canvas, center, cite, code,
+dd, del, details, dfn, dialog, div, dl, dt, em, embed, 
+fieldset, figcaption, figure, form, footer, 
+header, hgroup, h1, h2, h3, h4, h5, h6, html, 
+i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav,
+object, ol, output, p, pre, q, ruby, 
+s, samp, section, main, small, span, strike, strong, sub, summary, sup, 
+tt, table, tbody, textarea, tfoot, thead, time, tr, th, td,
+u, ul, var, video { 
+	font-family: inherit; 
+	font-size: inherit; 
+	font-weight: inherit; 
+	font-style: inherit; 
+	vertical-align: baseline; 
+	white-space: normal;
+	text-align: left; 
+	margin: 0; 
+	padding: 0; 
+	border: 0; 
+	outline: 0;
+	background: transparent;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup,
+menu, nav, section, main { 
+	display: block; 
+}
+ol, ul { 
+	list-style: none; 
+}
+blockquote, q {
+	quotes: none; 
+}
+table { 
+	border-collapse: collapse; 
+	border-spacing: 0; 
+}
+*,
+*::before,
+*::after {
+    -webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-kerning: auto;
+	-webkit-text-size-adjust: 100%;
+}
+a {
+	text-decoration: none;
+}
+img {
+	display: block;
+	margin-bottom: 0;
+}
+button,
+select,
+input,
+textarea {
+	border: none;
+	background-color: transparent;
+	color: inherit;
+	font-size: inherit;
+	line-height: inherit;
+	&:focus {
+		outline: none;
+	}
+}
+textarea {
+	resize: none;
+}
+body {
+    font-feature-settings: 'palt' 1;
+    font-kerning: normal;
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+@keyframes onAutoFillStart {
+	from {
+	}
+	to {
+	}
+}
+input:-webkit-autofill {
+    animation-name: onAutoFillStart;
+	-webkit-box-shadow: 0 0 0 1000px #f0f0f0 inset;
+	transition:
+		background-color 50000s ease-in-out 0s,
+		-webkit-box-shadow .4s ease-in-out;
+	&:focus {
+		-webkit-box-shadow: 0 0 0 1000px #f0f0f0 inset;
+	}
+}
+/* iOSでのデフォルトスタイルをリセット */
+input[type="submit"],
+input[type="button"] {
+	border-radius: 0;
+	-webkit-box-sizing: content-box;
+	-webkit-appearance: button;
+	appearance: button;
+	border: none;
+	box-sizing: border-box;
+    &::-webkit-search-decoration {
+      display: none;
+    }
+    &:focus {
+      outline-offset: -2px;
+    }
+}
+input[type=text],
+input[type=password],
+textarea {
+    -webkit-border-radius : 0;
+    -webkit-appearance : none;
+    -webkit-tap-highlight-color : rgba(0,0,0,0);
+}
+
+/*--------------------------------------
+base.css
+--------------------------------------*/
+html {
+    font-size: 62.5%;
+}
+body {
+    font-size: 1.6em;
+    letter-spacing: 0.05em;
+    overflow-x: hidden;
+    color: $color-text;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    a {
+        color: $color-text;
+    }
+}
+main {
+    min-height: calc(100vh - 318px);
+}
+img {
+    pointer-events: none;
+    user-select: none;
+}
+h1 {
+    font-size: 30px;
+    line-height: 46px;
+    letter-spacing: 4px;
+    font-weight: 600;
+}
+h2 {
+    font-size: 18px;
+    line-height: 30px;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+h3 {
+    font-size: 20px;
+    line-height: 35px;
+    letter-spacing: 2px;
+    font-weight: 600;
+    span {
+        font-size: 20px;
+        line-height: 35px;
+        letter-spacing: 2px;
+        font-weight: 600;
+    }
+}
+h4 {
+    font-size: 16px;
+    line-height: 30px;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+h5 {
+    font-size: 15px;
+    line-height: 28px;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+p {
+    display: block;
+}
+h6, p, span, time, a, li, dt, dd, th, td, strong {
+    font-size: 16px;
+    line-height: 2;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+.grecaptcha-badge {
+    visibility: hidden;
+    opacity: 0;
+}
+@include under(768px) {
+    h1 {
+        font-size: 21px;
+        line-height: 34px;
+        letter-spacing: 2px;
+    }
+    h2 {
+        font-size: 16px;
+        line-height: 24px;
+    }
+    h3 {
+        font-size: 18px;
+        line-height: 26px;
+    }
+}
+@include under(480px) {
+    h1 {
+        font-size: 18px;
+        line-height: 30px;
+        letter-spacing: 2px;
+    }
+}

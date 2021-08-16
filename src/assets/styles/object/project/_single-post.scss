@@ -1,0 +1,306 @@
+.single-post {
+    .single-post {
+        padding: 100px 0 0 0;
+    }
+    main {
+        #article {
+            width: 1160px;
+            margin: 0 auto;
+            position: relative;
+            display: grid;
+            grid-template-columns: calc(100% - 372px) 300px;
+            grid-template-rows: 1fr;
+            column-gap: 72px;
+            grid-template-areas: "column aside";
+            #column {
+                grid-area: column;
+                grid-column: 1 / 2;
+                grid-row: 1 / 2;
+                .adress {
+                    p {
+                        margin: 0 0 0 0;
+                    }
+                }
+                .paragraph {
+                    &:not(:last-of-type) {
+                        margin: 0 0 30px;
+                    }
+                }
+            }
+            #aside {
+                grid-area: aside;
+                grid-column: 2 / 3;
+                grid-row: 1 / 2;
+                position: sticky;
+                align-self: flex-end;
+                bottom: 50px;
+            }
+        }
+        #tags {
+            padding: 20px;
+            margin: 0 0 30px 0;
+        }
+        #writer {
+            padding: 20px;
+            background: #f0f0f0;
+            margin: 0 0 30px 0;
+            display: flex;
+            .title {
+                flex-basis: 20%;
+                span {
+                    font-size: 10px;
+                }
+            }
+            .paragraph {
+                flex-basis: 80%;
+                display: flex;
+                .image {
+                    margin: 0 15px 0 0;
+                    img {
+                        height: 50px;
+                        width: 50px;
+                        border-radius: 50%;
+                        border: 1px solid $color-light-gray;
+                    }
+                }
+                .profile {
+                    .user-name {
+                        display: flex;
+                        margin: 0 0 4px;
+                        .name {
+                            margin: 0 4px 0 0;
+                            p {
+                                font-size: 14px;
+                            }
+                        }
+                        .profile-status {
+                            display: none;
+                            &.approved {
+                                display: flex;
+                                align-items: center;
+                                svg {
+                                    width: 15px;
+                                    height: auto;
+                                }
+                            }
+                        }
+                    }
+                    .social-link {
+                        margin: 0 0 10px;
+                        .um-tip-n {
+                            display: flex;
+                            background: none !important;
+                            &::before {
+                                content: '';
+                                display: inline-block;
+                                background-image: url(../images/icon/instagram.svg);
+                                background-position: center;
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                height: 15px;
+                                width: 15px;
+                                margin: 0 .8rem 0 0;
+                            }
+                            &::after {
+                                content: 'Instagram';
+                                display: inline-block;
+                                font-size: 12px;
+                                line-height: 15px;
+                            }
+                        }
+                    }
+                }
+                .description {
+                    font-size: 12px;
+                    letter-spacing: 1.4px;
+                }
+            }
+        }
+        #share {
+            padding: 20px;
+            background: #f0f0f0;
+        }
+    }
+    .ig {
+        img {
+            margin: 0 0 10px 0;
+        }
+        .position {
+            display: flex;
+            justify-content: flex-end;
+            .link {
+                span {
+                    font-size: 12px;
+                    color: $color-gray;
+                }
+            }
+        }
+    }
+    @include under(1439px) {
+        main {
+            #article {
+                width: 944px;
+            }
+        }
+    }
+    @include under(1023px) {
+        main {
+            #article {
+                width: 100%;
+                display: block;
+                #column {
+                    width: 100%;
+                    margin: 0 0 80px 0;
+                }
+                #aside {
+                    display: none;
+                }
+            }
+        }
+    }
+    @include under(480px) {
+        main {
+            &.single-item {
+                padding: 70px 0 0 0;
+            }
+        }
+        main {
+            #article {
+                #column {
+                    margin: 0 0 50px 0;
+                }
+            }
+            #writer {
+                flex-direction: column;
+                .title {
+                    flex-basis: 100%;
+                    margin: 0 0 10px;
+                }
+                .paragraph {
+                    flex-basis: 100%;
+                    margin: 0 0 10px;
+                }
+            }
+            #tags {
+                flex-direction: column;
+            }
+        }
+    }
+}
+#share {
+    display: flex;
+    span {
+        font-size: 10px;
+        flex-basis: 20%;
+    }
+    ul {
+        flex-basis: 80%;
+        li {
+            display: inline-block;
+            &:not(:last-of-type) {
+                margin: 0 20px 0 0;
+            }
+            a {
+                font-size: 10px;
+                transition: all 0.2s ease-out;
+                &:hover {
+                    color: $color-main;
+                }
+            }
+        }
+    }
+    @include under(480px) {
+        flex-direction: column;
+        span {
+            flex-basis: 100%;
+            display: block;
+        }
+        ul {
+            flex-basis: 100%;
+        }
+    }
+}
+#relation {
+    padding: 100px 0 0 0;
+    .header {
+        margin: 0 0 20px 0;
+        .sub-title {
+            span {
+                font-size: 16px;
+                margin: 0 0 10px 0;
+            }
+        }
+        .title {
+            p {
+                font-size: 12px;
+            }
+        }
+    }
+    .wrapper {
+        display: flex;
+        justify-content: space-between;
+        section {
+            flex-basis: 30%;
+            .content {
+                display: block;
+                .image {
+                    width: 100%;
+                    margin: 0 0 15px 0;
+                    picture {
+                        display: block;
+                        padding: 0 0 65% 0;
+                        position: relative;
+                        img {
+                            position: absolute;
+                            height: 100%;
+                            width: 100%;
+                            top: 0;
+                            left: 0;
+                        }
+                    }
+                }
+                .paragraph {
+                    .title {
+                    }
+                    .date {
+                        time {
+                            font-size: 10px;
+                            color: $color-gray;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    @include under(768px) {
+        padding: 0;
+    }
+    @include under(480px) {
+        .wrapper {
+            flex-direction: column;
+            section {
+                flex-basis: 100%;
+                .content {
+                    display: flex;
+                    flex-direction: row-reverse;
+                    margin: 0 0 20px 0;
+                    .image {
+                        flex-basis: 40%;
+                        margin: 0;
+                    }
+                    .paragraph {
+                        flex-basis: 60%;
+                        padding: 0 20px 0 0;
+                        .title {
+                            * {
+                                font-size: 13px;
+                                line-height: 20px;
+                                font-weight: bold;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }   
+}

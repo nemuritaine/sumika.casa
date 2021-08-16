@@ -1,0 +1,117 @@
+.page-contact {
+    #contact:checked ~ #contact_content,
+    #artist:checked ~ #artist_content,
+    #company:checked ~ #company_content {
+        display: block;
+    }
+    .tab_item {
+        width: calc(100% / 3);
+        &:not(:last-of-type) {
+            margin: 0 30px 0 0;
+        }
+        h2 {
+            margin: 0 0 30px 0;
+        }
+    }
+    .tab_content {
+        display: none;
+    }
+    input[name="tab_item"] {
+        display: none;
+        &:checked + label h2 {
+            border-bottom: solid 4px $color-gray;
+        }
+    }
+    h2 {
+        cursor: pointer;
+        display: inline-block;
+    }
+    form {
+        .required {
+            &::after {
+                content: '必須';
+                display: inline-flex;
+                align-items: center;
+                background-color: $color-gray;
+                color: $color-white;
+                font-size: 10px;
+                padding: 6px 10px;
+                line-height: 14px;
+                margin: 0 0 0 10px;
+            }
+        }
+        br {
+            display: none;
+        }
+        fieldset {
+            margin: 0 0 20px 0;
+            label {
+                display: flex;
+                align-items: center;
+                &:not(:last-of-type) {
+                    margin: 0 0 20px 0;
+                }
+                p {
+                    &:first-of-type {
+                        flex-basis: 30%;
+                    }
+                    &:last-of-type {
+                        flex-basis: 70%;
+                    }
+                }
+                input,
+                textarea {
+                    padding: 20px 20px 20px 20px;
+                }
+                textarea {
+                    border: solid 1px $color-gray;
+                }
+                input[type="text"],
+                input[type="email"] {
+                    border-bottom: solid 1px $color-gray;
+                }
+                select {
+                    padding: 20px 20px 20px 20px;
+                    appearance: none;
+                    position: relative;
+                    &::after {
+                        content: "";
+                        display: block;
+                        position: absolute;
+                        border-right: solid 1px $color-gray;
+                        border-bottom: solid 1px $color-gray;
+                        right: 6px;
+                        width: 15px;
+                        height: 15px;
+                    }
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 480px) {
+    .page-contact {
+        form {
+            fieldset {
+                label {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    p {
+                        width: 100%;
+                        &:first-of-type {
+                            flex-basis: 100%;
+                        }
+                        &:last-of-type {
+                            flex-basis: 100%;
+                        }
+                    }
+                    input,
+                    textarea {
+                        width: 100%;
+                        font-size: 16px;
+                    }
+                }
+            }
+        }
+    }
+}

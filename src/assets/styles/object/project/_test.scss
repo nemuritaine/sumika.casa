@@ -1,0 +1,50 @@
+.todo {
+    position: relative;
+    display: inline-flex;
+    cursor: pointer;
+    .todo__state {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        visibility: hidden;
+        &:checked ~ .todo__text {
+            transition-delay: 0s;
+            color: $color-dark-gray;
+        }
+        &:checked ~ .todo__icon .todo__box {
+            transition-delay: 0.3s;
+            stroke: $color-dark-gray;
+        }
+        &:checked ~ .todo__icon .todo__check {
+            stroke-dasharray: 17, 0;
+            transition-delay: 0.3s;
+        }
+    }
+    .todo__text {
+        color: $color-light-gray;
+        transition: all 0.3s linear;
+    }
+    .todo__icon {
+        width: 25px;
+        height: 25px;
+        fill: none;
+        stroke: $color-dark-gray;
+        stroke-width: 2;
+        stroke-linejoin: round;
+        stroke-linecap: round;
+        margin: 0 10px 0 0;
+        .todo__box {
+            stroke-width: 1px;
+            stroke: $color-light-gray;
+            transition-duration: 0.3s;
+        }
+        .todo__check {
+            stroke-width: 1px;
+            stroke: $color-dark-gray;
+            stroke-dasharray: 17, 17;
+            stroke-dashoffset: 18;
+            transition-duration: 0.3s;
+        }
+    }
+}

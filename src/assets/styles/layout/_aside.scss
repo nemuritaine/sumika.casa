@@ -1,0 +1,131 @@
+.single-post,
+#aside {
+    #ranking {
+        margin: 30px 0;
+        .header {
+            margin: 0 0 20px;
+            .sub-title {
+                span {
+                    font-size: 16px;
+                    margin: 0 0 10px 0;
+                }
+            }
+            .title {
+                p {
+                    font-size: 12px;
+                }
+            }
+        }
+        .wrapper {
+            section {
+                margin: 0 0 20px 0;
+                counter-increment: ranking;
+                .content {
+                    display: flex;
+                    justify-content: space-between;
+                    position: relative;
+                    &::before {
+                        content: counter(ranking);
+                        background: $color-main;
+                        color: $color-white;
+                        font-weight: bold;
+                        top: 4px;
+                        left: 4px;
+                        width: 24px;
+                        height: 24px;
+                        border-radius: 12px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        position: absolute;
+                        pointer-events: none;
+                        z-index: 1;
+                    }
+                    &:not(:last-of-type) {
+                        border-bottom: solid 1px $color-gray;
+                        padding: 0 0 15px 0;
+                        margin: 0 0 15px 0;
+                    }
+                    .image {
+                        flex-basis: 40%;
+                        picture {
+                            display: block;
+                            position: relative;
+                            padding: 0 0 65% 0;
+                            img {
+                                position: absolute;
+                                height: 100%;
+                                width: 100%;
+                                top: 0;
+                                left: 0;
+                                &::before {
+                
+                                }
+                            }
+                        }
+                    }
+                    .paragraph {
+                        padding: 0 0 0 20px;
+                        flex-basis: 60%;
+                        .title {
+                            h3 {
+                                font-size: 13px;
+                                font-weight: normal;
+                                line-height: 20px;
+                                letter-spacing: 1px;
+                                overflow: hidden;
+                                display: -webkit-box;
+                                -webkit-box-orient: vertical;
+                                -webkit-line-clamp: 3;
+                            }
+                        }
+                        .date {
+                            time {
+                                font-size: 10px;
+                                color: $color-gray;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 480px) {
+    .single-post,
+    #aside {
+        #ranking {
+            margin: 50px 0;
+            .header {
+            }
+            .wrapper {
+                section {
+                    .content {
+                        &::before {
+                        }
+                        &:not(:last-of-type) {
+                        }
+                        .image {
+                            flex-basis: 40%;
+                            picture {
+                                img {
+                                    &::before {
+                    
+                                    }
+                                }
+                            }
+                        }
+                        .paragraph {
+                            flex-basis: 60%;
+                            .title {
+                                h3 {
+                                    font-weight: bold;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

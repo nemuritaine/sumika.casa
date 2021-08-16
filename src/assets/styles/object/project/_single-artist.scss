@@ -1,0 +1,77 @@
+.single-artists {
+    #canvas {
+        height: calc(100vh - 15vh);
+        max-height: 1080px;
+        width: 100%;
+        margin: 0 auto;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        img {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            width: 80%;
+            margin-left: auto;
+            object-position: center;
+        }
+        figcaption {
+            position: absolute;
+            left: 60px;
+            display: flex;
+            flex-direction: column;
+            height: initial;
+            z-index: 100;
+            span {
+                font-size: 50px;
+                line-height: 60px;
+                letter-spacing: 1px;
+                margin: 0 0 16px 0;
+            }
+            h1 {
+                font-size: 21px;
+                letter-spacing: 1px;
+            }
+        }
+    }
+    aside {
+        height: 15vh;
+        ul {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+    }
+    @include under(480px) {
+        #canvas {
+            img {
+                width: 90%;
+            }
+        }
+        article {
+            flex-direction: column;
+            flex-wrap: wrap;
+            section {
+                flex-basis: 100%;
+                &:not(:last-of-type) {
+                    margin: 0 0 80px 0;
+                }
+                > span {
+                    font-size: 24px;
+                    margin: 0 0 20px 0;
+                }
+                dl {
+                    dd {
+                        margin: 0 0 16px 0;
+                    }
+                }
+                p {
+                    margin: 0 0 16px 0;
+                }
+            }
+        }
+    }
+}

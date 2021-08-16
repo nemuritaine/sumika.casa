@@ -1,0 +1,166 @@
+.blog,
+.archive {
+    main {
+        padding: 100px 0 0 0;
+        #article {
+            width: 1160px;
+            margin: 0 auto;
+            position: relative;
+            display: grid;
+            grid-template-columns: calc(100% - 372px) 300px;
+            grid-template-rows: 1fr;
+            column-gap: 72px;
+            grid-template-areas: "column aside";
+            #column {
+                grid-area: column;
+                grid-column: 1 / 2;
+                grid-row: 1 / 2;
+                .header {
+
+                }
+                .wrapper {
+                    section {
+                        padding: 26px 0;
+                        border-bottom: solid 1px $color-gray;
+                        .content {
+                            display: flex;
+                            .image {
+                                flex-basis: 35%;
+                                picture {
+                                    display: block;
+                                    padding: 0 0 65% 0;
+                                    position: relative;
+                                    img {
+                                        position: absolute;
+                                        top: 0;
+                                        left: 0;
+                                        height: 100%;
+                                        width: 100%;
+                                    }
+                                }
+                            }
+                            .paragraph {
+                                flex-basis: 65%;
+                                padding: 0 0 0 20px;
+                                .date {
+                                    time {
+                                        font-size: 11px;
+                                    }
+                                }
+                                .title {
+                                    display: block;
+                                    margin: 0 0 6px 0;
+                                    * {
+                                        font-size: 16px;
+                                        line-height: 26px;
+                                        letter-spacing: 1.4px;
+                                    }
+                                }
+                                .user {
+                                    display: flex;
+                                    align-items: center;
+                                    picture {
+                                        margin: 0 10px 0 0;
+                                        img {
+                                            border-radius: 50%;
+                                            border: 1px solid $color-light-gray;
+                                        }
+                                    }
+                                    .name {
+                                        a {
+                                            font-weight: bold;
+                                            font-size: 11px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            #aside {
+                grid-area: aside;
+                grid-column: 2 / 3;
+                grid-row: 1 / 2;
+                position: sticky;
+                align-self: flex-end;
+                bottom: 50px;
+            }
+        }
+        #tags {
+            margin: 0 0 30px 0;
+        }
+    }
+    @include under(1439px) {
+        main {
+            #article {
+                width: 944px;
+            }
+        }
+    }
+    @include under(1023px) {
+        main {
+            #article {
+                width: 100%;
+                display: block;
+                #column {
+                    width: 100%;
+                    margin: 0;
+                }
+                #aside {
+                    display: none;
+                }
+            }
+        }
+    }
+    @include under(480px) {
+        main {
+            #article {
+                #column {
+                    .wrapper {
+                        section {
+                            padding: 20px 0;
+                            border-bottom: solid 1px $color-gray;
+                            .content {
+                                .image {
+                                    flex-basis: 40%;
+                                    picture {
+                                        img {
+                                        }
+                                    }
+                                }
+                                .paragraph {
+                                    flex-basis: 60%;
+                                    padding: 0 0 0 15px;
+                                    .date {
+                                        time {
+                                            font-size: 10px;
+                                        }
+                                    }
+                                    .title {
+                                        margin: 0;
+                                        * {
+                                            font-size: 13px;
+                                            line-height: 18px;
+                                        }
+                                    }
+                                    .user {
+                                        display: none;
+                                        picture {
+                                            img {
+                                            }
+                                        }
+                                        .name {
+                                            a {
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

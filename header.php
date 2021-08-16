@@ -1,0 +1,65 @@
+
+ <?php if(!defined('ABSPATH')) exit; ?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8"/><?php if(is_mobile()): ?>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/><?php elseif(wp_is_mobile()): ?>
+  <meta name="viewport" content="width=1200"/><?php else: ?>
+  <meta name="viewport" content="width=1200"/><?php endif; ?>
+  <link rel="shortcut icon" href="<?php bloginfo('template_url'); ?>/images/favicon.png"/><?php if (is_single()): ?>
+  <meta name="thumbnail" content="<?php the_post_thumbnail_url('medium'); ?>"/><?php endif; ?>
+  <meta name="format-detection" content="telephone=no"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri(); ?>/css/style.css<?php echo '?' . filemtime(get_stylesheet_directory() . '/style.css'); ?>" type="text/css" media="all"/><script>
+  	window.googletag = window.googletag || {cmd: []};
+  	googletag.cmd.push(function() {
+  		googletag.defineSlot('/21846113676/sumika.casa_mobile_article_display', [300, 250], 'div-gpt-ad-1567340243264-0').addService(googletag.pubads());
+  		googletag.pubads().enableSingleRequest();
+  		googletag.enableServices();
+  	});
+  </script><?php wp_head(); ?>
+</head></head>
+<body id="body" <?php body_class(); ?>>
+<header class="l-header">
+  <div class="l-header__wrap"><a href="<?php echo home_url('/'); ?>">
+      <div class="l-header__logo">
+        <svg role="img" viewBox="0 0 193.6 42.18">
+          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#shared__logo"></use>
+        </svg>
+      </div></a></div>
+</header>
+<div class="l-menu__btn" id="menu_button">
+  <svg class="hamburger" width="26px" height="25px" viewBox="0 0 26 18">
+    <path class="hamburger-01" d="M25.5,2H1A1,1,0,0,1,1,0H25.5a1,1,0,0,1,0,2Z"></path>
+    <path class="hamburger-02" d="M25.5,10.07H1a1,1,0,1,1,0-2H25.5a1,1,0,1,1,0,2Z"></path>
+    <path class="hamburger-03" d="M25.5,18.14H1a1,1,0,0,1,0-2H25.5a1,1,0,0,1,0,2Z"></path>
+  </svg>
+</div>
+<nav class="l-menu" id="nav">
+  <div class="l-menu__wrap">
+    <div class="l-menu__sns">
+      <dl>
+        <dt>FOLLOW ME</dt>
+        <dd>
+          <ul> 
+            <li> <a href="https://www.instagram.com/sumika.casa/" target="_blank">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path>
+                </svg></a></li>
+            <li><a href="https://www.tiktok.com/@sumika.casa/" target="_blank">
+                <svg role="img" viewBox="0 0 307.59 350.1">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#shared__tiktok"></use>
+                </svg></a></li>
+          </ul>
+        </dd>
+      </dl>
+    </div>
+    <ul class="l-menu__nav">
+      <li class="l-menu__nav__item"><a href="<?php echo home_url('/') ?>">HOME</a></li>
+      <li class="l-menu__nav__item"><a href="<?php echo home_url('/') ?>article/category/interior/">インテリア記事一覧</a></li>
+      <li class="l-menu__nav__item"><a href="<?php echo home_url('/') ?>article/category/architecture/">建築記事一覧</a></li>
+      <li class="l-menu__nav__item"><a href="https://store.sumika.casa/" target="_blank">インテリアショップ</a></li>
+    </ul>
+  </div>
+</nav><main <?php body_class(); ?>>

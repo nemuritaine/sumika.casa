@@ -1,0 +1,217 @@
+main {
+    &.page-account {
+        .wrapper {
+            display: flex;
+            width: 1024px;
+            margin: 0 auto;
+            aside {
+                width: 300px;
+                .title {
+                    margin: 0 0 2rem;
+                    p {
+                        font-size: 1.8rem;
+                        letter-spacing: .2rem;
+                    }
+                }
+                ul {
+                    li {
+                        margin: 0 0 2rem;
+                        border-bottom: 2px solid #2c2c2c;
+                        .um-account-link {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            padding: 20px;
+                            &.current {
+                                background: $color-input-gray;
+                            }
+                            svg {
+                                width: 15px;
+                            }
+                        }
+                    }
+                }
+            }
+            .um-account-main {
+                width: 652px;
+                margin: 0 0 0 72px;
+                .um-account-tab {
+                    display: none;
+                    .um-account-heading {
+                        font-size: 1.8rem;
+                        letter-spacing: .2rem;
+                        margin: 0 0 2rem 0;
+                        i {
+                            display: none;
+                        }
+                        & + p {
+                            margin: 0 0 20px 0;
+                        }
+                    }
+                    .um-field {
+                        margin: 0 0 2rem;
+                        .um-field-label {
+                            margin: 0 0 1rem;
+                            label {
+                            }
+                        }
+                        input {
+                            font-size: 12px;
+                            letter-spacing: 2px;
+                            border-bottom: 2px solid #2c2c2c;
+                            padding: 20px 20px 20px 20px;
+                            width: 100%;
+                        }
+                    }
+                    .um-field-select {
+                        #profile_privacy {
+                            border: 0;
+                            clip: rect(0 0 0 0);
+                            height: 1px;
+                            margin: -1px;
+                            padding: 0;
+                            position: absolute;
+                            overflow: hidden;
+                            width: 1px !important;
+                            & + .select2-container {
+                                box-sizing: border-box;
+                                display: inline-block;
+                                margin: 0;
+                                position: relative;
+                                vertical-align: middle;
+                                .select2-selection--single {
+                                    background-color: $color-white;
+                                    border: 1px solid $color-input-gray;
+                                    border-radius: 4px;
+                                    box-sizing: border-box;
+                                    cursor: pointer;
+                                    display: block;
+                                    height: 28px;
+                                    user-select: none;
+                                    .select2-selection__rendered {
+                                        line-height: 28px;
+                                        display: block;
+                                        padding-left: 8px;
+                                        padding-right: 20px;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                        white-space: nowrap;
+                                    }
+                                    .select2-selection__arrow {
+                                        height: 26px;
+                                        position: absolute;
+                                        top: 1px;
+                                        right: 1px;
+                                        width: 20px;
+                                        b {
+                                            border-color: $color-gray transparent transparent transparent;
+                                            border-style: solid;
+                                            border-width: 5px 4px 0 4px;
+                                            height: 0;
+                                            left: 50%;
+                                            margin-left: -4px;
+                                            margin-top: -2px;
+                                            position: absolute;
+                                            top: 50%;
+                                            width: 0;
+                                        }
+                                    }
+                                }
+                            } 
+                        }
+                    }
+                    input[type="submit"] {
+                        width: 100%;
+                        padding: 20px 20px 20px 20px;
+                        font-size: 12px;
+                        border: 1px solid #f0f0f0;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+}
+.select2-container--open {
+    .select2-search--hide {
+        display: none;
+    }
+    .select2-dropdown--below {
+        border-top: none;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+    .select2-dropdown {
+        display: block;
+        .select2-results {
+            & > .select2-results__options {
+                max-height: 200px;
+                overflow-y: auto;
+            }
+        }
+        .select2-results__option[aria-selected] {
+            cursor: pointer;
+        }
+        .select2-results__option {
+            background-color: $color-white;
+            padding: 6px;
+            user-select: none;
+        }
+        .select2-results__option--highlighted[aria-selected] {
+            background-color: $color-dark-gray;
+            color: $color-white;
+        }
+    }
+}
+@media screen and (max-width: 1440px) {
+    main {
+        &.page-account {
+            .wrapper {
+                aside {
+                    width: 30%;
+                }
+                .um-account-main {
+                    width: 62.5%;
+                    margin: 0 0 0 7.5%;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 1023px) {
+    main {
+        &.page-account {
+            .wrapper {
+                width: 100%;
+                aside {
+                    display: none;
+                }
+                .um-account-main {
+                    width: 100%;
+                    margin: 0 auto;
+                    .um-account-tab {
+                        display: block;
+                        &:not(:last-of-type) {
+                            margin: 0 0 5rem;
+                        }
+                        .um-account-heading {
+                            margin: 0 0 1.4rem;
+                        }
+                        .um-field {
+                            overflow: hidden;
+                            input[type="password"],
+                            input[type="text"] {
+                                font-size: 16px;
+                                transform: scale(0.85);
+                                letter-spacing: 2px;
+                                width: 115%;
+                                right: 7.5%;
+                                position: relative;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,43 @@
+<?php get_header(); ?>
+	.inner
+		#article
+			article#column
+				.header
+					| <?php
+					| 	$term = get_queried_object();
+					| 	$term_name = single_term_title( '', false );
+					| 	$term_slug = $term->slug;
+					| ?>
+					.title
+						h1 <?php echo $term_name ?>の記事一覧
+					.sub-title
+						span TAG #<?php echo $term_name ?>
+				.wrapper
+					<?php while (have_posts()) : the_post(); ?>
+						section
+							.content
+								a.image(href!="<?php the_permalink(); ?>")
+									picture
+										| <?php
+										| 	if (has_post_thumbnail()) {
+										| 		the_post_thumbnail('full', array('class' => 'cover lazyload'));
+										| 	} else {
+										| 		echo '<img class="cover lazyload" src="' . get_bloginfo('template_url') . '/images/common/common_eyecatch.jpg' . '" alt="thumbnail" />';
+										| 	}
+										| ?>
+								.paragraph
+									.date
+										time <?php echo get_post_time('Y.m.d D H:i') ?>
+									a.title(href="<?php the_permalink(); ?>")
+										h2.clamp_3 <?php the_title(); ?>
+					<?php endwhile; ?>
+				| <?php 
+				| 	global $wp_query;
+				| 	$maxpages = $wp_query->max_num_pages;
+				| 	$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+				| 	select_pagenation($maxpages, $paged);
+				| ?>
+			aside#aside(role="complementary")
+				.wrapper
+					<?php get_sidebar(); ?>
+<?php get_footer(); ?>

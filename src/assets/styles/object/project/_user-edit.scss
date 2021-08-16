@@ -1,0 +1,97 @@
+.user-edit {
+    margin: 50px 0;
+    section {
+        margin: 0 0 50px;
+    }
+    h2,
+    h3 {
+        margin: 0 0 16px;
+    }
+    p {
+        &:not(:last-of-type) {
+            margin: 0 0 16px;
+        }
+        font-size: 16px;
+    }
+    .paragraph {
+        .title {
+            margin: 0 0 16px;
+        }
+        .text {
+            a {
+                text-decoration: underline;
+            }
+        }
+    }
+    .person {
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 40px;
+    }
+    figure {
+        margin: 0 0 24px;
+        figcaption {
+            margin: 0 0 16px;
+        }
+    }
+    img {
+        width: 100%;
+        height: auto;
+    }
+    .header {
+        margin: 0 0 20px;
+        .title {
+            font-size: 20px;
+            line-height: 30px;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+    }
+    .question {
+        color: $color-gray;
+    }
+    .via {
+        margin: 10px 0 0;
+    }
+    .location {
+        .address {
+            p {
+                margin: 0;
+            }
+        }
+        iframe {
+            width: 100%;
+            height: 300px;
+            margin: 0 0 20px;
+        }
+    }
+}
+@media screen and (max-width: 768px) {
+    .user-edit {
+        p {
+            font-size: 14px;
+            &:not(:last-of-type) {
+                margin: 0 0 10px;
+            }
+        }
+        .person {
+            font-size: 14px;
+            line-height: 30px;
+        }
+        h3 {
+            font-size: 16px;
+        }
+    }
+}
+@media screen and (max-width: 480px) {
+    .user-edit {
+        section {
+            margin: 0 0 30px;
+        }
+        .location {
+            iframe {
+                height: 200px;
+            }
+        }
+    }
+}

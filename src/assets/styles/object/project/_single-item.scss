@@ -1,0 +1,214 @@
+main {
+    &.single-item {
+        padding: 100px 0 0 0;
+        article {
+            .content {
+                display: flex;
+                box-shadow: 0px 1px 20px 0px rgba(0, 0, 0, 0.1);
+                border-radius: 30px;
+                position: relative;
+                .image {
+                    display: block;
+                    width: 580px;
+                    height: 580px;
+                    picture {
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 30px 0px 0px 30px;
+                        }
+                    }
+                }
+                .paragraph {
+                    width: 580px;
+                    padding: 24px;
+                    border-radius: 0px 30px 30px 0px;
+                    .title {
+                        height: auto;
+                        max-height: 80px;
+                        overflow: hidden;
+                        margin: 0 0 30px;
+                        h1 {
+                            font-size: 24px;
+                            line-height: 40px;
+                            letter-spacing: 2px;
+                            overflow: hidden;
+                            display: -webkit-box;
+                            -webkit-box-orient: vertical;
+                            -webkit-line-clamp: 2;
+                        }
+                    }
+                    #price {
+                        #cheapest-price {
+                            margin: 0 0 15px;
+                            p {
+                                font-size: 30px;
+                                line-height: 30px;
+                                font-weight: bold;
+                                &::before {
+                                    content: '¥';
+                                    font-size: 30px;
+                                    line-height: 30px;
+                                    font-weight: bold;
+                                    margin: 0 10px 0 0;
+                                }
+                            }
+                        }
+                        .price {
+                            display: flex;
+                            color: $color-gray;
+                            h3 {
+                                font-size: 14px;
+                                line-height: 24px;
+                                letter-spacing: 1px;
+                                font-weight: 500;
+                                margin: 0 10px 0 0;
+                                width: 100px;
+                            }
+                            span {
+                                &::before {
+                                    content: '¥';
+                                    font-size: 14px;
+                                    line-height: 24px;
+                                    letter-spacing: 1px;
+                                    font-weight: 500;
+                                    margin: 0 4px 0 0;
+                                }
+                            }
+                        }
+                    }
+                    .position {
+                        position: absolute;
+                        bottom: 24px;
+                        right: 24px;
+                    }
+                }
+            }
+        }
+        .link {
+            display: flex;
+            flex-direction: column;
+            &:not(:last-of-type) {
+                margin: 0 0 15px;
+            }
+            a {
+                display: inline-flex;
+                align-items: center;
+                padding: 14px 30px;
+                height: 48px;
+                color: $color-white;
+                font-weight: bold;
+                border-radius: 14px;
+                svg {
+                    margin: 0 10px 0 0;
+                }
+                &.shop {
+                    background: $color-light-gray;
+                }
+                &.rakuten {
+                    background: $color-rakuten;
+                    svg {
+                        width: 64px;
+                        height: auto;
+                        .logo {
+                            fill: $color-white;
+                        }
+                    }
+                }
+                &.amazon {
+                    background: $color-amazon;
+                    svg {
+                        width: 64px;
+                        height: auto;
+                        .logo {
+                            fill: $color-white;
+                        }
+                    }
+                }
+            }
+        }
+        @include under(1279px) {
+            article {
+                .content {
+                    .image {
+                        width: 472px;
+                        height: 472px;
+                    }
+                    .paragraph {
+                        width: 472px;
+                    }
+                }
+            }
+        }
+        @include under(1023px) {
+            article {
+                .content {
+                    .image {
+                        width: 50%;
+                        height: 100%;
+                        picture {
+                            img {
+                                width: 100%;
+                                height: auto;
+                            }
+                        }
+                    }
+                    .paragraph {
+                        width: 50%;
+                    }
+                }
+            }
+        }
+        @include under(768px) {
+            article {
+                .inner {
+                    padding: 0;
+                }
+                .content {
+                    flex-direction: column;
+                    box-shadow: none;
+                    border-radius: 0;
+                    .image {
+                        width: 100%;
+                        margin: 0 0 30px;
+                        picture {
+                            img {
+                                border-radius: 0;
+                                max-height: 400px;
+                            }
+                        }
+                    }
+                    .paragraph {
+                        width: 100%;
+                        padding: 0 20px;
+                        border-radius: 0;
+                        .title {
+                            max-height: 72px;
+                            margin: 0 0 20px;
+                            h1 {
+                                font-size: 14px;
+                                line-height: 24px;
+                                -webkit-line-clamp: 3;
+                            }
+                        }
+                        #price {
+                            margin: 0 0 20px;
+                        }
+                        .position {
+                            position: static;
+                            bottom: unset;
+                            right: unset;
+                            display: flex;
+                            justify-content: flex-end;
+                            flex-direction: column;
+                            align-items: flex-end;
+                            .link {
+                                display: inline-block;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
