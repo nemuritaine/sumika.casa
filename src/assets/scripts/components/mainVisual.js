@@ -474,113 +474,19 @@ export class mainHero {
 	}
 };
 
-//スマホ画面高さ調整
 export function setHeight() {
-	var ua = navigator.userAgent.toLowerCase();
-	var isIOS = /ip(hone|od|ad)/.test(ua);
-	var isAndroid = /android/.test(ua);
-	var isMobile = isIOS || isAndroid;
-	var isSafari = /safari/.test(ua);
-	var isIOSChrome = /crios/.test(ua);
-	var isOpera = /opera/.test(ua);
-	if (isIOS && (isSafari || isIOSChrome || isOpera)) {
-		var t = {
-				w: window.innerWidth,
-				h: window.innerHeight
-			},
-			o = {
-				w: 0,
-				h: 0
-			};
-		if (o.w !== t.w || Math.abs(o.h - t.h) > 120) {
-			var e = t.h;
-			t.w <= 750 && e,
-			TweenMax.set(".p-page--home__hero", {
-				height: e
-			}),
-			TweenMax.set(".p-page--home__hero__menu", {
-				height: e
-			}),
-			TweenMax.set(".p-page--home__hero__gallery", {
-				height: e
-			}),
-			o = t
-		}
-	} else {
-		//WebViewの場合
-		var t = {
-				w: window.innerWidth,
-				h: window.innerHeight
-			},
-			o = {
-				w: 0,
-				h: 0
-			};
-		if (o.w !== t.w || Math.abs(o.h - t.h) > 120) {
-			const e = t.h;
-			t.w <= 750 && e,
-			TweenMax.set(".p-page--home__hero", {
-				height: e
-			}),
-			TweenMax.set(".p-page--home__hero__menu", {
-				height: e
-			}),
-			TweenMax.set(".p-page--home__hero__gallery", {
-				height: e
-			}),
-			o = t
-		}
-	}
-	if (!isMobile) {
-		// モバイルではない場合
-		var t = {
-				w: window.innerWidth,
-				h: window.innerHeight
-			},
-			o = {
-				w: 0,
-				h: 0
-			};
-		if (o.w !== t.w || Math.abs(o.h - t.h) > 120) {
-			var e = t.h;
-			t.w <= 750 && e,
-			TweenMax.set(".p-page--home__hero", {
-				height: e
-			}),
-			TweenMax.set(".p-page--home__hero__menu", {
-				height: e
-			}),
-			TweenMax.set(".p-page--home__hero__gallery", {
-				height: e
-			}),
-			o = t
-		}
-	}
-	// Android標準 or AndroidChromeもFireFoxもOperaもなんならSBrowserもようこそ
-	if (isAndroid) {
-		console.log('Android');
-		var t = {
-				w: window.innerWidth,
-				h: window.innerHeight
-			},
-			o = {
-				w: 0,
-				h: 0
-			};
-		if (o.w !== t.w || Math.abs(o.h - t.h) > 120) {
-			var e = t.h;
-			t.w <= 750 && e,
-			TweenMax.set(".p-page--home__hero", {
-				height: e
-			}),
-			TweenMax.set(".p-page--home__hero__menu", {
-				height: e
-			}),
-			TweenMax.set(".p-page--home__hero__gallery", {
-				height: e
-			}),
-			o = t
-		}
+	let width = window.innerWidth,
+		height = window.innerHeight;
+	if(width < 480) {
+		TweenMax.set(".p-page--home__hero", {
+			height: height
+		}),
+		TweenMax.set(".p-page--home__hero__menu", {
+			height: height
+		}),
+		TweenMax.set(".p-page--home__hero__gallery", {
+			height: height
+		})
 	}
 }
 
