@@ -1,0 +1,10 @@
+@use "sass:math";
+@use "../../../global/" as *;
+
+@forward "news";
+
+.p-indexPage {
+  .l-footerMenuItem__icon.--home svg .st0 {
+    fill: color(main);
+  }
+}

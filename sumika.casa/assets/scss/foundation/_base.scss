@@ -1,0 +1,95 @@
+@use "sass:math";
+@use "../global/" as *;
+
+::selection {
+  background-color: #b3d4fc;
+  color: #000;
+  text-shadow: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+}
+
+body {
+  overscroll-behavior: none;
+  font-feature-settings: 'palt';
+  font-family:
+    "游ゴシック体",
+    YuGothic,
+    "游ゴシック Medium",
+    "Yu Gothic Medium",
+    "游ゴシック",
+    "Yu Gothic",
+    "Helvetica Neue",
+    Arial,
+    "Hiragino Kaku Gothic ProN",
+    "Hiragino Sans",
+    Meiryo,
+    sans-serif;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  font-weight: 400;
+  overflow-x: hidden;
+  color: color(text);
+}
+
+body.preload * {
+  transition: none !important;
+}
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  height: auto;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+li {
+  list-style: none;
+}
+
+em {
+  font-style: normal;
+}
+
+input,
+button,
+select,
+textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  font: inherit;
+}
+
+label,
+button,
+select {
+  cursor: pointer;
+}
+
+button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  display: inline-block;
+  position: relative;
+  text-decoration: none;
+  text-align: left;
+}

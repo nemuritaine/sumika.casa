@@ -1,0 +1,17 @@
+@use "sass:math";
+@use "../../../global/" as *;
+
+.p-studyDetail {
+
+  .l-footerMenuItem__icon.--compass svg {
+
+    circle {
+      fill: color(main);
+    }
+
+    path {
+      stroke: none;
+      fill: color(bg);
+    }
+  }
+}

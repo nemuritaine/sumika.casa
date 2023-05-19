@@ -1,0 +1,112 @@
+@use "sass:math";
+@use "../../global/" as *;
+
+.c-controller {
+  display: flex;
+  column-gap: 28px;
+
+  @include responsive(md, min) {
+    column-gap: vw(28);
+  }
+
+  &__counter {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+
+    @include responsive(md, min) {
+      column-gap: vw(10);
+    }
+  }
+
+  // .c-controller__navigation
+  &__navigation {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+
+    @include responsive(md, min) {
+      column-gap: vw(10);
+    }
+  }
+}
+
+.c-controllerCounter {
+  @include font(10, 15, 0);
+  @include Optima;
+
+  @include responsive(md, min) {
+    @include vwfont(1280, 10);
+  }
+
+  &.--current {
+    color: color(main);
+  }
+
+  &.--total {
+    column-gap: 10px;
+    display: flex;
+    align-items: center;
+
+    @include responsive(md, min) {
+      column-gap: vw(10);
+    }
+
+    &:before {
+      content: '';
+      width: 2px;
+      height: 2px;
+      display: block;
+      border-radius: 50%;
+      background-color: color(lightgray);
+
+      @include responsive(md, min) {
+        width: vw(2);
+        height: vw(2);
+      }
+    }
+  }
+}
+
+.c-controllerNavigation {
+  cursor: pointer;
+
+  &.--prev {
+    transform: scaleX(-1);
+  }
+
+  &__icon {
+    position: relative;
+  }
+}
+
+
+.c-controllerNavigationIcon {
+  display: block;
+
+  &.--frame {
+    width: 43px;
+    height: 33px;
+    fill: color(lightgray);
+
+    @include responsive(md, min) {
+      width: vw(43);
+      height: vw(33);
+    }
+  }
+
+  &.--arrow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 15px;
+    height: 12px;
+    fill: color(text);
+
+    @include responsive(md, min) {
+      width: vw(15);
+      height: vw(12);
+    }
+  }
+}

@@ -1,0 +1,26 @@
+@use "sass:math";
+@use "../function" as f;
+@use "../variables" as v;
+
+// =============================================
+// インナーの設定
+// =============================================
+@mixin inner($inner: md) {
+  box-sizing: content-box;
+  padding-right: 20px;
+  padding-left: 20px;
+  margin-right: auto;
+  margin-left: auto;
+
+  @media screen and (min-width: 48rem) { // 768px
+    padding-right: 50px;
+    padding-left: 50px;
+  }
+
+  @media screen and (min-width: 64rem) { // 1024px
+    $width: #{inspect(map-get(v.$inners, $inner))};
+    max-width: calc($width / 1280 * 100vw);
+  }
+}
+
+

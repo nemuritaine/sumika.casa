@@ -1,0 +1,14 @@
+@use "sass:math";
+@use "../../../global/" as *;
+
+@forward "item";
+
+.p-newsIndex {
+
+  .l-footerMenuItem__icon.--bell svg path {
+
+    &:nth-child(2) {
+      fill: color(main);
+    }
+  }
+}

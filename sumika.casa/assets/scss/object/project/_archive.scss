@@ -1,0 +1,399 @@
+@use "sass:math";
+@use "../../global/" as *;
+
+.p-archive {
+
+  .l-main {
+    background-color: color(bg);
+    padding-top: rem(32);
+    padding-bottom: rem(104);
+
+    @include responsive(sm, min) {
+      padding-top: rem(56);
+      padding-bottom: rem(56);
+    }
+
+    @include responsive(md, min) {
+      padding-top: vw(56);
+      padding-bottom: vw(56);
+    }
+  }
+
+  &__inner {
+    @include inner(lg);
+  }
+
+  &__wrapper {
+    
+    @include responsive(md, min) {
+      display: flex;
+      column-gap: per(48, 1120);
+    }
+  }
+
+  &__aside {
+    width: per(240, 1120);
+
+    @include responsive(md, max) {
+      position: fixed;
+      opacity: 0;
+      visibility: hidden;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      background-color: rgba(0, 0, 0, 0.3);
+      padding-top: rem(20);
+      padding-right: 10px;
+      padding-bottom: rem(20);
+      padding-left: 10px;
+      height: 100vh;
+    }
+
+    @include responsive(md, min) {
+      position: relative;
+    }
+  }
+
+  &__article {
+    
+    @include responsive(md, min) {
+      width: per(832, 1120);
+    }
+  }
+
+  &__sort {
+    position: fixed;
+    // opacity: 0;
+    // visibility: hidden;
+    width: calc(100% - 40px);
+    bottom: rem(60);
+    z-index: 100;
+
+    @include responsive(sm, min) {
+      bottom: rem(30);
+      width: calc(100% - 100px);
+    }
+
+    @include responsive(md, min) {
+      display: none;
+    }
+  }
+}
+
+.p-archiveAside {
+
+  @include responsive(md, max) {
+    background-color: color(white);
+    border-radius: rem(6);
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-bottom: rem(20);
+    height: 100%;
+  }
+
+  &__heading {
+    height: rem(70);
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    @include responsive(md, max) {
+      justify-content: center;
+      border-bottom: 1px solid color(lightgray);
+    }
+    
+    @include responsive(md, min) {
+      background-color: color(smoke);
+      border-radius: vw(6);
+      height: vw(60);
+      padding-left: vw(20);
+      padding-right: vw(20);
+    }
+  }
+
+  &__close {
+    width: 29px;
+    height: 29px;
+    display: grid;
+    place-items: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    color: color(main);
+    cursor: pointer;
+
+    @include responsive(md, min) {
+      display: none;
+    }
+
+    svg {
+      display: block;
+      width: 15px;
+      height: 15px;
+    }
+  }
+  
+  &__title {
+    
+    p {
+      @include font(18, 27, 0, 700);
+    
+      @include responsive(md, min) {
+        @include vwfont(1280, 18, 27, 0, 700);
+      }
+    }
+  }
+
+  &__clear {
+    color: color(main);
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 4px;
+
+    @include responsive(md, min) {
+      display: none;
+    }
+
+    p {
+      @include font(14, 21, 0, 700);
+    }
+  }
+
+  &__menu {
+
+    @include responsive(md, max) {
+      margin-top: rem(4);
+      height: calc(100% - rem(70) - rem(54) - rem(20));
+      overflow-y: scroll;
+      white-space: nowrap;
+      overflow-x: scroll;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    @include responsive(md, min) {
+      margin-top: vw(4);
+      padding-right: vw(20);
+      padding-left: vw(20);
+    }
+
+    &::-webkit-scrollbar {
+
+      @include responsive(md, max) {
+        display: none;
+      }
+    }
+  }
+
+  &__button {
+
+    @include responsive(md, max) {
+      margin-top: rem(20);
+    }
+
+    @include responsive(md, min) {
+      display: none;
+    }
+  }
+}
+
+.p-archiveAsideMenu {
+  $this: &;
+  padding-top: rem(16);
+  padding-bottom: rem(16);
+  border-bottom: 1px solid color(lightgray);
+
+  @include responsive(md, min) {
+    padding-bottom: vw(20);
+    border-bottom: vw(1) solid color(lightgray);  
+  }
+
+  &.is-accordion {
+
+    #{$this}__heading {
+
+      @include responsive(md, max) {
+        cursor: pointer;
+      }
+    }
+
+    #{$this}__body {
+
+      @include responsive(md, max) {
+        height: 0;
+        overflow: hidden;
+      }
+    }
+
+    #{$this}__icon {
+      display: block;
+
+      @include responsive(md, min) {
+        display: none;
+      }
+    }
+  }
+
+  // .p-archiveAsideMenu__heading
+  &__heading {
+
+    @include responsive(md, max) {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+  }
+  
+  &__title {
+    
+    p {
+      @include font(16, 24, 0, 700);
+    
+      @include responsive(md, min) {
+        @include vwfont(1280, 16);
+      }
+    }
+  }
+
+  &__icon {
+    display: none;
+    position: absolute;
+    right: 4px;
+    width: 14px;
+    height: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    span {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 14px;
+      background-color: color(main);
+
+      &:nth-of-type(1) {
+        transform: translate(-50%, -50%);
+        height: 1px;
+        border-radius: 0.5px;
+      }
+
+      &:nth-of-type(2) {
+        height: 2px;
+        border-radius: 1px;
+        transform: translate(-50%, -50%) rotate(-90deg);
+      }
+    }
+  }
+
+  &__body {
+  }
+
+  &__item {
+    margin-top: rem(12);
+
+    @include responsive(md, min) {
+      margin-top: vw(12);
+    }
+  }
+}
+
+.p-archiveAsideButton {
+  width: 100%;
+  background-color: color(main);
+  color: color(white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: rem(54);
+  border-radius: rem(6);
+  cursor: pointer;
+
+  p {
+    @include font(16, 24, 40, 700);
+  }
+}
+
+.p-archiveAsideMenuItem {
+  display: flex;
+  column-gap: 9px;
+
+  @include responsive(md, min) {
+    column-gap: vw(9);
+  }
+
+  &:not(:first-of-type) {
+    margin-top: rem(12);
+
+    @include responsive(md, min) {
+      margin-top: vw(12);
+    }
+  }
+
+  input[type="checkbox"] {
+    cursor: pointer;
+    background-color: color(beige);
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-top: rem(1);
+
+    @include responsive(md, min) {
+      width: vw(20);
+      height: vw(20);
+      border-radius: vw(4);
+      margin-top: vw(1);
+    }
+
+    &:checked {
+      background-image: url(/assets/images/common/ico_check.svg);
+      background-color: color(main);
+      background-size: 13px;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      @include responsive(md, min) {
+        background-size: vw(13);
+      }
+    }
+  }
+
+  label {
+    @include font(16, 24, 0);
+    width: calc(100% - 20px - 9px);
+  
+    @include responsive(md, min) {
+      @include vwfont(1280, 16, 24, 0);
+      width: calc(100% - vw(20) - vw(9));
+    }
+  }
+}
+
+.p-archiveSort {
+  width: 100%;
+  background-color: color(main);
+  color: color(white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+  height: rem(54);
+  border-radius: rem(6);
+  cursor: pointer;
+
+  &__icon {
+
+    svg {
+      display: block;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &__text {
+    @include font(16, 24, 0, 700);
+  }
+}

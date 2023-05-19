@@ -1,0 +1,179 @@
+@use "sass:math";
+@use "../../global/" as *;
+
+.c-sort {
+  
+  @include responsive(sm, min) {
+    display: flex;
+    align-items: center;
+  }
+
+  &__title {
+
+  }
+
+  // .c-sort__type
+  &__type {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: rem(16);
+    
+    @include responsive(sm, max) {
+      margin-top: rem(16);
+      column-gap: per(15, 335);
+    }
+
+    @include responsive(sm, min) {
+      position: relative;
+      padding-left: vw(60);
+    }
+
+    // .c-sort__type:before
+    &:before {
+      
+      @include responsive(sm, min) {
+        content: '';
+        display: block;
+        width: 2px;
+        height: rem(20);
+        background-color: color(lightgray);
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: vw(30);
+      }
+
+      @include responsive(md, min) {
+        width: vw(2);
+        height: vw(20);
+      }
+    }
+  }
+}
+
+.c-sortTitle {
+  @include font(13, 18, 40, 700);
+  
+  @include responsive(md, min) {
+    @include vwfont(1280, 13, 18, 40, 700);
+  }
+}
+
+.c-sortType {
+  $this: &;
+  
+  @include responsive(sm, max) {
+    width: per(160, 335);
+  }
+
+  @include responsive(sm, min) {
+    display: flex;
+    align-items: center;
+  }
+
+  & + #{$this} {
+    @include responsive(sm, min) {
+      margin-left: vw(30);
+    }
+  }
+
+  // .c-sortType__title
+  &__title {
+    @include font(13, 18, 40, 500);
+    
+    @include responsive(md, min) {
+      @include vwfont(1280, 13, 18, 40, 500);
+    }
+  }
+
+  &__selector {
+    
+    @include responsive(sm, max) {
+      margin-top: rem(8);
+    }
+
+    @include responsive(sm, min) {
+      margin-left: vw(16);
+    }
+  }
+}
+
+.c-sortTypeSelector {
+  position: relative;
+  
+  &.--border {
+    
+    select {
+      border: 1px solid color(lightgray);
+
+      @include responsive(md, min) {
+        border-width: vw(1);
+      }
+    }
+  }
+  
+  // .c-sortTypeSelector select
+  select {
+    @include font(13, 24, 40, 500);
+    width: 100%;
+    height: rem(40);
+    padding-left: 17px;
+    border-radius: 6px;
+    background-color: white;
+    outline: none;
+    
+    @include responsive(md, min) {
+      @include vwfont(1280, 13, 18, 40, 500);
+      width: vw(160);
+    }
+  }
+
+  &__icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 12px;
+    width: 11px;
+    height: 11px;
+    pointer-events: none;
+    
+    @include responsive(sm, min) {
+      width: vw(11);
+      height: vw(11);
+      right: vw(16);
+    }
+  }
+}
+
+.c-sortTypeSelectorIcon {
+  background-color: color(text);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  &:nth-of-type(1) {
+    width: 2px;
+    height: 11px;
+    border-radius: 1px;
+    
+    @include responsive(sm, min) {
+      width: vw(2);
+      height: vw(11);
+      border-radius: vw(1);
+    }
+  }
+
+  &:nth-of-type(2) {
+    width: 11px;
+    height: 1px;
+    border-radius: 0.5px;
+
+    @include responsive(sm, min) {
+      width: vw(11);
+      height: vw(1);
+      border-radius: vw(0.5);
+    }
+  }
+}

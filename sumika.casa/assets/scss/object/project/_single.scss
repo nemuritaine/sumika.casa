@@ -1,0 +1,46 @@
+@use "sass:math";
+@use "../../global/" as *;
+
+.p-single {
+  
+  .l-main {
+    background-color: color(bg);
+    padding-top: rem(50);
+    padding-bottom: rem(50);
+
+    @include responsive(sm, min) {
+      padding-top: rem(80);
+      padding-bottom: rem(80);
+    }
+
+    @include responsive(md, min) {
+      padding-top: vw(80);
+      padding-bottom: vw(80);
+    }
+  }
+
+  &__inner {
+    @include inner(lg);
+  }
+
+  &__wrapper {
+    position: relative;
+    
+    @include responsive(sm, min) {
+      display: flex;
+    }
+  }
+
+  &__aside {
+    display: none;
+  }
+
+  &__article {
+    
+    @include responsive(sm, min) {
+      width: per(800, 1120);
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+}

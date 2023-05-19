@@ -1,0 +1,144 @@
+@use "sass:math";
+@use "../../global/" as *;
+
+.c-elementCard {
+  width: per(160, 335);
+  display: inline-block;
+  white-space: normal;
+  vertical-align: top;
+
+  @include responsive(sm, min) {
+    width: per(192, 1040);
+  }
+
+  @include responsive(md, min) {
+    width: vw(192);
+  }
+
+  // .c-elementCard:not(:first-child)
+  &:not(:first-child) {
+    
+    @include responsive(sm, max) {
+      margin-left: per(15, 335);
+    }
+
+    // @include responsive(md, min) {
+    //   margin-left: vw(20);
+    // }
+  }
+
+  // .c-elementCard__link
+  &__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-color: color(white);
+    border-radius: rem(10);
+    aspect-ratio: 192 / 226;
+    padding-top: rem(14);
+
+    @include responsive(md, min) {
+      padding-top: vw(14);
+    }
+  }
+
+  &__detail {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-top: rem(12);
+    padding-right: 17px;
+    padding-left: 17px;
+    
+    @include responsive(md, min) {
+      padding-top: rem(12);
+      padding-right: vw(17);
+      padding-left: vw(17);
+    }
+  }
+
+  &__like {
+    position: absolute;
+    bottom: rem(15);
+    left: 17px;
+    display: flex;
+    align-items: center;
+
+    @include responsive(md, min) {
+      left: vw(17);
+    }
+  }
+
+  // .c-elementCard__image
+  &__image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: per(120, 192);
+    margin-right: auto;
+    margin-left: auto;
+    
+    // .c-elementCard__image img
+    img {
+      object-fit: contain;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+    }
+  }
+
+  // .c-elementCard__title
+  &__title {
+    @include Alokary;
+    @include font(12, 32, 100, 500);
+    display: block;
+
+    @include responsive(md, min) {
+      @include vwfont(1280, 12, 32, 100, 500);
+    }
+  }
+
+  &__price {
+    @include Wandeln;
+    @include font(12, 17, 0);
+    display: block;
+    margin-top: rem(-4);
+
+    @include responsive(md, min) {
+      @include vwfont(1280, 12, 17, 0);
+    }
+  }
+}
+
+.c-elementCardLike {
+  display: flex;
+  align-items: center;
+
+  &__icon {
+    display: flex;
+    color: color(main);
+    
+    svg {
+      width: 11.34px;
+      height: 10px;
+
+      @include responsive(md, min) {
+        width: vw(11.34);
+        height: vw(10);
+      }
+    }
+  }
+
+  &__text {
+    @include Optima;
+    @include font(10, 12, -100);
+    color: color(main);
+    margin-left: 3.66px;
+    
+    @include responsive(md, min) {
+      @include vwfont(1280, 10, 12, -100);
+      margin-left: vw(4);
+    }
+  }
+}

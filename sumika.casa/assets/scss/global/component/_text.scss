@@ -1,0 +1,53 @@
+@use "sass:math";
+@use "../function" as f;
+@use "../variables" as v;
+
+// =============================================
+// [font フォント周りの設定]
+// $color           {String} color プロパティの値
+// $font-size       {Number} font-size プロパティの値
+// $letter-spacing  {Number} letter-spacing プロパティの値
+// $line-height     {Number} line-height プロパティの値
+// =============================================
+@mixin vwfont($width: 1280, $font-size: null, $line-height: null, $letter-spacing: null, $font-weight: null) {
+  @if $font-size and $width {
+    font-size: math.div($font-size, $width) * 100vw;
+  }
+  @if $letter-spacing {
+    letter-spacing: math.div($letter-spacing, 1000) * 1em;
+  }
+  @if $line-height and $font-size {
+    line-height: math.div($line-height, $font-size);
+  }
+  @if $font-weight {
+    font-weight: $font-weight;
+  }
+}
+@mixin font($font-size: null, $line-height: null, $letter-spacing: null, $font-weight: null) {
+  @if $font-size {
+    font-size: f.rem($font-size);
+  }
+  @if $letter-spacing {
+    letter-spacing: math.div($letter-spacing, 1000) * 1em;
+  }
+  @if $line-height and $font-size {
+    line-height: math.div($line-height, $font-size);
+  }
+  @if $font-weight {
+    font-weight: $font-weight;
+  }
+}
+@mixin variable($font-size: null, $line-height: null, $letter-spacing: null, $font-weight: null) {
+  @if $font-size {
+    font-size: f.rem($font-size);
+  }
+  @if $letter-spacing {
+    letter-spacing: math.div($letter-spacing, 1000) * 1em;
+  }
+  @if $line-height and $font-size {
+    line-height: math.div($line-height, $font-size);
+  }
+  @if $font-weight {
+    font-variation-settings: "wght" $font-weight;
+  }
+}

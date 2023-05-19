@@ -1,0 +1,56 @@
+@use "sass:math";
+
+// ---------------------------------------------
+// カラーチップ
+// ---------------------------------------------
+// 【この変数はデザイナーと相談のうえ設定しています】
+// メインデザイナーの許可なく追加・削除・変更することを禁止します
+// ex) color(link);
+@function color($name:text) {
+  @return map-get($colors, $name);
+}
+$colors: (
+  main: #26915C,
+  assort: #CC151D,
+  text: #111111,
+  black: #000000,
+  beige: #E5E1D8,
+  darkgray: #8A8A8A,
+  gray: #333333,
+  grayish: #565853,
+  lightgray: #E8E8E8,
+  smoke: #F1F0ED,
+  white: #fff,
+  bg: #FAFAF8,
+);
+
+// ---------------------------------------------
+// ブレークポイントの定義
+// ---------------------------------------------
+$breakpoints-max: (
+  "xl": ( max-width: 90em, ), // 1440px
+  "lg": ( max-width: 80em, ), // 1280px
+  "md": ( max-width: 64em, ), // 1024px
+  "sm": ( max-width: 48em, ), // 768px
+  "xs": ( max-width: 30em, ) // 480px
+) !default;
+$breakpoints-min: (
+  "xl": ( min-width: 90.0625em, ), // 1441px
+  "lg": ( min-width: 80.0625em, ), // 1281px
+  "md": ( min-width: 64.0625em, ), // 1025px
+  "sm": ( min-width: 48.0625em, ), // 769px
+  "xs": ( min-width: 30.0625em, ) // 481px
+) !default;
+
+
+// ---------------------------------------------
+// 最大幅の定義
+// ---------------------------------------------
+$inners: (
+  "xl": ( 1440 ),
+  "lg": ( 1120 ),
+  "md": ( 1040 ),
+  "sm": ( 1024 ),
+  "xs": ( 768 ),
+  "xxs": ( 480 )
+) !default;

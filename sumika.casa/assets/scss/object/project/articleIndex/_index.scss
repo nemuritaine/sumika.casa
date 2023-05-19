@@ -1,0 +1,16 @@
+@use "sass:math";
+@use "../../../global/" as *;
+
+.p-articleIndex {
+
+  .l-footerMenuItem__icon.--article svg {
+
+    rect {
+      fill: color(main);
+    }
+
+    line {
+      stroke: color(bg);
+    }
+  }
+}

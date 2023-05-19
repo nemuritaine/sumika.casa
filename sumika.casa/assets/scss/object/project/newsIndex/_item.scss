@@ -1,0 +1,17 @@
+@use "sass:math";
+@use "../../../global/" as *;
+
+.p-newsIndexItemText {
+
+  p {
+    @include font(14, 22, 40);
+
+    @include responsive(md, min) {
+      @include vwfont(1280, 14);
+    }
+
+    &:not(:first-child) {
+      margin-top: rem(16);
+    }
+  }
+}

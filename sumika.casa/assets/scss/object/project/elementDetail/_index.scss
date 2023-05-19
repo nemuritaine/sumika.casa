@@ -1,0 +1,24 @@
+@forward "news";
+
+@use "sass:math";
+@use "../../../global/" as *;
+
+.p-elementDetail {
+
+  .l-footerMenuItem__icon.--search svg .st0 {
+    stroke-width: 6px;
+  }
+
+  .l-main {
+    background-color: color(bg);
+    padding-top: rem(50);
+
+    @include responsive(sm, min) {
+      padding-top: rem(50);
+    }
+
+    @include responsive(md, min) {
+      padding-top: vw(50);
+    }
+  }
+}

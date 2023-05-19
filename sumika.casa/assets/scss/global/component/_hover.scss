@@ -1,0 +1,14 @@
+@use "sass:math";
+@use "../function" as f;
+@use "../variables" as v;
+
+// =============================================
+// [hover ホバーの指定]
+// =============================================
+@mixin hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @content;
+    }
+  }
+}

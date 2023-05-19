@@ -1,0 +1,11 @@
+@use "sass:math";
+@use "../global/" as *;
+
+.l-main {
+  overflow: hidden;
+  min-height: calc(100vh - rem(95) - rem(47));
+
+  @include responsive(md, min) {
+    min-height: calc(100vh - vw(193) - vw(148));
+  }
+}

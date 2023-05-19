@@ -1,0 +1,79 @@
+@use "sass:math";
+@use "../../global/" as *;
+
+.u-device {
+
+  &__min {
+    &--xl {
+      display: none !important;
+      @include responsive(xl, min) {
+        display: inline-block !important;
+      }
+    }
+
+    &--lg {
+      display: none !important;
+      @include responsive(lg, min) {
+        display: inline-block !important;
+      }
+    }
+
+    &--md {
+      display: none !important;
+      @include responsive(md, min) {
+        display: inline-block !important;
+      }
+    }
+
+    &--sm {
+      display: none !important;
+      @include responsive(sm, min) {
+        display: inline-block !important;
+      }
+    }
+
+    &--xs {
+      display: none !important;
+      @include responsive(xs, min) {
+        display: inline-block !important;
+      }
+    }
+  }
+
+  &__max {
+    &--xl {
+      display: none !important;
+      @include responsive(xl, max) {
+        display: inline-block !important;
+      }
+    }
+
+    &--lg {
+      display: none !important;
+      @include responsive(lg, max) {
+        display: inline-block !important;
+      }
+    }
+
+    &--md {
+      display: none !important;
+      @include responsive(md, max) {
+        display: inline-block !important;
+      }
+    }
+
+    &--sm {
+      display: none !important;
+      @include responsive(sm, max) {
+        display: inline-block !important;
+      }
+    }
+
+    &--xs {
+      display: none !important;
+      @include responsive(xs, max) {
+        display: inline-block !important;
+      }
+    }
+  }
+}
