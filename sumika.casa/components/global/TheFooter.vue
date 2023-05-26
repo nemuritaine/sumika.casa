@@ -68,7 +68,7 @@
                   <line class="st0" x1="18" y1="24" x2="39" y2="24"/>
                 </svg>
               </span>
-              <span class="l-footerMenuItem__text">コラム</span>
+              <span class="l-footerMenuItem__text">お部屋紹介</span>
             </a>
           </li>
           <li class="l-footerMenuItem">

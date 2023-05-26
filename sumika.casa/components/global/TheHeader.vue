@@ -65,7 +65,7 @@
           </nav>
         </div>
         <div class="l-header__logo">
-          <span>SUMIKA.CASA</span>
+          <a href="/">SUMIKA.CASA</a>
         </div>
         <div class="l-header__copy">
           <h1 class="l-headerCopy">知りたいがすぐに見つかる暮らしのデータベース</h1>
@@ -172,7 +172,7 @@
 
     async fetch () {
       try {
-        const responseItemStyles = await this.$axios.get(`https://sumika.artche.jp/cms/wp-json/custom/v0/element_style`)
+        const responseItemStyles = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/element_style`)
         this.itemStyles = responseItemStyles.data
       } catch (error) {
         console.log(error)
@@ -190,10 +190,6 @@
 
     @include responsive(md, min) {
       border-width: vw(1);
-    }
-
-    // .l-header__inner
-    &__inner {
     }
 
     &__wrapper {
@@ -227,7 +223,8 @@
         order: 1;
       }
 
-      span {
+      // .l-header__logo a
+      a {
         display: block;
         @include Wandeln;
         @include font(34, 34, -40);
@@ -239,6 +236,7 @@
           position: relative;
           height: rem(79);
           bottom: rem(2);
+          pointer-events: none;
         }
 
         @include responsive(md, min) {
@@ -585,8 +583,9 @@
       margin-left: 10px;
     }
 
+    // .l-headerMenuItem a
     a {
-      @include font(14, 14, 0);
+      @include font(13, 13, 0);
       display: flex;
       justify-content: center;
       align-items: center;

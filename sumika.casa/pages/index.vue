@@ -30,6 +30,21 @@
                 </div>
                 <div class="c-sort__type">
                   <div class="c-sortType">
+                    <div class="c-sortType__title">スタイル</div>
+                    <div class="c-sortType__selector">
+                      <div class="c-sortTypeSelector">
+                        <select name="style" v-model="selectedItemStyle">
+                          <option value="">すべて</option>
+                          <option v-for="style in itemStyles" :key="style.id" :value="`${style.cat_slug}`">{{ style.cat_name }}</option>
+                        </select>
+                        <div class="c-sortTypeSelector__icon">
+                          <div class="c-sortTypeSelectorIcon"></div>
+                          <div class="c-sortTypeSelectorIcon"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="c-sortType">
                     <div class="c-sortType__title">種類</div>
                     <div class="c-sortType__selector">
                       <div class="c-sortTypeSelector">
@@ -44,7 +59,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="c-sortType">
+                  <!-- <div class="c-sortType">
                     <div class="c-sortType__title">ブランド</div>
                     <div class="c-sortType__selector">
                       <div class="c-sortTypeSelector">
@@ -58,7 +73,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                   <div class="c-sortType">
                     <div class="c-sortType__title">値段</div>
                     <div class="c-sortType__selector">
@@ -453,6 +468,7 @@
         selectedItemCategory: '',
         selectedItemBrand: '',
         selectedItemPrice: '',
+        selectedItemStyle: '',
         articleCurrentSlideNumber: 0,
         articleTotalSlides: 0,
         elementCurrentSlideNumber: 0,
@@ -460,17 +476,18 @@
       }
     },
 
-    async asyncData({ $axios }) {
+    async asyncData({ $axios, app }) {
       try {
-        const responseArticles = await $axios.get(`${process.env.VUE_APP_API_URL}/custom/v0/posts`)
-        const responseNews = await $axios.get(`${process.env.VUE_APP_API_URL}/custom/v0/news`)
-        const responseStudies = await $axios.get(`${process.env.VUE_APP_API_URL}/custom/v0/studies`)
-        const responseStudyCategories = await $axios.get(`${process.env.VUE_APP_API_URL}/custom/v0/study_cat`)
-        const responseItems = await $axios.get(`${process.env.VUE_APP_API_URL}/custom/v0/elements`)
-        const responseItemClasses = await $axios.get(`${process.env.VUE_APP_API_URL}/custom/v0/element_class`)
-        const responseItemPrices = await $axios.get(`${process.env.VUE_APP_API_URL}/custom/v0/element_price`)
-        const responseItembrands = await $axios.get(`${process.env.VUE_APP_API_URL}/custom/v0/element_brand`)
-        const responsePostsCounts = await $axios.$get(`${process.env.VUE_APP_API_URL}/custom/v0/counts`)
+        const responseArticles = await $axios.get(`${app.$url}/custom/v0/posts`)
+        const responseNews = await $axios.get(`${app.$url}/custom/v0/news`)
+        const responseStudies = await $axios.get(`${app.$url}/custom/v0/studies`)
+        const responseStudyCategories = await $axios.get(`${app.$url}/custom/v0/study_cat`)
+        const responseItems = await $axios.get(`${app.$url}/custom/v0/elements`)
+        const responseItemClasses = await $axios.get(`${app.$url}/custom/v0/element_class`)
+        const responseItemPrices = await $axios.get(`${app.$url}/custom/v0/element_price`)
+        const responseItemStyles = await $axios.get(`${app.$url}/custom/v0/element_style`)
+        const responseItembrands = await $axios.get(`${app.$url}/custom/v0/element_brand`)
+        const responsePostsCounts = await $axios.$get(`${app.$url}/custom/v0/counts`)
         
         return {
           articles: responseArticles.data,
@@ -480,6 +497,7 @@
           items: responseItems.data,
           itemClasses: responseItemClasses.data,
           itemPrices: responseItemPrices.data,
+          itemStyles: responseItemStyles.data,
           itemBrands: responseItembrands.data,
           counts: responsePostsCounts,
         }
@@ -494,6 +512,7 @@
           items: [],
           itemClasses: [],
           itemPrices: [],
+          itemStyles: [],
           itemBrands: [],
           counts: [],
         }
@@ -511,6 +530,9 @@
         await this.fetchItems()
       },
       async selectedItemPrice () {
+        await this.fetchItems()
+      },
+      async selectedItemStyle () {
         await this.fetchItems()
       },
     },
@@ -545,7 +567,7 @@
     methods: {
       async fetchStudies () {
         try {
-          const responseStudies = await this.$axios.get(`https://sumika.artche.jp/cms/wp-json/custom/v0/studies`, {
+          const responseStudies = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/studies`, {
             params: {
               'categories[]': this.selectedStudyCategory,
             },
@@ -559,11 +581,12 @@
 
       async fetchItems () {
         try {
-          let url = `https://sumika.artche.jp/cms/wp-json/custom/v0/elements`
+          let url = `${this.$nuxt.$url}/custom/v0/elements`
           const queryParams = [
             { key: "classes", value: this.selectedItemCategory },
             { key: "brands", value: this.selectedItemBrand },
             { key: "prices", value: this.selectedItemPrice },
+            { key: "styles", value: this.selectedItemStyle },
           ]
             .filter((param) => param.value)
             .map((param) => `${param.key}[]=${param.value}`)
@@ -914,8 +937,47 @@
       }
     }
 
+    // .p-topElementSlider__sort
     &__sort {
       width: 100%;
+
+      .c-sort__type {
+
+        @include responsive(sm, max) {
+          flex-wrap: nowrap;
+          column-gap: 0;
+          white-space: nowrap;
+          overflow-x: scroll;
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+          width: calc(100% + 40px);
+          margin-left: -20px !important;
+          padding-left: 20px !important;
+          padding-right: 20px !important;
+        }
+
+        &::-webkit-scrollbar {
+
+          @include responsive(sm, max) {
+            display: none;
+          }
+        }
+      }
+
+      .c-sortType {
+        
+        @include responsive(sm, max) {
+          display: inline-block;
+          flex: 0 0 auto;
+        }
+        
+        &:not(:first-of-type) {
+          
+          @include responsive(sm, max) {
+            margin-left: per(15, 335);
+          }
+        }
+      }
     }
 
     // .p-topElementSlider__controller

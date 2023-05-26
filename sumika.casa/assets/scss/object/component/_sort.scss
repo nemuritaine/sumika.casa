@@ -122,6 +122,7 @@
     border-radius: 6px;
     background-color: white;
     outline: none;
+    color: color(text);
     
     @include responsive(md, min) {
       @include vwfont(1280, 13, 18, 40, 500);

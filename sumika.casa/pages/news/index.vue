@@ -199,11 +199,11 @@
       },
     },
 
-    async asyncData({ $axios }) {
+    async asyncData({ $axios, app }) {
       try {
-        // const responseYears = await $axios.get(`${process.env.VUE_APP_API_URL}/custom/v0/news_year`)
-        const responseCategories = await $axios.get(`${process.env.VUE_APP_API_URL}/custom/v0/news_cat`)
-        const responseNews = await $axios.get(`${process.env.VUE_APP_API_URL}/custom/v0/news`, {
+        // const responseYears = await $axios.get(`${app.$url}/custom/v0/news_year`)
+        const responseCategories = await $axios.get(`${app.$url}/custom/v0/news_cat`)
+        const responseNews = await $axios.get(`${app.$url}/custom/v0/news`, {
           params: {
             per_page: 20,
             page: 1,
@@ -234,7 +234,7 @@
 
       async fetchNews (page) {
         try {
-          const response = await this.$axios.get(`https://sumika.artche.jp/cms/wp-json/custom/v0/news`, {
+          const response = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/news`, {
             params: {
               per_page: this.perPage,
               page: page,

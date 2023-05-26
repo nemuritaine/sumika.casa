@@ -1,5 +1,4 @@
 import axios from 'axios'
-require("dotenv").config();
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -43,6 +42,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/api.js'
     // { src: '~/plugins/splide.client.js', mode: 'client' }
   ],
 
@@ -60,6 +60,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/dotenv',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

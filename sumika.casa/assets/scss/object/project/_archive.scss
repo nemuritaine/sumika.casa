@@ -82,7 +82,7 @@
 }
 
 .p-archiveAside {
-
+  
   @include responsive(md, max) {
     background-color: color(white);
     border-radius: rem(6);
@@ -203,49 +203,41 @@
 
 .p-archiveAsideMenu {
   $this: &;
-  padding-top: rem(16);
-  padding-bottom: rem(16);
   border-bottom: 1px solid color(lightgray);
 
   @include responsive(md, min) {
-    padding-bottom: vw(20);
     border-bottom: vw(1) solid color(lightgray);  
   }
 
   &.is-accordion {
 
     #{$this}__heading {
-
-      @include responsive(md, max) {
-        cursor: pointer;
-      }
+      cursor: pointer;
     }
 
     #{$this}__body {
-
-      @include responsive(md, max) {
-        height: 0;
-        overflow: hidden;
-      }
+      height: 0;
+      overflow: hidden;
     }
 
     #{$this}__icon {
       display: block;
-
-      @include responsive(md, min) {
-        display: none;
-      }
     }
   }
 
   // .p-archiveAsideMenu__heading
   &__heading {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-top: rem(16);
+    padding-bottom: rem(16);
 
-    @include responsive(md, max) {
-      position: relative;
-      display: flex;
-      align-items: center;
+    @include responsive(md, min) {
+      padding-top: vw(16);
+      padding-bottom: vw(16);
     }
+
   }
   
   &__title {
@@ -293,10 +285,12 @@
   }
 
   &__item {
-    margin-top: rem(12);
+    margin-top: rem(-4);
+    margin-bottom: rem(20);
 
     @include responsive(md, min) {
-      margin-top: vw(12);
+      margin-top: vw(-4);
+      margin-bottom: vw(20);
     }
   }
 }

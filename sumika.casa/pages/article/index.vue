@@ -118,12 +118,13 @@
         perPage: 20,
         isLoading: false,
         isLastPage: false,
-
+        // start aside stiky
         sidebarStyle: {},
         lastScrollTop: 0,
         scrollDirection: null,
         fixedScrollTop: null,
         fixedScrollBottom: null,
+        // end aside stiky
       }
     },
 
@@ -135,25 +136,31 @@
     },
 
     mounted () {
+      this.boundAsideSticky = this.asideSticky.bind(this)
+      this.initAsideAccordions()
+
+      window.addEventListener('scroll', () => {
+        this.handleScroll()
+        
+        if (window.innerWidth >= 1025) {
+          this.boundAsideSticky()
+        }
+      })
+      
+      window.addEventListener('resize', () => {
+        this.boundAsideSticky()
+      })
 
       if (window.innerWidth <= 1024) {
         gsap.set('.p-archive__aside', { autoAlpha: 0 })
-        this.initAsideAccordions()
       }
-      
-      window.addEventListener('scroll', () => {
-        this.handleScroll()
-        this.asideSticky()
-      })
-
-      window.addEventListener('resize', () => {
-        this.handleResize()
-      })
     },
 
     beforeDestroy () {
-      window.removeEventListener('scroll', this.handleScroll)
-      window.removeEventListener('scroll', this.asideSticky)
+      ['handleScroll', 'boundAsideSticky'].forEach((handler) => {
+        window.removeEventListener('scroll', this[handler])
+      })
+      window.removeEventListener('resize', this.boundAsideSticky)
     },
 
     watch: {
@@ -173,11 +180,11 @@
       },
     },
 
-    async asyncData({ $axios }) {
+    async asyncData({ $axios, app }) {
       try {
-        const responseCategories = await $axios.get(`${process.env.VUE_APP_API_URL}/custom/v0/categories`)
-        const responseTags = await $axios.get(`${process.env.VUE_APP_API_URL}/custom/v0/tags`)
-        const responseArticles = await $axios.get(`${process.env.VUE_APP_API_URL}/custom/v0/posts`, {
+        const responseCategories = await $axios.get(`${app.$url}/custom/v0/categories`)
+        const responseTags = await $axios.get(`${app.$url}/custom/v0/tags`)
+        const responseArticles = await $axios.get(`${app.$url}/custom/v0/posts`, {
           params: {
             per_page: 20,
             page: 1,
@@ -208,7 +215,7 @@
 
       async fetchArticles (page) {
         try {
-          const response = await this.$axios.get(`https://sumika.artche.jp/cms/wp-json/custom/v0/posts`, {
+          const response = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/posts`, {
             params: {
               per_page: this.perPage,
               page: page,
@@ -262,37 +269,17 @@
         }
       },
 
-      handleResize () {
-        const asideAccordionMenu = document.querySelectorAll('.p-archiveAsideMenu.is-accordion')
-
-        if (window.innerWidth <= 1024) {
-          gsap.to('.p-archive__aside', { autoAlpha: 0 })
-          asideAccordionMenu.forEach((menu) => {
-            const asideAccordionMenuBody = menu.querySelector('.p-archiveAsideMenu__body')
-            const asideAccordionMenuIcon = menu.querySelectorAll('.p-archiveAsideMenu__icon span')
-            gsap.set(asideAccordionMenuBody, { height: 0, autoAlpha: 0 })
-            gsap.set(asideAccordionMenuIcon[1], { rotate: -90, duration: 0.3 }, '<')
-          })
-        } else {
-          gsap.to('.p-archive__aside', { autoAlpha: 1 })
-          asideAccordionMenu.forEach((menu) => {
-            const asideAccordionMenuBody = menu.querySelector('.p-archiveAsideMenu__body')
-            gsap.set(asideAccordionMenuBody, { height: 'auto', autoAlpha: 1 })
-          })
-        }
-      },
-
       animateAside () {
 
         if (window.innerWidth <= 1024) {
-          gsap.to('.p-archive__aside', { autoAlpha: 1 })
         }
+        gsap.to('.p-archive__aside', { autoAlpha: 1 })
       },
 
       hideAside () {
         if (window.innerWidth <= 1024) {
-          gsap.to('.p-archive__aside', { autoAlpha: 0 })
         }
+        gsap.to('.p-archive__aside', { autoAlpha: 0 })
       },
 
       initAsideAccordions () {
@@ -305,18 +292,18 @@
       asideAccordion (event) {
 
         if (window.innerWidth <= 1024) {
-          const tl = gsap.timeline()
-          const target = event.currentTarget
-          const contentElement = target.nextElementSibling
-          const iconElement = target.querySelectorAll('.p-archiveAsideMenu__icon span')
+        }
+        const tl = gsap.timeline()
+        const target = event.currentTarget
+        const contentElement = target.nextElementSibling
+        const iconElement = target.querySelectorAll('.p-archiveAsideMenu__icon span')
 
-          if (gsap.getProperty(contentElement, 'autoAlpha') == 0) {
-            tl.to(contentElement, { height: 'auto', autoAlpha: 1, duration: 0.3 })
-              .to(iconElement[1], { rotate: 0, duration: 0.3 }, '<')
-          } else {
-            tl.to(contentElement, { height: 0, autoAlpha: 0, duration: 0.3 })
-              .to(iconElement[1], { rotate: -90, duration: 0.3 }, '<')
-          }
+        if (gsap.getProperty(contentElement, 'autoAlpha') == 0) {
+          tl.to(contentElement, { height: 'auto', autoAlpha: 1, duration: 0.3 })
+            .to(iconElement[1], { rotate: 0, duration: 0.3 }, '<')
+        } else {
+          tl.to(contentElement, { height: 0, autoAlpha: 0, duration: 0.3 })
+            .to(iconElement[1], { rotate: -90, duration: 0.3 }, '<')
         }
       },
 
@@ -328,12 +315,18 @@
       },
 
       asideSticky () {
+        const wrapper = document.querySelector('.p-archive__aside')
+        const sidebar = document.querySelector('.p-archiveAside')
+
+        if (!wrapper || !sidebar) {
+          return
+        }
+
+        let wrapperWidth = wrapper.clientWidth
 
         if (window.innerWidth >= 1025) {
           let scrollTop = window.pageYOffset || document.documentElement.scrollTop // スクロール量
-          const wrapper = document.querySelector('.p-archive__aside')
-          let sidebar = document.querySelector('.p-archiveAside')
-          let sidebarHeight = sidebar.clientHeight 
+          let sidebarHeight = sidebar.clientHeight
           let sidebarTop = sidebar.getBoundingClientRect().top  // スクロール量に対してサイドバーの相対位置
           let sidebarBottom = sidebar.getBoundingClientRect().bottom // スクロール量に対してサイドバーの相対位置
           let article = document.querySelector('.p-archive__article')
@@ -342,6 +335,8 @@
           let absoluteArticleTop = scrollTop + articleTop // ページ全体に対してアーティクルの絶対位置
 
           wrapper.style.height = `${sidebarHeight}px`
+          sidebar.style.width = `${wrapperWidth}px`
+          gsap.to('.p-archive__aside', { autoAlpha: 1 })
           
           if (scrollTop > this.lastScrollTop) {
             // console.log('下にスクロールしています')
@@ -376,7 +371,7 @@
               }
               
             } else {
-              console.log('下スクロール：サイドバーの最下部までスクロールしていません')
+              // console.log('下スクロール：サイドバーの最下部までスクロールしていません')
 
               this.sidebarStyle = {
                 position: 'relative',
@@ -436,7 +431,10 @@
 
           this.lastScrollTop = scrollTop <= 0 ? 0 : scrollTop
         } else {
+          gsap.to('.p-archive__aside', { autoAlpha: 0 })
+          sidebar.style.width = '100%'
           this.sidebarStyle = null
+          wrapper.style.height = null
         }
       }
     },

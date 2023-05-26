@@ -20,7 +20,7 @@
             <dt>サイズ</dt>
             <dd></dd>
             <dt>値段</dt>
-            <dd>{{ post.price }}</dd>
+            <dd>JPY {{ post.price }}</dd>
           </dl>
           <div class="p-elementDetailFacade__button">
             <a :href="post.affiliate">詳しくみる</a>
@@ -63,18 +63,21 @@
     </section>
     <section class="p-elementDetailCarousel">
       <div class="p-elementDetailCarousel__inner">
-        <div v-for="carousel in post.carousel_data" :key="carousel.taxonomy_slug" class="p-elementDetailCarousel__item">
-          <div
-            v-for="post in carousel.posts"
-            :key="post.ID"
-            class="p-elementDetailCarouselItem"
-          >
-            <div class="p-elementDetailCarouselItem__image">
-              <img :src="post.thumbnail" :alt="post.title" />
-            </div>
-            <div class="p-elementDetailCarouselItem__title">
-              <span>{{ carousel.taxonomy_slug }}</span>
-            </div>
+        <div v-for="carousel in post.carousel_data" :key="carousel.taxonomy_slug" class="p-elementDetailCarousel__wrapper" ref="elementDetailCarousel__wrapper">
+          <div class="p-elementDetailCarousel__item">
+            <a
+              v-for="post in carousel.posts"
+              :key="post.ID"
+              :href="`/element/${post.ID}`"
+              class="p-elementDetailCarouselItem"
+            >
+              <div class="p-elementDetailCarouselItem__image">
+                <img :src="post.thumbnail" :alt="post.title" />
+              </div>
+              <div class="p-elementDetailCarouselItem__title">
+                <span>{{ carousel.taxonomy_slug }}</span>
+              </div>
+            </a>
           </div>
         </div>
       </div>
@@ -313,13 +316,11 @@
       }
     },
 
-    async asyncData(context) {
-      const postId = context.params.id
-      const apiUrl = process.env.VUE_APP_API_URL
+    async asyncData({ app, params, $axios }) {
       
       try {
-        const responsePost = await context.$axios.$get(`${apiUrl}/custom/v0/single_element?id=${postId}`)
-        const responseNews = await context.$axios.get(`${apiUrl}/custom/v0/news`)
+        const responsePost = await $axios.$get(`${app.$url}/custom/v0/single_element?id=${params.id}`)
+        const responseNews = await $axios.get(`${app.$url}/custom/v0/news`)
         return {
           post: responsePost,
           news: responseNews.data,
@@ -427,24 +428,67 @@
           splide.splide.destroy()
         }
       },
+
+      initCarousel () {
+        const elements = this.$refs.elementDetailCarousel__wrapper
+
+        async function processElements(elements) {
+
+          const firstProcess = new Promise((resolve) => {
+            elements.forEach(el => {
+              el.appendChild(el.querySelector('.p-elementDetailCarousel__item').cloneNode(true))
+            })
+            resolve()
+          })
+
+          firstProcess.then(() => {
+            elements.forEach(el => {
+              el.classList.add('is-active')
+            })
+          })
+        }
+        processElements(elements)
+      }
     },
 
     mounted () {
+      this.initCarousel()
       this.initNewsAccordions()
 
-      if (process.client) {
-        const splideCoordinationItem = document.querySelector('.p-elementDetailCoordination__carousel')
-        const splideRelationItem = document.querySelector('.p-elementDetailRelation__carousel')
-        
+      const splideCoordinationItem = document.querySelector('.p-elementDetailCoordination__carousel')
+      const splideRelationItem = document.querySelector('.p-elementDetailRelation__carousel')
+      
+      if (splideCoordinationItem) {
+        splideCoordinationItem.style.visibility = 'visible'
+      }
+
+      if (splideRelationItem) {
+        splideRelationItem.style.visibility = 'visible'
+      }
+
+      if (window.innerWidth >= 768) {
+
         if (splideCoordinationItem) {
-          splideCoordinationItem.style.visibility = 'visible'
+          this.initializeCoordinationSplide()
         }
 
         if (splideRelationItem) {
-          splideRelationItem.style.visibility = 'visible'
+          this.initializeRelationSplide()
         }
+      }
 
-        if (window.innerWidth >= 768) {
+      window.addEventListener('resize', () => {
+        
+        if (window.innerWidth <= 768) {
+
+          if (splideCoordinationItem) {
+            this.destroyCoordinationSplide()
+          }
+          
+          if (splideRelationItem) {
+            this.destroyRelationSplide()
+          }
+        } else {
 
           if (splideCoordinationItem) {
             this.initializeCoordinationSplide()
@@ -454,30 +498,7 @@
             this.initializeRelationSplide()
           }
         }
-
-        window.addEventListener('resize', () => {
-          
-          if (window.innerWidth < 768) {
-
-            if (splideCoordinationItem) {
-              this.destroyCoordinationSplide()
-            }
-            
-            if (splideRelationItem) {
-              this.destroyRelationSplide()
-            }
-          } else {
-
-            if (splideCoordinationItem) {
-              this.initializeCoordinationSplide()
-            }
-
-            if (splideRelationItem) {
-              this.initializeRelationSplide()
-            }
-          }
-        })
-      }
+      })
     },
 
     computed: {
@@ -924,6 +945,7 @@
 
 
 .p-elementDetailCarousel {
+  $this: &;
   margin-top: rem(80);
 
   @include responsive(sm, min) {
@@ -949,11 +971,22 @@
     }
   }
 
-  &__item {
+  &__wrapper {
+    white-space: nowrap;
     border-bottom: 1px solid #D9D9D9;
+    padding-top: rem(12);
+    padding-bottom: rem(12);
+    display: inline-flex;
 
+    @include responsive(sm, min) {
+      padding-top: rem(14);
+      padding-bottom: rem(14);
+    }
+    
     @include responsive(md, min) {
       border-bottom: vw(1) solid #D9D9D9;
+      padding-top: vw(14);
+      padding-bottom: vw(14);
     }
 
     &:first-child {
@@ -963,24 +996,50 @@
         border-top: vw(1) solid #D9D9D9;
       }
     }
+
+    &.is-active {
+
+      &:nth-of-type(odd) {
+  
+        #{$this}__item {
+  
+          &:nth-of-type(1) {
+            animation: infiniteAnimation 40s -20s linear infinite reverse;
+          }
+          
+          &:nth-of-type(2) {
+            animation: infiniteAnimationClone 40s linear infinite reverse;
+          }
+        }
+      }
+  
+      &:nth-of-type(even) {
+  
+        #{$this}__item {
+          &:nth-of-type(1) {
+            animation: infiniteAnimation 40s -20s linear infinite;
+          }
+          
+          &:nth-of-type(2) {
+            animation: infiniteAnimationClone 40s linear infinite;
+          }
+        }
+      }
+    }
+  }
+
+  // .p-elementDetailCarousel__item
+  &__item {
+    white-space: nowrap;
+    display: inline-flex;
+    flex: 0 0 auto;
   }
 }
 
 .p-elementDetailCarouselItem {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  padding-top: rem(12);
-  padding-bottom: rem(12);
-
-  @include responsive(sm, min) {
-    padding-top: rem(14);
-    padding-bottom: rem(14);
-  }
-
-  @include responsive(md, min) {
-    padding-top: vw(14);
-    padding-bottom: vw(14);
-  }
+  flex: 0 0 auto;
 
   &__image {
 

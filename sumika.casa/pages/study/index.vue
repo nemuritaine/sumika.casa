@@ -121,10 +121,10 @@
       },
     },
 
-    async asyncData({ $axios }) {
+    async asyncData({ $axios, app }) {
       try {
-        const responseCategories = await $axios.get(`${process.env.VUE_APP_API_URL}/custom/v0/study_cat`)
-        const responseStudies = await $axios.get(`${process.env.VUE_APP_API_URL}/custom/v0/studies`, {
+        const responseCategories = await $axios.get(`${app.$url}/custom/v0/study_cat`)
+        const responseStudies = await $axios.get(`${app.$url}/custom/v0/studies`, {
           params: {
             per_page: 20,
             page: 1,
@@ -153,7 +153,7 @@
 
       async fetchStudies (page) {
         try {
-          const response = await this.$axios.get(`https://sumika.artche.jp/cms/wp-json/custom/v0/studies`, {
+          const response = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/studies`, {
             params: {
               per_page: this.perPage,
               page: page,

@@ -27,8 +27,9 @@
 
   export default {
 
-    async asyncData(context) {
-      const post = await context.$axios.$get(`https://sumika.artche.jp/cms/wp-json/custom/v0/single_news?id=${context.params.id}`)
+    async asyncData({ app, params, $axios }) {
+
+      const post = await $axios.$get(`${app.$url}/custom/v0/single_news?id=${params.id}`)
       return {
         post
       }
