@@ -87,6 +87,7 @@
           'brand' => $brands && !is_wp_error($brands) && isset($brands[0]) ? $brands[0]->name : '',
           'price' => get_field('p-elementItem__price', $coordination),
           'link' => get_permalink($coordination),
+          'likes_count' => get_field('likes_count', $post->ID),
         );
         array_push($coordination_data, $coordination_item);
       }
@@ -101,6 +102,7 @@
             'post_status' => 'publish',
             'posts_per_page' => 20,
             'orderby' => 'rand',
+            'post__not_in' => array($post->ID),
             'tax_query' => array(
               array(
                 'taxonomy' => 'style',
@@ -125,6 +127,7 @@
                 'brand' => $brands && !is_wp_error($brands) && isset($brands[0]) ? $brands[0]->name : '',
                 'price' => $price,
                 'link' => get_permalink($style_post->ID),
+                'likes_count' => get_field('likes_count', $style_post->ID),
               );
               array_push($coordination_data, $style_item);
               array_push($added_ids, $style_post->ID);
@@ -146,6 +149,7 @@
           'brand' => $brands && !is_wp_error($brands) && isset($brands[0]) ? $brands[0]->name : '',
           'price' => get_field('p-elementItem__price', $relation),
           'link' => get_permalink($relation),
+          'likes_count' => get_field('likes_count', $post->ID),
         );
         array_push($relation_data, $relation_item);
       }
@@ -159,6 +163,7 @@
             'post_status' => 'publish',
             'posts_per_page' => 20,
             'orderby' => 'rand',
+            'post__not_in' => array($post->ID),
             'tax_query' => array(
               array(
                 'taxonomy' => 'brand',
@@ -181,6 +186,7 @@
               'brand' => $brand->name,
               'price' => $price,
               'link' => get_permalink($related_post->ID),
+              'likes_count' => get_field('likes_count', $related_post->ID),
             );
             array_push($relation_data, $relation_item);
           }
@@ -202,7 +208,9 @@
       'title' => $post->post_title,
       'brand' => $brands && !is_wp_error($brands) && isset($brands[0]) ? $brands[0]->name : '',
       'price' => $price,
+      'size' => get_field('p-elementItem__size', $post->ID),
       'affiliate' => get_field('p-elementItem__affiliate', $post->ID),
+      'store' => get_field('p-elementItem__store', $post->ID),
       'category' => get_the_terms($post->ID, 'class')[0]->name,
       'room_data' => $room_data,
       'coordination_data' => $coordination_data,

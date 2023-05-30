@@ -6,6 +6,7 @@
   display: inline-block;
   white-space: normal;
   vertical-align: top;
+  position: relative;
 
   @include responsive(sm, min) {
     width: per(192, 1040);
@@ -49,8 +50,13 @@
     top: 0;
     left: 0;
     padding-top: rem(12);
-    padding-right: 17px;
-    padding-left: 17px;
+    padding-right: 16px;
+    padding-left: 16px;
+
+    @include responsive(sm, min) {
+      padding-right: 17px;
+      padding-left: 17px;
+    }
     
     @include responsive(md, min) {
       padding-top: rem(12);
@@ -61,14 +67,9 @@
 
   &__like {
     position: absolute;
-    bottom: rem(15);
-    left: 17px;
-    display: flex;
-    align-items: center;
-
-    @include responsive(md, min) {
-      left: vw(17);
-    }
+    bottom: 0;
+    left: 0;
+    z-index: 10;
   }
 
   // .c-elementCard__image
@@ -91,41 +92,88 @@
   // .c-elementCard__title
   &__title {
     @include Alokary;
-    @include font(12, 32, 100, 500);
+    @include font(12, 24, 140);
     display: block;
 
     @include responsive(md, min) {
-      @include vwfont(1280, 12, 32, 100, 500);
+      @include vwfont(1280, 12);
     }
   }
 
+  // .c-elementCard__price
   &__price {
     @include Wandeln;
-    @include font(12, 17, 0);
+    @include font(12, 18, 0);
     display: block;
-    margin-top: rem(-4);
 
     @include responsive(md, min) {
-      @include vwfont(1280, 12, 17, 0);
+      @include vwfont(1280, 12);
     }
   }
 }
 
 .c-elementCardLike {
+  $this: &;
   display: flex;
   align-items: center;
+  padding: rem(15) 15px;
 
+  @include responsive(md, min) {
+    padding: vw(15);
+  }
+
+  @include hover {
+
+    #{$this}__icon {
+      color: color(darkgray);
+    }
+
+    #{$this}__text {
+      color: color(darkgray);
+    }
+  }
+
+  &.is-liked {
+
+    #{$this}__icon {
+      color: color(main);
+
+      svg {
+        
+        path {
+  
+          &:nth-of-type(1) {
+            display: none;
+          }
+        }
+      }
+    }
+
+    #{$this}__text {
+      color: color(main);
+    }
+  }
+
+  // .p-topElementSliderCardLike__icon
   &__icon {
     display: flex;
-    color: color(main);
-    
+    color: color(beige);
+    transition: color 0.3s ease;
+        
     svg {
-      width: 11.34px;
-      height: 10px;
+      width: 11px;
+      height: 11px;
 
       @include responsive(md, min) {
-        width: vw(11.34);
-        height: vw(10);
+        width: vw(11);
+        height: vw(11);
+      }
+
+      path {
+
+        &:nth-of-type(1) {
+          display: block;
+        }
       }
     }
   }
@@ -133,12 +181,13 @@
   &__text {
     @include Optima;
     @include font(10, 12, -100);
-    color: color(main);
-    margin-left: 3.66px;
+    color: color(beige);
+    margin-left: 3px;
+    transition: color 0.3s ease;
     
     @include responsive(md, min) {
-      @include vwfont(1280, 10, 12, -100);
-      margin-left: vw(4);
+      @include vwfont(1280, 10);
+      margin-left: vw(3);
     }
   }
 }

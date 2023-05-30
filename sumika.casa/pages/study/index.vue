@@ -12,7 +12,7 @@
             <div class="p-archiveAside__title">
               <p>絞り込み</p>
             </div>
-            <div class="p-archiveAside__clear">
+            <div class="p-archiveAside__clear" @click="clearAll">
               <p>クリア</p>
             </div>
           </div>
@@ -183,10 +183,11 @@
       async handleScroll () {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop
         const windowHeight = window.innerHeight
-        const documentHeight = document.documentElement.scrollHeight
+        const articleElement = document.querySelector('.p-archive__article')
+        const articleHeight = articleElement.scrollHeight
 
-        if (scrollTop + windowHeight >= documentHeight - 100) {
-          this.currentPage += 1;
+        if (scrollTop + windowHeight >= articleHeight - 300) {
+          this.currentPage += 1
           await this.fetchStudies(this.currentPage)
         }
       },
@@ -194,11 +195,15 @@
       selectAll (type, checked) {
         if (type === 'category') {
           if (checked) {
-            this.selectedCategories = this.categories.map(category => category.id)
+            this.selectedCategories = this.categories.map(category => category.cat_slug)
           } else {
             this.selectedCategories = []
           }
         }
+      },
+
+      clearAll () {
+        this.selectedCategories = []
       },
 
       handleResize () {

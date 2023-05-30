@@ -12,7 +12,7 @@
             <div class="p-archiveAside__title">
               <p>絞り込み</p>
             </div>
-            <div class="p-archiveAside__clear">
+            <div class="p-archiveAside__clear" @click="clearAll">
               <p>クリア</p>
             </div>
           </div>
@@ -67,7 +67,7 @@
           </div>
         </div>
       </aside>
-      <article class="p-archive__article" @scroll.passive="handleScroll">
+      <article class="p-archive__article" ref="archiveArticle" @scroll.passive="handleScroll">
         <ul class="p-articleIndex__item">
           <li v-for="article in articles" :key="article.id" class="p-articleIndexItem">
             <nuxt-link :to="`/article/${article.id}`">
@@ -86,7 +86,7 @@
           </li>
         </ul>
       </article>
-      <div class="p-archive__sort">
+      <div class="p-archive__sort" ref="archiveSort">
         <div class="p-archiveSort" @click="animateAside">
           <div class="p-archiveSort__icon">
             <svg>
@@ -125,6 +125,7 @@
         fixedScrollTop: null,
         fixedScrollBottom: null,
         // end aside stiky
+        isFetching: false,
       }
     },
 
@@ -139,17 +140,19 @@
       this.boundAsideSticky = this.asideSticky.bind(this)
       this.initAsideAccordions()
 
+      this.sortOpacityResize()
+      window.addEventListener('resize', this.sortOpacityResize)
+      window.addEventListener('scroll', this.sortOpacityScroll)
+
+      window.addEventListener('scroll', this.handleScroll)
       window.addEventListener('scroll', () => {
-        this.handleScroll()
         
         if (window.innerWidth >= 1025) {
           this.boundAsideSticky()
         }
       })
+      window.addEventListener('resize', this.boundAsideSticky)
       
-      window.addEventListener('resize', () => {
-        this.boundAsideSticky()
-      })
 
       if (window.innerWidth <= 1024) {
         gsap.set('.p-archive__aside', { autoAlpha: 0 })
@@ -157,10 +160,11 @@
     },
 
     beforeDestroy () {
-      ['handleScroll', 'boundAsideSticky'].forEach((handler) => {
-        window.removeEventListener('scroll', this[handler])
-      })
+      window.removeEventListener('scroll', this.handleScroll)
+      window.removeEventListener('scroll', this.boundAsideSticky)
       window.removeEventListener('resize', this.boundAsideSticky)
+      window.removeEventListener('resize', this.sortOpacityResize)
+      window.removeEventListener('scroll', this.sortOpacityScroll)
     },
 
     watch: {
@@ -214,6 +218,8 @@
       },
 
       async fetchArticles (page) {
+        this.isFetching = true
+        
         try {
           const response = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/posts`, {
             params: {
@@ -240,16 +246,47 @@
         } finally {
           this.isLoading = false
         }
+
+        this.isFetching = false
       },
 
       async handleScroll () {
+
+        if (this.isFetching) {  // isFetchingがtrueならfetch中と判断し処理を抜ける
+          return
+        }
+
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop
         const windowHeight = window.innerHeight
-        const documentHeight = document.documentElement.scrollHeight
+        const articleElement = this.$refs.archiveArticle
+        const articleHeight = articleElement.scrollHeight
 
-        if (scrollTop + windowHeight >= documentHeight - 100) {
-          this.currentPage += 1;
+        if (scrollTop + windowHeight >= articleHeight - 300) {
+          this.currentPage += 1
           await this.fetchArticles(this.currentPage)
+        }
+      },
+
+      sortOpacityResize () {
+
+        if (window.innerWidth <= 769 || window.innerWidth >= 1024) {
+          this.$refs.archiveSort.style.opacity = ''
+          this.$refs.archiveSort.style.visibility = ''
+        }
+      },
+
+      sortOpacityScroll () {
+
+        if (window.innerWidth >= 769 && window.innerWidth <= 1024) {
+          const scrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop
+          const articleBottom = this.$refs.archiveArticle.getBoundingClientRect().bottom + window.pageYOffset
+          const threshold = articleBottom - window.innerHeight
+
+          if (scrollPosition >= threshold) {
+            gsap.to(this.$refs.archiveSort, { autoAlpha: 0 })
+          } else {
+            gsap.to(this.$refs.archiveSort, { autoAlpha: 1 })
+          }
         }
       },
 
@@ -267,6 +304,11 @@
             this.selectedTags = []
           }
         }
+      },
+
+      clearAll () {
+        this.selectedCategories = []
+        this.selectedTags = []
       },
 
       animateAside () {
@@ -291,20 +333,54 @@
 
       asideAccordion (event) {
 
-        if (window.innerWidth <= 1024) {
-        }
         const tl = gsap.timeline()
         const target = event.currentTarget
         const contentElement = target.nextElementSibling
         const iconElement = target.querySelectorAll('.p-archiveAsideMenu__icon span')
+        const wrapper = document.querySelector('.p-archive__aside')
+        const sidebar = document.querySelector('.p-archiveAside')
+        let sidebarHeight = null
+        let article = document.querySelector('.p-archive__article')
+        let articleBottom = article.getBoundingClientRect().bottom  // ビューポートに対してアーティクルの相対位置
+        let self = this
 
-        if (gsap.getProperty(contentElement, 'autoAlpha') == 0) {
-          tl.to(contentElement, { height: 'auto', autoAlpha: 1, duration: 0.3 })
-            .to(iconElement[1], { rotate: 0, duration: 0.3 }, '<')
-        } else {
-          tl.to(contentElement, { height: 0, autoAlpha: 0, duration: 0.3 })
-            .to(iconElement[1], { rotate: -90, duration: 0.3 }, '<')
+        async function processAccordion () {
+
+          const firstProcess = new Promise((resolve) => {
+
+            if (gsap.getProperty(contentElement, 'autoAlpha') == 0) {
+              tl.to(contentElement, { height: 'auto', autoAlpha: 1, duration: 0.3, onComplete: resolve })
+                .to(iconElement[1], { rotate: 0, duration: 0.3 }, '<')
+            } else {
+              tl.to(contentElement, { height: 0, autoAlpha: 0, duration: 0.3, onComplete: resolve })
+                .to(iconElement[1], { rotate: -90, duration: 0.3 }, '<')
+            }
+          })
+
+          firstProcess.then(() => {
+
+            sidebarHeight = sidebar.clientHeight
+
+            if (window.innerWidth >= 1025) {
+              wrapper.style.height = `${sidebarHeight}px`
+            }
+
+            if (
+              window.innerWidth >= 1025 &&
+              window.innerHeight >= articleBottom &&
+              sidebar.clientHeight >= window.innerHeight
+            ) {
+              // console.log('アーティクルの最下部よりもスクロールしています')
+
+              self.sidebarStyle = {
+                position: 'fixed',
+                bottom: `${window.innerHeight - articleBottom}px`,
+              }
+            }
+          })
         }
+
+        processAccordion()
       },
 
       vwEquivalent (pxValueAt1280) {
@@ -340,6 +416,25 @@
           
           if (scrollTop > this.lastScrollTop) {
             // console.log('下にスクロールしています')
+
+            if (sidebarHeight <= window.innerHeight) {
+
+              if (articleTop >= this.vwEquivalent(40)) {
+                // console.log('下スクロール：アーティクルの最上部よりもスクロールしています')
+
+                this.sidebarStyle = {
+                  position: 'fixed',
+                  top: `${articleTop}px`,
+                  bottom: 'auto',
+                }
+              } else {
+                this.sidebarStyle = {
+                  position: 'fixed',
+                  top: `${this.vwEquivalent(40)}px`,
+                }
+              }
+              return
+            }
 
             if (this.scrollDirection === 'up') {
 
@@ -488,11 +583,12 @@
       row-gap: rem(8);
 
       @include responsive(md, min) {
-        margin-top: vw(20);
+        margin-top: vw(18);
         row-gap: vw(8);
       }
     }
 
+    // .p-articleIndexItem__title
     &__title {
       display: -webkit-box;
       -webkit-box-orient: vertical;
@@ -500,14 +596,10 @@
       overflow: hidden;
 
       p {
-        @include font(14, 21, 0, 700);
+        @include font(14, 22.4, 0);
         
-        @include responsive(xs, min) {
-          @include font(16, 24);
-        }
-      
         @include responsive(md, min) {
-          @include vwfont(1280, 16);
+          @include vwfont(1280, 14);
         }
       }
     }

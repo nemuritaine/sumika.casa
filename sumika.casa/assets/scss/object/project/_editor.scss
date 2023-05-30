@@ -329,17 +329,23 @@
 
   // .p-editorProfile__wrapper
   &__wrapper {
-    padding: 20px 20px;
+    padding-top: rem(22);
+    padding-right: 20px;
+    padding-bottom: rem(20);
+    padding-left: 20px;
     background: #f0f0f0;
-
+    overflow: hidden;
+    border-radius: rem(6);
+    
     @include responsive(sm, min) {
       padding-top: rem(36);
       padding-right: 40px;
       padding-bottom: rem(36);
       padding-left: 40px;
     }
-
+    
     @include responsive(md, min) {
+      border-radius: vw(6);
       padding-top: vw(36);
       padding-right: vw(40);
       padding-bottom: vw(36);
@@ -350,16 +356,16 @@
   &__name {
   
     p {
-      @include font(18, 27, 40, 600);
+      @include font(16, 24, 40, 600);
 
       @include responsive(md, min) {
-        @include vwfont(1280, 18, 27, 40);
+        @include vwfont(1280, 18);
       }
     }
   }
   
   &__detail {
-    margin-top: rem(16);
+    margin-top: rem(12);
 
     @include responsive(md, min) {
       margin-top: vw(16);
@@ -669,6 +675,15 @@
         padding-left: vw(10);
         border-radius: vw(6);
       }
+    }
+  }
+
+  &__image {
+    overflow: hidden;
+    border-radius: rem(6);
+
+    @include responsive(md, min) {
+      border-radius: vw(6);
     }
   }
   

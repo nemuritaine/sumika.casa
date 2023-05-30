@@ -24,6 +24,30 @@ add_action('rest_api_init', 'register_custom_blocks_in_rest');
 /*-------------------------------------------*/
 function add_custom_endpoint() {
 
+	// ライクデータ取得
+  register_rest_route(
+    'likes',
+    '/fetch/(?P<id>\d+)',
+    [
+      'methods'  => WP_REST_Server::READABLE,
+			// 'permission_callback' => 'rest_permission', // 関数名指定
+      'permission_callback' => '__return_true', // どこからでもアクセス可能
+      'callback' => 'fetch_like_count'
+    ]
+  );
+
+	// ライクデータ操作（増加・減少）
+  register_rest_route(
+    'likes',
+    '/change/(?P<id>\d+)',
+    [
+      'methods'  => WP_REST_Server::CREATABLE,
+			// 'permission_callback' => 'rest_permission', // 関数名指定
+      'permission_callback' => '__return_true', // どこからでもアクセス可能
+      'callback' => 'change_like_data'
+    ]
+  );
+
 	// 投稿データ取得
 	register_rest_route(
 		'custom/v0', // ネームスペース
@@ -369,6 +393,16 @@ function rest_response($file_name, $param = null) {
 	$response = new WP_REST_Response($res);
 	$response->set_status(200);
 	return $response;
+}
+
+// ライクデータ取得
+function fetch_like_count($param) {
+	return rest_response('fetch-like-count', $param);
+}
+
+// ライクデータ操作（増加・減少）
+function change_like_data($param) {
+	return rest_response('change-like-data', $param);
 }
 
 // 投稿データ取得

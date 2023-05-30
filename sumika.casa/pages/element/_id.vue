@@ -5,7 +5,7 @@
         <div class="p-elementDetailFacade__wrapper">
           <div class="p-elementDetailFacade__heading">
             <div class="p-elementDetailFacade__brand">
-              <span>{{ post.brand }}</span>
+              <span class="p-elementDetailFacadeBrand" ref="brandText">{{ post.brand }}</span>
             </div>
             <div class="p-elementDetailFacade__title">
               <p>{{ post.title }}</p>
@@ -17,13 +17,14 @@
             </div>
           </div>
           <dl class="p-elementDetailFacade__detail">
-            <dt>サイズ</dt>
-            <dd></dd>
-            <dt>値段</dt>
-            <dd>JPY {{ post.price }}</dd>
+            <dt v-if="post.size">サイズ</dt>
+            <dd v-if="post.size">{{ post.size }}</dd>
+            <dt v-if="post.price">値段</dt>
+            <dd v-if="post.price">JPY {{ post.price }}</dd>
           </dl>
           <div class="p-elementDetailFacade__button">
-            <a :href="post.affiliate">詳しくみる</a>
+            <a v-if="post.affiliate" :href="post.affiliate" target="_blank">詳しくみる</a>
+            <a v-else-if="post.store" :href="post.store" target="_blank">詳しくみる</a>
           </div>
         </div>
       </div>
@@ -128,18 +129,24 @@
                     <span class="c-elementCard__title">{{ coordination.brand }}</span>
                     <span class="c-elementCard__price">{{ coordination.price }}</span>
                   </span>
-                  <span class="c-elementCard__like">
-                    <span class="c-elementCardLike__icon">
-                      <svg>
-                        <use xlink:href="@/static/assets/images/common/graphics.svg#ico_heart"></use>
-                      </svg>
-                    </span>
-                    <span class="c-elementCardLike__text">23</span>
-                  </span>
                   <span class="c-elementCard__image">
                     <img :src="coordination.thumbnail" alt="" width="" height="">
                   </span>
                 </a>
+                <span class="c-elementCard__like">
+                  <button
+                    :class="coordination.isLiked ? 'c-elementCardLike is-liked' : 'c-elementCardLike'"
+                    @click="coordinationLikePost(coordination.id)"
+                  >
+                    <span class="c-elementCardLike__icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+                        <path d="m45.03,7.81c-2.62-2.62-6.1-4.09-9.78-4.09s-7.16,1.43-9.78,4.05l-.45.45-.45-.45c-2.62-2.62-6.1-4.05-9.78-4.05s-7.12,1.43-9.74,4.05c-2.62,2.62-4.05,6.1-4.05,9.78s1.43,7.16,4.05,9.78l18.25,18.25c.45.45,1.06.7,1.72.7s1.27-.25,1.72-.7l18.21-18.21c2.62-2.62,4.05-6.1,4.05-9.78s-1.43-7.16-4.05-9.78h.08Z"/>
+                        <path d="m45.03,7.81c-2.62-2.62-6.1-4.09-9.78-4.09s-7.16,1.43-9.78,4.05l-.45.45-.45-.45c-2.62-2.62-6.1-4.05-9.78-4.05s-7.12,1.43-9.74,4.05c-2.62,2.62-4.05,6.1-4.05,9.78s1.43,7.16,4.05,9.78l18.25,18.25c.45.45,1.06.7,1.72.7s1.27-.25,1.72-.7l18.21-18.21c2.62-2.62,4.05-6.1,4.05-9.78s-1.43-7.16-4.05-9.78h.08Zm-18.29,5.69l2.25-2.25c1.68-1.68,3.93-2.62,6.3-2.62s4.62.94,6.3,2.62c1.68,1.68,2.62,3.93,2.62,6.3s-.94,4.62-2.62,6.3l-16.49,16.49L8.53,23.81c-1.68-1.68-2.62-3.93-2.62-6.3s.94-4.62,2.58-6.3c1.68-1.68,3.93-2.62,6.3-2.62s4.62.94,6.3,2.62l2.21,2.21c.94.9,2.46.94,3.44.04v.04Z"/>
+                      </svg>
+                    </span>
+                    <span class="c-elementCardLike__text">{{ coordination.likes_count }}</span>
+                  </button>
+                </span>
               </li>
             </ul>
           </div>
@@ -201,18 +208,24 @@
                     <span class="c-elementCard__title">{{ relation.brand }}</span>
                     <span class="c-elementCard__price">{{ relation.price }}</span>
                   </span>
-                  <span class="c-elementCard__like">
-                    <span class="c-elementCardLike__icon">
-                      <svg>
-                        <use xlink:href="@/static/assets/images/common/graphics.svg#ico_heart"></use>
-                      </svg>
-                    </span>
-                    <span class="c-elementCardLike__text">23</span>
-                  </span>
                   <span class="c-elementCard__image">
                     <img :src="relation.thumbnail" alt="" width="" height="">
                   </span>
                 </a>
+                <span class="c-elementCard__like">
+                  <button
+                    :class="relation.isLiked ? 'c-elementCardLike is-liked' : 'c-elementCardLike'"
+                    @click="relationLikePost(relation.id)"
+                  >
+                    <span class="c-elementCardLike__icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+                        <path d="m45.03,7.81c-2.62-2.62-6.1-4.09-9.78-4.09s-7.16,1.43-9.78,4.05l-.45.45-.45-.45c-2.62-2.62-6.1-4.05-9.78-4.05s-7.12,1.43-9.74,4.05c-2.62,2.62-4.05,6.1-4.05,9.78s1.43,7.16,4.05,9.78l18.25,18.25c.45.45,1.06.7,1.72.7s1.27-.25,1.72-.7l18.21-18.21c2.62-2.62,4.05-6.1,4.05-9.78s-1.43-7.16-4.05-9.78h.08Z"/>
+                        <path d="m45.03,7.81c-2.62-2.62-6.1-4.09-9.78-4.09s-7.16,1.43-9.78,4.05l-.45.45-.45-.45c-2.62-2.62-6.1-4.05-9.78-4.05s-7.12,1.43-9.74,4.05c-2.62,2.62-4.05,6.1-4.05,9.78s1.43,7.16,4.05,9.78l18.25,18.25c.45.45,1.06.7,1.72.7s1.27-.25,1.72-.7l18.21-18.21c2.62-2.62,4.05-6.1,4.05-9.78s-1.43-7.16-4.05-9.78h.08Zm-18.29,5.69l2.25-2.25c1.68-1.68,3.93-2.62,6.3-2.62s4.62.94,6.3,2.62c1.68,1.68,2.62,3.93,2.62,6.3s-.94,4.62-2.62,6.3l-16.49,16.49L8.53,23.81c-1.68-1.68-2.62-3.93-2.62-6.3s.94-4.62,2.58-6.3c1.68-1.68,3.93-2.62,6.3-2.62s4.62.94,6.3,2.62l2.21,2.21c.94.9,2.46.94,3.44.04v.04Z"/>
+                      </svg>
+                    </span>
+                    <span class="c-elementCardLike__text">{{ relation.likes_count }}</span>
+                  </button>
+                </span>
               </li>
             </ul>
           </div>
@@ -228,7 +241,7 @@
                 <span class="p-elementDetailNewsTitleEn">News&<br class="u-device__min--sm">Event</span>
               </div>
               <div class="p-elementDetailNewsTitle__ja">
-                <p class="p-elementDetailNewsTitleJa">お知らせとイベント</p>
+                <p>お知らせとイベント</p>
               </div>
             </div>
           </div>
@@ -245,8 +258,10 @@
                   </span>
                   <span class="p-elementDetailNewsItem__category">{{ item.category_slug }}</span>
                 </span>
-                <div class="p-elementDetailNewsItem__main">
-                  <p class="p-elementDetailNewsItem__title">{{ item.title }}</p>
+                <span class="p-elementDetailNewsItem__main">
+                  <span class="p-elementDetailNewsItem__title">
+                    <p>{{ item.title }}</p>
+                  </span>
                   <span class="p-elementDetailNewsItem__icon">
                     <span :class="`p-elementDetailNewsItemIcon--${item.icon}`">
                       <svg>
@@ -259,22 +274,24 @@
                       </svg>
                     </span>
                   </span>
-                </div>
+                </span>
               </a>
               <div
                 v-else-if="item.icon === 'expansion'"
                 class="p-elementDetailNewsItem__link is-accordion"
                 @click="newsAccordion"
               >
-                <span class="p-elementDetailNewsItem__heading">
-                  <span class="p-elementDetailNewsItem__date">
+                <div class="p-elementDetailNewsItem__heading">
+                  <div class="p-elementDetailNewsItem__date">
                     <time>{{ item.time }}</time>
-                  </span>
+                  </div>
                   <span class="p-elementDetailNewsItem__category">{{ item.category_slug }}</span>
-                </span>
+                </div>
                 <div class="p-elementDetailNewsItem__main">
-                  <p class="p-elementDetailNewsItem__title">{{ item.title }}</p>
-                  <span class="p-elementDetailNewsItem__icon">
+                  <div class="p-elementDetailNewsItem__title">
+                    <p>{{ item.title }}</p>
+                  </div>
+                  <div class="p-elementDetailNewsItem__icon">
                     <span :class="`p-elementDetailNewsItemIcon--${item.icon}`">
                       <span class="p-elementDetailNewsItemIcon__line"></span>
                       <span class="p-elementDetailNewsItemIcon__line"></span>
@@ -284,7 +301,7 @@
                         <use xlink:href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
                       </svg>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div v-if="item.icon === 'expansion'" class="p-elementDetailNewsItem__text">
                   <div class="p-elementDetailNewsItemText" v-html="item.content"></div>
@@ -308,11 +325,14 @@
 
     data() {
       return {
+        post: [],
         news: [],
         coordinationCurrentSlideNumber: 0,
         coordinationTotalSlides: 0,
         relationCurrentSlideNumber: 0,
         relationTotalSlides: 0,
+        isProcessingRelationLike: false, // like処理中フラグ
+        isProcessingCoordinationLike: false, // like処理中フラグ
       }
     },
 
@@ -334,6 +354,198 @@
     },
 
     methods: {
+
+      async relationLikePost (postId) {
+
+        // 処理中なら何もしない
+        if (this.isProcessingRelationLike) return
+        this.isProcessingRelationLike = true // フラグを立てる
+
+        const storageKey = `liked_${postId}`
+        
+        // Cookieが利用可能か確認
+        let canUseCookies
+        let hasLiked
+        if (process.client) {
+          canUseCookies = navigator.cookieEnabled
+          hasLiked = this.hasUserLiked(postId)
+        } else {
+          hasLiked = false
+        }
+
+        const isUnlike = hasLiked ? true : false
+
+        // ポストを探す
+        let post = this.post.relation_data.find(item => item.id === postId)
+        if (!post) return
+
+        // オプティミスティックUI更新：サーバーレスポンスを待たずにUIを更新
+        post.isLiked = !isUnlike
+        post.likes_count = post.isLiked ? post.likes_count + 1 : post.likes_count - 1
+
+        try {
+
+          const response = await this.$axios.$post(`${this.$nuxt.$url}/likes/change/${postId}`, {
+            unlike: isUnlike ? '1' : '0',
+          })
+
+          // サーバーからのレスポンスを元に、最終的な値を更新
+          if (response.data && response.data.likes_count !== undefined) {
+            post.likes_count = response.data.likes_count
+          }
+            
+          // Cookieが利用可能な場合、like情報をCookieに保存
+          if (canUseCookies) {
+
+            if (isUnlike) {
+              // Unlikeの場合、Cookieから情報を削除
+              this.$cookies.remove(storageKey)
+            } else {
+              // Likeの場合、情報をCookieに保存
+              this.$cookies.set(storageKey, true)
+            }
+
+          } else {
+
+            // Cookieが利用不可能な場合、like情報をローカルストレージに保存
+            
+            if (isUnlike) {
+              // Unlikeの場合、ローカルストレージから情報を削除
+              window.localStorage.removeItem(storageKey)
+            } else {
+              // Likeの場合、情報をローカルストレージに保存
+              window.localStorage.setItem(storageKey, true)
+            }
+          }
+          
+        } catch (error) {
+          // エラー発生時はUIを元に戻す
+          post.isLiked = isUnlike
+          post.likes_count = post.isLiked ? post.likes_count + 1 : post.likes_count - 1
+          console.error('Error liking post:', error)
+        } finally {
+          this.isProcessingRelationLike = false // フラグを下す
+        }
+      },
+
+      async coordinationLikePost (postId) {
+
+        // 処理中なら何もしない
+        if (this.isProcessingCoordinationLike) return
+        this.isProcessingCoordinationLike = true // フラグを立てる
+
+        const storageKey = `liked_${postId}`
+        
+        // Cookieが利用可能か確認
+        let canUseCookies
+        let hasLiked
+        if (process.client) {
+          canUseCookies = navigator.cookieEnabled
+          hasLiked = this.hasUserLiked(postId)
+        } else {
+          hasLiked = false
+        }
+
+        const isUnlike = hasLiked ? true : false
+
+        // ポストを探す
+        let post = this.post.coordination_data.find(item => item.id === postId)
+        if (!post) return
+
+        // オプティミスティックUI更新：サーバーレスポンスを待たずにUIを更新
+        post.isLiked = !isUnlike
+        post.likes_count = post.isLiked ? post.likes_count + 1 : post.likes_count - 1
+
+        try {
+
+          const response = await this.$axios.$post(`${this.$nuxt.$url}/likes/change/${postId}`, {
+            unlike: isUnlike ? '1' : '0',
+          })
+
+          // サーバーからのレスポンスを元に、最終的な値を更新
+          if (response.data && response.data.likes_count !== undefined) {
+            post.likes_count = response.data.likes_count
+          }
+          
+          // Cookieが利用可能な場合、like情報をCookieに保存
+          if (canUseCookies) {
+
+            if (isUnlike) {
+              // Unlikeの場合、Cookieから情報を削除
+              this.$cookies.remove(storageKey)
+            } else {
+              // Likeの場合、情報をCookieに保存
+              this.$cookies.set(storageKey, true)
+            }
+
+          } else {
+
+            // Cookieが利用不可能な場合、like情報をローカルストレージに保存
+            
+            if (isUnlike) {
+              // Unlikeの場合、ローカルストレージから情報を削除
+              window.localStorage.removeItem(storageKey)
+            } else {
+              // Likeの場合、情報をローカルストレージに保存
+              window.localStorage.setItem(storageKey, true)
+            }
+          }
+          
+        } catch (error) {
+          // エラー発生時はUIを元に戻す
+          post.isLiked = isUnlike
+          post.likes_count = post.isLiked ? post.likes_count + 1 : post.likes_count - 1
+          console.error('Error liking post:', error)
+        } finally {
+          this.isProcessingCoordinationLike = false // フラグを下す
+        }
+      },
+
+      async relationFetchLikesCount(postId) {
+
+        try {
+          const response = await this.$axios.$get(`${this.$nuxt.$url}/likes/fetch/${postId}`)
+          let post = this.post.relation_data.find(item => item.id === postId)
+          if (post) post.likes_count = (response.data && response.data.likes_count) ? response.data.likes_count : 0
+        } catch (error) {
+          console.error('Error fetching likes count:', error)
+        }
+      },
+
+      async coordinationFetchLikesCount(postId) {
+
+        try {
+          const response = await this.$axios.$get(`${this.$nuxt.$url}/likes/fetch/${postId}`)
+          let post = this.post.coordination_data.find(item => item.id === postId)
+          if (post) post.likes_count = (response.data && response.data.likes_count) ? response.data.likes_count : 0
+        } catch (error) {
+          console.error('Error fetching likes count:', error)
+        }
+      },
+
+      hasUserLiked (postId) {
+        const storageKey = `liked_${postId}`
+        const canUseCookies = navigator.cookieEnabled
+        
+        if (canUseCookies) {
+          return this.$cookies.get(storageKey) ? true : false
+        } else {
+          return window.localStorage.getItem(storageKey) ? true : false
+        }
+      },
+      
+      likedInit () {
+
+        this.post.relation_data.forEach(item => {
+          this.relationFetchLikesCount(item.id)
+          item.isLiked = this.hasUserLiked(item.id)
+        })
+
+        this.post.coordination_data.forEach(item => {
+          this.coordinationFetchLikesCount(item.id)
+          item.isLiked = this.hasUserLiked(item.id)
+        })
+      },
 
       initNewsAccordions () {
         const newsAccordionElements = document.querySelectorAll('.p-elementDetailNewsItem__link.is-accordion .p-elementDetailNewsItem__text')
@@ -448,12 +660,33 @@
           })
         }
         processElements(elements)
+      },
+
+      adjustSpanText () {
+        const brandText = this.$refs.brandText
+        const textContent = brandText.textContent
+
+        if (textContent.includes(' ')) {
+          let words = textContent.split(' ')
+          let newTextContent = words.map(word => `<span>${word}</span>`).join('')
+          brandText.innerHTML = newTextContent
+        }
+      },
+    },
+
+    created () {
+      if (process.client) {
+        this.likedInit()
       }
     },
 
     mounted () {
       this.initCarousel()
       this.initNewsAccordions()
+      this.adjustSpanText()
+      if (!process.client) {
+        this.likedInit()
+      }
 
       const splideCoordinationItem = document.querySelector('.p-elementDetailCoordination__carousel')
       const splideRelationItem = document.querySelector('.p-elementDetailRelation__carousel')
@@ -595,28 +828,11 @@
     }
   }
 
+  // .p-elementDetailFacade__brand
   &__brand {
 
     @include responsive(sm, max) {
       order: 1;
-    }
-
-    span {
-      display: block;
-      @include Wandeln;
-      @include font(64, 60, -40);
-      
-      @include responsive(sm, max) {
-        text-align: center;
-      }
-      
-      @include responsive(sm, min) {
-        @include font(96, 76.8);
-      }
-
-      @include responsive(md, min) {
-        @include vwfont(1280, 96);
-      }
     }
   }
 
@@ -708,6 +924,30 @@
     }
   }
 }
+
+.p-elementDetailFacadeBrand {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 12px;
+  @include Wandeln;
+  @include font(62, 60, -48);
+  
+  @include responsive(sm, max) {
+    justify-content: center;
+    height: rem(60);
+  }
+  
+  @include responsive(sm, min) {
+    @include font(96, 76.8);
+    column-gap: 16px;
+  }
+
+  @include responsive(md, min) {
+    @include vwfont(1280, 96);
+    column-gap: vw(16);
+  }
+}
+
 
 .p-elementDetailFacadeImage {
   width: vw(220, 335);
@@ -870,19 +1110,19 @@
   // .p-elementDetailRoomItem__tag
   &__tag {
     display: flex;
-    column-gap: 16px;
+    column-gap: 12px;
     margin-top: rem(12);
 
     @include responsive(md, min) {
-      column-gap: vw(16);
-      margin-top: vw(12);
+      column-gap: vw(12);
+      margin-top: vw(10);
     }
 
     li {
-      @include font(13, 18, 0);
+      @include font(11, 16.5, 0);
 
       @include responsive(md, min) {
-        @include vwfont(1280, 13);
+        @include vwfont(1280, 11);
       }
     }
   }
@@ -900,7 +1140,7 @@
     border-bottom: 1px solid color(main);
 
     @include responsive(sm, max) {
-      margin-top: rem(36);
+      margin-top: rem(40);
     }
     
     @include responsive(sm, min) {
@@ -931,13 +1171,13 @@
       height: 13px;
 
       @include responsive(sm, min) {
-        width: 20px;
-        height: 16px;
+        width: 17px;
+        height: 14px;
       }
 
       @include responsive(md, min) {
-        width: vw(20);
-        height: vw(16);
+        width: vw(17);
+        height: vw(14);
       }
     }
   }
@@ -1004,11 +1244,11 @@
         #{$this}__item {
   
           &:nth-of-type(1) {
-            animation: infiniteAnimation 40s -20s linear infinite reverse;
+            animation: infiniteAnimation 80s -40s linear infinite reverse;
           }
           
           &:nth-of-type(2) {
-            animation: infiniteAnimationClone 40s linear infinite reverse;
+            animation: infiniteAnimationClone 80s linear infinite reverse;
           }
         }
       }
@@ -1017,11 +1257,11 @@
   
         #{$this}__item {
           &:nth-of-type(1) {
-            animation: infiniteAnimation 40s -20s linear infinite;
+            animation: infiniteAnimation 80s -40s linear infinite;
           }
           
           &:nth-of-type(2) {
-            animation: infiniteAnimationClone 40s linear infinite;
+            animation: infiniteAnimationClone 80s linear infinite;
           }
         }
       }
@@ -1339,7 +1579,19 @@
   }
 
   &__ja {
-    margin-top: vw(14);
+    margin-top: rem(12);
+
+    @include responsive(md, min) {
+      margin-top: vw(18);
+    }
+    
+    p {
+      @include font(13, 19.5, 40, 500);
+  
+      @include responsive(md, min) {
+        @include vwfont(1280, 14);
+      }
+    }
   }
 }
 
@@ -1350,14 +1602,6 @@
   
   @include responsive(md, min) {
     @include vwfont(1280, 36, 56, 100);
-  }
-}
-
-.p-elementDetailNewsTitleJa {
-  @include font(14, 26, 40, 500);
-  
-  @include responsive(md, min) {
-    @include vwfont(1280, 14);
   }
 }
 
@@ -1400,6 +1644,7 @@
   }
 
   &__main {
+    display: block;
     position: relative;
     margin-top: rem(8);
 
@@ -1414,19 +1659,24 @@
 
   // .p-elementDetailNewsItem__title
   &__title {
-    @include font(14, 22, 40);
     padding-right: 57px;
-
-    @include responsive(sm, min) {
-    }
+    display: block;
 
     @include responsive(md, min) {
-      @include vwfont(1280, 14);
       padding-right: vw(80);
+    }
+
+    p {
+      @include font(14, 22, 40);
+
+      @include responsive(md, min) {
+        @include vwfont(1280, 14);
+      }
     }
   }
 
   &__icon {
+    display: block;
     position: absolute;
     right: 0;
     top: rem(-5);

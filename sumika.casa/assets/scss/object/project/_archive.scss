@@ -26,11 +26,13 @@
   &__wrapper {
     
     @include responsive(md, min) {
+      overflow: hidden;
       display: flex;
       column-gap: per(48, 1120);
     }
   }
 
+  // .p-archive__aside
   &__aside {
     width: per(240, 1120);
 
@@ -41,13 +43,13 @@
       width: 100%;
       top: 0;
       left: 0;
-      z-index: 1000;
+      z-index: 10001;
       background-color: rgba(0, 0, 0, 0.3);
       padding-top: rem(20);
       padding-right: 10px;
       padding-bottom: rem(20);
       padding-left: 10px;
-      height: 100vh;
+      height: 100%;
     }
 
     @include responsive(md, min) {
@@ -284,12 +286,13 @@
   &__body {
   }
 
+  // .p-archiveAsideMenu__item
   &__item {
-    margin-top: rem(-4);
+    // margin-top: rem(-4);
     margin-bottom: rem(20);
 
     @include responsive(md, min) {
-      margin-top: vw(-4);
+      // margin-top: vw(-4);
       margin-bottom: vw(20);
     }
   }

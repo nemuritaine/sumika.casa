@@ -12,12 +12,12 @@
   margin-right: auto;
   margin-left: auto;
 
-  @media screen and (min-width: 48rem) { // 768px
+  @media screen and (min-width: 48.0625rem) { // 769px
     padding-right: 50px;
     padding-left: 50px;
   }
 
-  @media screen and (min-width: 64rem) { // 1024px
+  @media screen and (min-width: 64.0625rem) { // 1025px
     $width: #{inspect(map-get(v.$inners, $inner))};
     max-width: calc($width / 1280 * 100vw);
   }

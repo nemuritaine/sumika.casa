@@ -12,7 +12,7 @@
             <div class="p-archiveAside__title">
               <p>絞り込み</p>
             </div>
-            <div class="p-archiveAside__clear">
+            <div class="p-archiveAside__clear" @click="clearAll">
               <p>クリア</p>
             </div>
           </div>
@@ -77,8 +77,10 @@
                 </span>
                 <span class="p-newsIndexItem__category">{{ news.category_slug }}</span>
               </span>
-              <div class="p-newsIndexItem__main">
-                <p class="p-newsIndexItem__title">{{ news.title }}</p>
+              <span class="p-newsIndexItem__main">
+                <span class="p-newsIndexItem__title">
+                  <p>{{ news.title }}</p>
+                </span>
                 <span class="p-newsIndexItem__icon">
                   <span :class="`p-newsIndexItemIcon--${news.icon}`">
                     <svg>
@@ -91,22 +93,24 @@
                     </svg>
                   </span>
                 </span>
-              </div>
+              </span>
             </nuxt-link>
             <div
               v-else-if="news.icon === 'expansion'"
               class="p-newsIndexItem__link is-accordion"
               @click="newsAccordion"
             >
-              <span class="p-newsIndexItem__heading">
-                <span class="p-newsIndexItem__date">
+              <div class="p-newsIndexItem__heading">
+                <div class="p-newsIndexItem__date">
                   <time>{{ news.time }}</time>
-                </span>
+                </div>
                 <span class="p-newsIndexItem__category">{{ news.category_slug }}</span>
-              </span>
+              </div>
               <div class="p-newsIndexItem__main">
-                <p class="p-newsIndexItem__title">{{ news.title }}</p>
-                <span class="p-newsIndexItem__icon">
+                <div class="p-newsIndexItem__title">
+                  <p>{{ news.title }}</p>
+                </div>
+                <div class="p-newsIndexItem__icon">
                   <span :class="`p-newsIndexItemIcon--${news.icon}`">
                     <span class="p-newsIndexItemIcon__line"></span>
                     <span class="p-newsIndexItemIcon__line"></span>
@@ -116,7 +120,7 @@
                       <use xlink:href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
                     </svg>
                   </span>
-                </span>
+                </div>
               </div>
               <div class="p-newsIndexItem__text">
                 <div class="p-newsIndexItemText" v-html="news.content"></div>
@@ -265,10 +269,11 @@
       async handleScroll () {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop
         const windowHeight = window.innerHeight
-        const documentHeight = document.documentElement.scrollHeight
+        const articleElement = document.querySelector('.p-archive__article')
+        const articleHeight = articleElement.scrollHeight
 
-        if (scrollTop + windowHeight >= documentHeight - 100) {
-          this.currentPage += 1;
+        if (scrollTop + windowHeight >= articleHeight - 300) {
+          this.currentPage += 1
           await this.fetchNews(this.currentPage)
         }
       },
@@ -276,11 +281,16 @@
       selectAll (type, checked) {
         if (type === 'category') {
           if (checked) {
-            this.selectedCategories = this.categories.map(category => category.id)
+            this.selectedCategories = this.categories.map(category => category.cat_slug)
           } else {
             this.selectedCategories = []
           }
         }
+      },
+
+      clearAll () {
+        this.selectedCategories = []
+        this.selectedYears = []
       },
 
       initNewsAccordions () {
@@ -410,6 +420,7 @@
     }
 
     &__main {
+      display: block;
       position: relative;
       margin-top: rem(8);
 
@@ -423,15 +434,19 @@
     }
 
     &__title {
-      @include font(14, 22, 40);
+      display: block;
       padding-right: 57px;
 
-      @include responsive(sm, min) {
+      @include responsive(md, min) {
+        padding-right: vw(80);
       }
 
-      @include responsive(md, min) {
-        @include vwfont(1280, 14);
-        padding-right: vw(80);
+      p {
+        @include font(14, 22, 40);
+
+        @include responsive(md, min) {
+          @include vwfont(1280, 14);
+        }
       }
     }
 
@@ -441,6 +456,7 @@
       top: rem(-5);
       width: 40px;
       height: 30px;
+      display: block;
 
       @include responsive(md, min) {
         width: vw(40);

@@ -1,91 +1,113 @@
 <template>
-  <header id="header" class="l-header">
-    <div class="l-header__inner">
-      <div class="l-header__wrapper">
-        <div class="l-header__navigation">
-          <nav class="l-headerNavigation">
-            <ul class="l-headerNavigation__item">
-              <li v-for="item in items" :key="item.id" class="l-headerNavigationItem">
-                <a class="l-headerNavigationItem__link" :href="item.url" :target="item.target && '_blank'">
-                  <span class="l-headerNavigationItem__text">{{ item.name }}</span>
-                  <span class="l-headerNavigationItem__icon">
-                    <span class="l-headerNavigationIcon--arrow">
-                      <svg>
-                        <use xlink:href="@/static/assets/images/common/graphics.svg#ico_arrowBottom"></use>
-                      </svg>
-                    </span>
-                    <span class="l-headerNavigationIcon--frame">
-                      <svg>
-                        <use xlink:href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
-                      </svg>
+  <div>
+    <header id="header" class="l-header" ref="header">
+      <div class="l-header__inner">
+        <div class="l-header__wrapper">
+          <div class="l-header__navigation">
+            <nav class="l-headerNavigation">
+              <ul class="l-headerNavigation__item">
+                <li v-for="item in items" :key="item.id" class="l-headerNavigationItem">
+                  <span v-if="item.url === ''" class="l-headerNavigationItem__link">
+                    <span class="l-headerNavigationItem__text">{{ item.name }}</span>
+                    <span class="l-headerNavigationItem__icon">
+                      <span class="l-headerNavigationIcon--arrow">
+                        <svg>
+                          <use xlink:href="@/static/assets/images/common/graphics.svg#ico_arrowBottom"></use>
+                        </svg>
+                      </span>
+                      <span class="l-headerNavigationIcon--frame">
+                        <svg>
+                          <use xlink:href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
+                        </svg>
+                      </span>
                     </span>
                   </span>
-                </a>
+                  <a v-else class="l-headerNavigationItem__link" :href="item.url" :target="item.target && '_blank'">
+                    <span class="l-headerNavigationItem__text">{{ item.name }}</span>
+                    <span class="l-headerNavigationItem__icon">
+                      <span class="l-headerNavigationIcon--arrow">
+                        <svg>
+                          <use xlink:href="@/static/assets/images/common/graphics.svg#ico_arrowBottom"></use>
+                        </svg>
+                      </span>
+                      <span class="l-headerNavigationIcon--frame">
+                        <svg>
+                          <use xlink:href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
+                        </svg>
+                      </span>
+                    </span>
+                  </a>
+                </li>
+              </ul>
+              <div class="l-headerNavigation__sns">
+                <div class="l-headerNavigationSns">
+                  <div class="l-headerNavigationSns__title">SNS</div>
+                  <ul class="l-headerNavigationSns__item">
+                    <li class="l-headerNavigationSnsItem">
+                      <a class="l-headerNavigationSnsItem__link" href="https://instagram.com/sumika.casa/" target="_blank">
+                        <span class="l-headerNavigationSnsItem__icon">
+                          <span class="l-headerNavigationSnsItemIcon--instagram">
+                            <svg>
+                              <use xlink:href="@/static/assets/images/common/graphics.svg#ico_instagram"></use>
+                            </svg>
+                          </span>
+                          <span class="l-headerNavigationIcon--frame">
+                            <svg>
+                              <use xlink:href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
+                            </svg>
+                          </span>
+                        </span>
+                      </a>
+                    </li>
+                    <li class="l-headerNavigationSnsItem">
+                      <a class="l-headerNavigationSnsItem__link" href="https://www.tiktok.com/@sumika.casa/" target="_blank">
+                        <span class="l-headerNavigationSnsItem__icon">
+                          <span class="l-headerNavigationSnsItemIcon--tiktok">
+                            <svg>
+                              <use :xlink:href="iconPaths.tiktok"></use>
+                            </svg>
+                          </span>
+                          <span class="l-headerNavigationIcon--frame">
+                            <svg>
+                              <use :xlink:href="iconPaths.frame"></use>
+                            </svg>
+                          </span>
+                        </span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </nav>
+          </div>
+          <div class="l-header__logo">
+            <a href="/">SUMIKA.CASA</a>
+          </div>
+          <div class="l-header__copy">
+            <h1 class="l-headerCopy">知りたいがすぐに見つかる暮らしのデータベース</h1>
+            <!-- <h1 class="l-headerCopy">知りたいがすぐに見つかるインテリア情報サイト</h1> -->
+          </div>
+        </div>
+        <div class="l-header__menu">
+          <nav class="l-headerMenu">
+            <ul class="l-headerMenu__item">
+              <li v-for="style in itemStyles" :key="style.id" class="l-headerMenuItem">
+                <a :href="`/element?styles=${style.cat_slug}`">{{ style.cat_name }}</a>
               </li>
             </ul>
-            <div class="l-headerNavigation__sns">
-              <div class="l-headerNavigationSns">
-                <div class="l-headerNavigationSns__title">SNS</div>
-                <ul class="l-headerNavigationSns__item">
-                  <li class="l-headerNavigationSnsItem">
-                    <a class="l-headerNavigationSnsItem__link" href="https://instagram.com/sumika.casa/" target="_blank">
-                      <span class="l-headerNavigationSnsItem__icon">
-                        <span class="l-headerNavigationSnsItemIcon--instagram">
-                          <svg>
-                            <use xlink:href="@/static/assets/images/common/graphics.svg#ico_instagram"></use>
-                          </svg>
-                        </span>
-                        <span class="l-headerNavigationIcon--frame">
-                          <svg>
-                            <use xlink:href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
-                          </svg>
-                        </span>
-                      </span>
-                    </a>
-                  </li>
-                  <li class="l-headerNavigationSnsItem">
-                    <a class="l-headerNavigationSnsItem__link" href="https://www.tiktok.com/@sumika.casa/" target="_blank">
-                      <span class="l-headerNavigationSnsItem__icon">
-                        <span class="l-headerNavigationSnsItemIcon--tiktok">
-                          <svg>
-                            <use :xlink:href="iconPaths.tiktok"></use>
-                          </svg>
-                        </span>
-                        <span class="l-headerNavigationIcon--frame">
-                          <svg>
-                            <use :xlink:href="iconPaths.frame"></use>
-                          </svg>
-                        </span>
-                      </span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
           </nav>
         </div>
-        <div class="l-header__logo">
-          <a href="/">SUMIKA.CASA</a>
-        </div>
-        <div class="l-header__copy">
-          <h1 class="l-headerCopy">知りたいがすぐに見つかる暮らしのデータベース</h1>
-          <!-- <h1 class="l-headerCopy">知りたいがすぐに見つかるインテリア情報サイト</h1> -->
-        </div>
       </div>
-      <div class="l-header__menu">
-        <nav class="l-headerMenu">
-          <ul class="l-headerMenu__item">
-            <li v-for="style in itemStyles" :key="style.id" class="l-headerMenuItem">
-              <a :href="`/element?styles=${style.cat_slug}`">{{ style.cat_name }}</a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-  </header>
+    </header>
+    <div ref="dummyHeader" class="l-header__dummy"></div>
+  </div>
 </template>
 
 <script>
+
+  import { throttle } from 'lodash'
+  import { gsap } from 'gsap'
+
   export default {
     
     computed: {
@@ -120,7 +142,7 @@
           {
             id: 3,
             name: 'STADY',
-            url: '/study'
+            url: ''
           },
           {
             id: 4,
@@ -167,6 +189,9 @@
           }
         ],
         itemStyles: [],
+        lastScrollPosition: 0,
+        isAnimating: false,
+        scrollThreshold: 100,
       }
     },
 
@@ -177,7 +202,88 @@
       } catch (error) {
         console.log(error)
       }
-    }
+    },
+
+    created () {
+      this.throttledHandleScroll = throttle(this.handleScroll, 500)
+      this.throttledUpdateDummyHeaderHeight = throttle(this.updateDummyHeaderHeight, 500)
+      this.throttledCheckWindowSize = throttle(this.checkWindowSize, 500)
+    },
+
+    mounted () {
+      this.checkWindowSize()
+      window.addEventListener('resize', this.throttledCheckWindowSize)
+    },
+
+    beforeDestroy () {
+      window.removeEventListener('resize', this.throttledCheckWindowSize)
+    },
+
+    methods: {
+
+      handleScroll () {
+        const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop
+    
+        // ページの最下部に達したかどうかを確認
+        const isBottom = (window.innerHeight + window.scrollY) >= document.body.offsetHeight;
+
+        if (Math.abs(currentScrollPosition - this.lastScrollPosition) < this.scrollThreshold || isBottom) {
+          return
+        }
+
+        if (this.isAnimating) {
+          return
+        }
+
+        this.isAnimating = true
+        let animation
+        if (currentScrollPosition < this.lastScrollPosition) {
+          animation = gsap.to(this.$refs.header, { top: '0', duration: 0.4 })
+        } else {
+          animation = gsap.to(this.$refs.header, { top: `-${this.$refs.header.offsetHeight}px`, duration: 0.3 })
+        }
+
+        animation.then(() => {
+          this.isAnimating = false
+          this.lastScrollPosition = currentScrollPosition
+        })
+      },
+
+      updateDummyHeaderHeight () {
+
+        this.$refs.dummyHeader.style.height = `${this.$refs.header.offsetHeight}px`
+      },
+
+      resetStyles () {
+
+        this.$refs.header.style.position = ''
+        this.$refs.header.style.top = ''
+        this.$refs.header.style.width = ''
+        this.$refs.header.style.zIndex = ''
+        this.$refs.dummyHeader.style.height = ''
+      },
+
+      initializeStylesForMobile () {
+        this.$refs.header.style.position = 'fixed'
+        this.$refs.header.style.top = '0'
+        this.$refs.header.style.width = '100%'
+        this.$refs.header.style.zIndex = '10000'
+        this.$refs.dummyHeader.style.height = `${this.$refs.header.offsetHeight}px`
+      },
+
+      checkWindowSize () {
+
+        if (window.innerWidth >= 769) {
+          this.resetStyles()
+          window.removeEventListener('scroll', this.throttledHandleScroll)
+          window.removeEventListener('resize', this.throttledUpdateDummyHeaderHeight)
+        } else {
+          this.initializeStylesForMobile()
+          window.addEventListener('scroll', this.throttledHandleScroll)
+          window.addEventListener('resize', this.throttledUpdateDummyHeaderHeight)
+        }
+      },
+    },
   }
 </script>
 
@@ -262,6 +368,10 @@
       @include responsive(sm, min) {
         display: none;
       }
+    }
+
+    &__dummy {
+      background-color: color(bg);
     }
   }
 

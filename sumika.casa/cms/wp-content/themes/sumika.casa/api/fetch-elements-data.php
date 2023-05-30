@@ -101,6 +101,7 @@
         'style' => $styles_data,
         'brand' => $brands && !is_wp_error($brands) && isset($brands[0]) ? $brands[0]->name : '',
         'price' => $price,
+        'likes_count' => get_field('likes_count'),
         'link' => get_the_permalink()
       ];
     endwhile;

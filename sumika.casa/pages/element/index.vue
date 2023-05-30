@@ -1,8 +1,8 @@
 <template>
   <div class="p-archive__inner">
     <div class="p-archive__wrapper">
-      <aside class="p-archive__aside">
-        <div class="p-archiveAside" :style="sidebarStyle">
+      <aside class="p-archive__aside" ref="archiveAside">
+        <div class="p-archiveAside" ref="archiveSidebar" :style="sidebarStyle">
           <div class="p-archiveAside__heading">
             <div class="p-archiveAside__close" @click="hideAside">
               <svg>
@@ -12,7 +12,7 @@
             <div class="p-archiveAside__title">
               <p>絞り込み</p>
             </div>
-            <div class="p-archiveAside__clear">
+            <div class="p-archiveAside__clear" @click="clearAll">
               <p>クリア</p>
             </div>
           </div>
@@ -117,28 +117,37 @@
           </div>
         </div>
       </aside>
-      <article class="p-archive__article" @scroll.passive="handleScroll">
+      <article class="p-archive__article" ref="archiveArticle" @scroll.passive="handleScroll">
         <div class="p-elementIndex__item">
-          <nuxt-link :to="`/element/${element.id}`" v-for="element in elements" :key="element.id" class="p-elementIndexItem">
-            <span class="p-elementIndexItem__detail">
-              <span class="p-elementIndexItem__title">{{ element.brand }}</span>
-              <span class="p-elementIndexItem__price">{{ element.price }}</span>
-            </span>
-            <span class="p-elementIndexItem__like">
-              <span class="p-elementIndexItemLike__icon">
-                <svg>
-                  <use xlink:href="@/static/assets/images/common/graphics.svg#ico_heart"></use>
-                </svg>
+          <li v-for="element in elements" :key="element.id" class="p-elementIndexItem">
+            <nuxt-link :to="`/element/${element.id}`" class="p-elementIndexItem__link">
+              <span class="p-elementIndexItem__detail">
+                <span class="p-elementIndexItem__title">{{ element.brand }}</span>
+                <span class="p-elementIndexItem__price">{{ element.price }}</span>
               </span>
-              <span class="p-elementIndexItemLike__text">23</span>
+              <span class="p-elementIndexItem__image">
+                <img :src="element.image_src" alt="" width="" height="">
+              </span>
+            </nuxt-link>
+            <span class="p-elementIndexItem__like">
+              <button
+                :class="element.isLiked ? 'p-elementIndexItemLike is-liked' : 'p-elementIndexItemLike'"
+                @click="likePost(element.id)"
+              >
+                <span class="p-elementIndexItemLike__icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+                    <path d="m45.03,7.81c-2.62-2.62-6.1-4.09-9.78-4.09s-7.16,1.43-9.78,4.05l-.45.45-.45-.45c-2.62-2.62-6.1-4.05-9.78-4.05s-7.12,1.43-9.74,4.05c-2.62,2.62-4.05,6.1-4.05,9.78s1.43,7.16,4.05,9.78l18.25,18.25c.45.45,1.06.7,1.72.7s1.27-.25,1.72-.7l18.21-18.21c2.62-2.62,4.05-6.1,4.05-9.78s-1.43-7.16-4.05-9.78h.08Z"/>
+                    <path d="m45.03,7.81c-2.62-2.62-6.1-4.09-9.78-4.09s-7.16,1.43-9.78,4.05l-.45.45-.45-.45c-2.62-2.62-6.1-4.05-9.78-4.05s-7.12,1.43-9.74,4.05c-2.62,2.62-4.05,6.1-4.05,9.78s1.43,7.16,4.05,9.78l18.25,18.25c.45.45,1.06.7,1.72.7s1.27-.25,1.72-.7l18.21-18.21c2.62-2.62,4.05-6.1,4.05-9.78s-1.43-7.16-4.05-9.78h.08Zm-18.29,5.69l2.25-2.25c1.68-1.68,3.93-2.62,6.3-2.62s4.62.94,6.3,2.62c1.68,1.68,2.62,3.93,2.62,6.3s-.94,4.62-2.62,6.3l-16.49,16.49L8.53,23.81c-1.68-1.68-2.62-3.93-2.62-6.3s.94-4.62,2.58-6.3c1.68-1.68,3.93-2.62,6.3-2.62s4.62.94,6.3,2.62l2.21,2.21c.94.9,2.46.94,3.44.04v.04Z"/>
+                  </svg>
+                </span>
+                <!-- <span class="p-elementIndexItemLike__text">{{ element.likes_count }}</span> -->
+                <span class="p-elementIndexItemLike__text">{{ element.likes_count }}</span>
+              </button>
             </span>
-            <span class="p-elementIndexItem__image">
-              <img :src="element.image_src" alt="" width="" height="">
-            </span>
-          </nuxt-link>
+          </li>
         </div>
       </article>
-      <div class="p-archive__sort">
+      <div class="p-archive__sort" ref="archiveSort">
         <div class="p-archiveSort" @click="animateAside">
           <div class="p-archiveSort__icon">
             <svg>
@@ -171,8 +180,9 @@
         selectedBrands: [],
         selectedPrices: [],
         selectedStyles: [],
-        currentPage: 1,
-        perPage: 20,
+        currentPage: 2,
+        perPage: 10,
+        initialSortFetch: true, // 初回取得フラグを追加
         isLoading: false,
         isLastPage: false,
         // start aside stiky
@@ -182,6 +192,8 @@
         fixedScrollTop: null,
         fixedScrollBottom: null,
         // end aside stiky
+        isFetching: false,
+        isProcessingLike: false, // like処理中フラグ
       }
     },
 
@@ -192,22 +204,36 @@
       }
     },
 
+    created () {
+      if (process.client) {
+        this.likedInit()
+      }
+    },
+
     mounted () {
       this.boundAsideSticky = this.asideSticky.bind(this)
       this.updateSelectionsFromURL()
       this.initAsideAccordions()
+      if (!process.client) {
+        this.likedInit()
+      }
+      this.sortOpacityResize()
 
-      window.addEventListener('scroll', () => {
+      this.onResize = () => {
+        this.sortOpacityResize()
+        this.boundAsideSticky()
+      }
+
+      this.onScroll = () => {
+        this.sortOpacityScroll()
         this.handleScroll()
-        
         if (window.innerWidth >= 1025) {
           this.boundAsideSticky()
         }
-      })
+      }
 
-      window.addEventListener('resize', () => {
-        this.boundAsideSticky()
-      })
+      window.addEventListener('resize', this.onResize)
+      window.addEventListener('scroll', this.onScroll)
       
       if (window.innerWidth <= 1024) {
         gsap.set('.p-archive__aside', { autoAlpha: 0 })
@@ -215,39 +241,25 @@
     },
 
     beforeDestroy () {
-      ['handleScroll', 'boundAsideSticky'].forEach((handler) => {
-        window.removeEventListener('scroll', this[handler])
-      })
-      window.removeEventListener('resize', this.boundAsideSticky)
+      window.removeEventListener('resize', this.onResize)
+      window.removeEventListener('scroll', this.onScroll)
     },
 
     watch: {
       selectedClasses: {
-        handler() {
-          this.resetPagination()
-          this.fetchElements(this.currentPage)
-        },
+        handler: 'handleSelectionChange',
         deep: true,
       },
       selectedBrands: {
-        handler() {
-          this.resetPagination()
-          this.fetchElements(this.currentPage)
-        },
+        handler: 'handleSelectionChange',
         deep: true,
       },
       selectedPrices: {
-        handler() {
-          this.resetPagination()
-          this.fetchElements(this.currentPage)
-        },
+        handler: 'handleSelectionChange',
         deep: true,
       },
       selectedStyles: {
-        handler() {
-          this.resetPagination()
-          this.fetchElements(this.currentPage)
-        },
+        handler: 'handleSelectionChange',
         deep: true,
       },
     },
@@ -286,16 +298,132 @@
 
     methods: {
 
+      handleSelectionChange () {
+        this.resetPagination()
+        this.fetchElements(this.currentPage)
+      },
+
       resetPagination () {
         this.currentPage = 1
         this.isLastPage = false
+        this.initialSortFetch = true // ページネーションがリセットされるたびに初回取得フラグをtrueにする
+      },
+
+      async likePost (postId) {
+
+        // 処理中なら何もしない
+        if (this.isProcessingLike) return
+        this.isProcessingLike = true // フラグを立てる
+
+        const storageKey = `liked_${postId}`
+        
+        // Cookieが利用可能か確認
+        const canUseCookies = navigator.cookieEnabled
+
+        let hasLiked
+        if (process.client) {
+          hasLiked = this.hasUserLiked(postId)
+        } else {
+          hasLiked = false
+        }
+
+        const isUnlike = hasLiked ? true : false
+
+        // ポストを探す
+        let post = this.elements.find(item => item.id === postId)
+        if (!post) return
+
+        // オプティミスティックUI更新：サーバーレスポンスを待たずにUIを更新
+        post.isLiked = !isUnlike
+        post.likes_count = post.isLiked ? post.likes_count + 1 : post.likes_count - 1
+
+        try {
+
+          const response = await this.$axios.$post(`${this.$nuxt.$url}/likes/change/${postId}`, {
+            unlike: isUnlike ? '1' : '0',
+          })
+
+          // サーバーからのレスポンスを元に、最終的な値を更新
+          if (response.data && response.data.likes_count !== undefined) {
+            post.likes_count = response.data.likes_count
+          }
+
+          // Cookieが利用可能な場合、like情報をCookieに保存
+          if (canUseCookies) {
+
+            if (isUnlike) {
+              // Unlikeの場合、Cookieから情報を削除
+              this.$cookies.remove(storageKey)
+            } else {
+              // Likeの場合、情報をCookieに保存
+              this.$cookies.set(storageKey, true)
+            }
+
+          } else {
+
+            // Cookieが利用不可能な場合、like情報をローカルストレージに保存
+            
+            if (isUnlike) {
+              // Unlikeの場合、ローカルストレージから情報を削除
+              window.localStorage.removeItem(storageKey)
+            } else {
+              // Likeの場合、情報をローカルストレージに保存
+              window.localStorage.setItem(storageKey, true)
+            }
+          }
+
+        } catch (error) {
+          // エラー発生時はUIを元に戻す
+          post.isLiked = isUnlike
+          post.likes_count = post.isLiked ? post.likes_count + 1 : post.likes_count - 1
+          console.error('Error liking post:', error)
+        } finally {
+          this.isProcessingLike = false // フラグを下す
+        }
+      },
+
+      async fetchLikesCount (postId) {
+
+        try {
+          const response = await this.$axios.$get(`${this.$nuxt.$url}/likes/fetch/${postId}`)
+          let post = this.elements.find(item => item.id === postId)
+          if (post) post.likes_count = (response.data && response.data.likes_count) ? response.data.likes_count : 0
+        } catch (error) {
+          console.error('Error fetching likes count:', error)
+        }
+      },
+
+      hasUserLiked (postId) {
+        const storageKey = `liked_${postId}`
+        const canUseCookies = navigator.cookieEnabled
+
+        if (canUseCookies) {
+          return this.$cookies.get(storageKey) ? true : false
+        } else {
+          return window.localStorage.getItem(storageKey) ? true : false
+        }
+      },
+
+      likedInit () {
+        
+        this.elements.forEach(item => {
+          this.fetchLikesCount(item.id)
+          item.isLiked = this.hasUserLiked(item.id)
+        })
       },
 
       async fetchElements (page) {
+        this.isFetching = true
+        this.isLoading = true
+
+        if (this.isLastPage) {
+          return
+        }
+
         try {
           const response = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/elements`, {
             params: {
-              per_page: this.perPage,
+              per_page: this.initialSortFetch ? 20 : this.perPage, // 初回取得フラグがtrueなら20件、そうでなければ10件取得
               page: page,
               classes: this.selectedClasses,
               brands: this.selectedBrands,
@@ -315,51 +443,101 @@
           } else {
             this.isLastPage = false
           }
+
+          // fetchElementsが完了したらlikedInitを呼び出す
+          this.likedInit()
+
+          if (this.initialSortFetch) { // 初回取得フラグがtrueならfalseにする
+            this.initialSortFetch = false
+            this.currentPage = 2
+          }
+
         } catch (error) {
           console.error(error)
 
         } finally {
           this.isLoading = false
         }
+
+        this.isFetching = false
       },
 
       async handleScroll () {
+
+        if (this.isFetching) {  // isFetchingがtrueならfetch中と判断し処理を抜ける
+          return
+        }
+
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop
         const windowHeight = window.innerHeight
-        const documentHeight = document.documentElement.scrollHeight
+        const articleElement = this.$refs.archiveArticle
+        const articleHeight = articleElement.scrollHeight
 
-        if (scrollTop + windowHeight >= documentHeight - 100) {
-          this.currentPage += 1;
+        if (scrollTop + windowHeight >= articleHeight - 300) {
+          this.currentPage += 1
+          if (this.initialSortFetch) { // 初回取得フラグがtrueならfalseにする
+            this.initialSortFetch = false
+          }
           await this.fetchElements(this.currentPage)
+        }
+      },
+
+      sortOpacityResize () {
+
+        if (window.innerWidth <= 769 || window.innerWidth >= 1024) {
+          this.$refs.archiveSort.style.opacity = ''
+          this.$refs.archiveSort.style.visibility = ''
+        }
+      },
+
+      sortOpacityScroll () {
+
+        if (window.innerWidth >= 769 && window.innerWidth <= 1024) {
+          const scrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop
+          const articleBottom = this.$refs.archiveArticle.getBoundingClientRect().bottom + window.pageYOffset
+          const threshold = articleBottom - window.innerHeight
+
+          if (scrollPosition >= threshold) {
+            gsap.to(this.$refs.archiveSort, { autoAlpha: 0 })
+          } else {
+            gsap.to(this.$refs.archiveSort, { autoAlpha: 1 })
+          }
         }
       },
 
       selectAll (type, checked) {
         if (type === 'class') {
           if (checked) {
-            this.selectedClasses = this.classes.map(classes => classes.id)
+            this.selectedClasses = this.classes.map(classes => classes.cat_slug)
           } else {
             this.selectedClasses = []
           }
         } else if (type === 'brand') {
           if (checked) {
-            this.selectedBrands = this.brands.map(brand => brand.id)
+            this.selectedBrands = this.brands.map(brand => brand.cat_slug)
           } else {
             this.selectedBrands = []
           }
         } else if (type === 'price') {
           if (checked) {
-            this.selectedPrices = this.prices.map(price => price.id)
+            this.selectedPrices = this.prices.map(price => price.cat_slug)
           } else {
             this.selectedPrices = []
           }
         } else if (type === 'style') {
           if (checked) {
-            this.selectedStyles = this.styles.map(style => style.id)
+            this.selectedStyles = this.styles.map(style => style.cat_slug)
           } else {
             this.selectedStyles = []
           }
         }
+      },
+
+      clearAll () {
+        this.selectedStyles = []
+        this.selectedClasses = []
+        this.selectedBrands = []
+        this.selectedPrices = []
       },
       
       animateAside () {
@@ -389,14 +567,50 @@
         const target = event.currentTarget
         const contentElement = target.nextElementSibling
         const iconElement = target.querySelectorAll('.p-archiveAsideMenu__icon span')
+        const wrapper = document.querySelector('.p-archive__aside')
+        const sidebar = document.querySelector('.p-archiveAside')
+        let sidebarHeight = null
+        let article = document.querySelector('.p-archive__article')
+        let articleBottom = article.getBoundingClientRect().bottom  // ビューポートに対してアーティクルの相対位置
+        let self = this
 
-        if (gsap.getProperty(contentElement, 'autoAlpha') == 0) {
-          tl.to(contentElement, { height: 'auto', autoAlpha: 1, duration: 0.3 })
-            .to(iconElement[1], { rotate: 0, duration: 0.3 }, '<')
-        } else {
-          tl.to(contentElement, { height: 0, autoAlpha: 0, duration: 0.3 })
-            .to(iconElement[1], { rotate: -90, duration: 0.3 }, '<')
+        async function processAccordion () {
+
+          const firstProcess = new Promise((resolve) => {
+
+            if (gsap.getProperty(contentElement, 'autoAlpha') == 0) {
+              tl.to(contentElement, { height: 'auto', autoAlpha: 1, duration: 0.3, onComplete: resolve })
+                .to(iconElement[1], { rotate: 0, duration: 0.3 }, '<')
+            } else {
+              tl.to(contentElement, { height: 0, autoAlpha: 0, duration: 0.3, onComplete: resolve })
+                .to(iconElement[1], { rotate: -90, duration: 0.3 }, '<')
+            }
+          })
+
+          firstProcess.then(() => {
+
+            sidebarHeight = sidebar.clientHeight
+
+            if (window.innerWidth >= 1025) {
+              wrapper.style.height = `${sidebarHeight}px`
+            }
+
+            if (
+              window.innerWidth >= 1025 &&
+              window.innerHeight >= articleBottom &&
+              sidebar.clientHeight >= window.innerHeight
+            ) {
+              // console.log('アーティクルの最下部よりもスクロールしています')
+
+              self.sidebarStyle = {
+                position: 'fixed',
+                bottom: `${window.innerHeight - articleBottom}px`,
+              }
+            }
+          })
         }
+
+        processAccordion()
       },
 
       updateSelectionsFromURL () {
@@ -414,6 +628,7 @@
       },
 
       selectItems (type, items) {
+
         items.forEach(item => {
           const checkbox = this.$el.querySelector(`#${type}-${item}`)
           if (checkbox) checkbox.checked = true
@@ -428,8 +643,8 @@
       },
 
       asideSticky () {
-        const wrapper = document.querySelector('.p-archive__aside')
-        const sidebar = document.querySelector('.p-archiveAside')
+        const wrapper = this.$refs.archiveAside
+        const sidebar = this.$refs.archiveSidebar
 
         if (!wrapper || !sidebar) {
           return
@@ -442,17 +657,36 @@
           let sidebarHeight = sidebar.clientHeight
           let sidebarTop = sidebar.getBoundingClientRect().top  // スクロール量に対してサイドバーの相対位置
           let sidebarBottom = sidebar.getBoundingClientRect().bottom // スクロール量に対してサイドバーの相対位置
-          let article = document.querySelector('.p-archive__article')
+          let article = this.$refs.archiveArticle
           let articleTop = article.getBoundingClientRect().top  // ビューポートに対してアーティクルの相対位置
           let articleBottom = article.getBoundingClientRect().bottom  // ビューポートに対してアーティクルの相対位置
           let absoluteArticleTop = scrollTop + articleTop // ページ全体に対してアーティクルの絶対位置
 
           wrapper.style.height = `${sidebarHeight}px`
           sidebar.style.width = `${wrapperWidth}px`
-          gsap.to('.p-archive__aside', { autoAlpha: 1 })
+          gsap.to(wrapper, { autoAlpha: 1 })
           
           if (scrollTop > this.lastScrollTop) {
             // console.log('下にスクロールしています')
+
+            if (sidebarHeight <= window.innerHeight) {
+
+              if (articleTop >= this.vwEquivalent(40)) {
+                // console.log('下スクロール：アーティクルの最上部よりもスクロールしています')
+
+                this.sidebarStyle = {
+                  position: 'fixed',
+                  top: `${articleTop}px`,
+                  bottom: 'auto',
+                }
+              } else {
+                this.sidebarStyle = {
+                  position: 'fixed',
+                  top: `${this.vwEquivalent(40)}px`,
+                }
+              }
+              return
+            }
 
             if (this.scrollDirection === 'up') {
 
@@ -544,12 +778,12 @@
 
           this.lastScrollTop = scrollTop <= 0 ? 0 : scrollTop
         } else {
-          gsap.to('.p-archive__aside', { autoAlpha: 0 })
+          gsap.to(wrapper, { autoAlpha: 0 })
           sidebar.style.width = '100%'
           this.sidebarStyle = null
           wrapper.style.height = null
         }
-      }
+      },
     },
   }
 </script>
@@ -574,21 +808,25 @@
 
   .p-elementIndexItem {
     width: per(160, 335);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     position: relative;
-    background-color: color(white);
-    border-radius: rem(10);
-    aspect-ratio: 194 / 228.75;
-    padding-top: rem(14);
-
+    
     @include responsive(sm, min) {
       width: per(193, 832);
     }
-
-    @include responsive(md, min) {
-      padding-top: vw(14);
+    
+    &__link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background-color: color(white);
+      border-radius: rem(10);
+      aspect-ratio: 194 / 228.75;
+      padding-top: rem(14);
+      
+      @include responsive(md, min) {
+        padding-top: vw(14);
+      }
     }
 
     // .p-elementIndexItem__detail
@@ -614,23 +852,15 @@
       }
     }
 
+    // .p-elementIndexItem__like
     &__like {
       position: absolute;
-      bottom: rem(15);
-      left: 16px;
-      display: flex;
-      align-items: center;
-
-      @include responsive(md, min) {
-        left: 17px;
-      }
-
-      @include responsive(md, min) {
-        left: vw(17);
-      }
+      bottom: 0;
+      left: 0;
+      z-index: 10;
     }
 
-    // .p-topElementItem__image
+    // .p-elementIndexItem__image
     &__image {
       display: flex;
       align-items: center;
@@ -639,7 +869,7 @@
       margin-right: auto;
       margin-left: auto;
       
-      // .p-topElementItem__image img
+      // .p-elementIndexItem__image img
       img {
         object-fit: contain;
         width: 100%;
@@ -647,7 +877,7 @@
       }
     }
 
-    // .p-topElementItem__title
+    // .p-elementIndexItem__title
     &__title {
       @include Alokary;
       @include font(12, 24, 140);
@@ -671,33 +901,82 @@
   }
 
   .p-elementIndexItemLike {
+    $this: &;
     display: flex;
     align-items: center;
+    padding: rem(15) 15px;
 
+    @include responsive(md, min) {
+      padding: vw(15);
+    }
+
+    @include hover {
+
+      #{$this}__icon {
+        color: color(darkgray);
+      }
+
+      #{$this}__text {
+        color: color(darkgray);
+      }
+    }
+
+    &.is-liked {
+
+      #{$this}__icon {
+        color: color(main);
+
+        svg {
+          
+          path {
+    
+            &:nth-of-type(1) {
+              display: none;
+            }
+          }
+        }
+      }
+
+      #{$this}__text {
+        color: color(main);
+      }
+    }
+
+    // .p-elementIndexItemLike__icon
     &__icon {
       display: flex;
-      color: color(main);
-      
+      color: color(beige);
+      transition: color 0.3s ease;
+          
       svg {
-        width: 11.34px;
-        height: 10px;
+        width: 11px;
+        height: 11px;
 
         @include responsive(md, min) {
-          width: vw(11.34);
-          height: vw(10);
+          width: vw(11);
+          height: vw(11);
+        }
+
+        path {
+
+          &:nth-of-type(1) {
+            display: block;
+          }
         }
       }
     }
 
+    // .p-elementIndexItemLike__text
     &__text {
       @include Optima;
       @include font(10, 12, -100);
-      color: color(main);
-      margin-left: 3.66px;
+      color: color(beige);
+      margin-left: 3px;
+      transition: color 0.3s ease;
       
       @include responsive(md, min) {
-        @include vwfont(1280, 10, 12, -100);
-        margin-left: vw(4);
+        @include vwfont(1280, 10);
+        margin-left: vw(3);
       }
     }
   }

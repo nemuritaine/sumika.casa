@@ -21,7 +21,7 @@
             <p class="p-topElementText">テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
           </div>
         </div>
-        <div class="p-topElement__slider splide">
+        <div class="p-topElement__slider splide" ref="topElementSlider">
           <div class="p-topElementSlider__heading">
             <div class="p-topElementSlider__sort">
               <div class="c-sort">
@@ -134,18 +134,24 @@
                     <span class="p-topElementSliderCard__title">{{ item.brand }}</span>
                     <span class="p-topElementSliderCard__price">{{ item.price }}</span>
                   </span>
-                  <span class="p-topElementSliderCard__like">
-                    <span class="p-topElementSliderCardLike__icon">
-                      <svg>
-                        <use xlink:href="@/static/assets/images/common/graphics.svg#ico_heart"></use>
-                      </svg>
-                    </span>
-                    <span class="p-topElementSliderCardLike__text">23</span>
-                  </span>
                   <span class="p-topElementSliderCard__image">
                     <img :src="item.image_src" alt="" width="" height="">
                   </span>
                 </a>
+                <span class="p-topElementSliderCard__like">
+                  <button
+                    :class="item.isLiked ? 'p-topElementSliderCardLike is-liked' : 'p-topElementSliderCardLike'"
+                    @click="likePost(item.id)"
+                  >
+                    <span class="p-topElementSliderCardLike__icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+                        <path d="m45.03,7.81c-2.62-2.62-6.1-4.09-9.78-4.09s-7.16,1.43-9.78,4.05l-.45.45-.45-.45c-2.62-2.62-6.1-4.05-9.78-4.05s-7.12,1.43-9.74,4.05c-2.62,2.62-4.05,6.1-4.05,9.78s1.43,7.16,4.05,9.78l18.25,18.25c.45.45,1.06.7,1.72.7s1.27-.25,1.72-.7l18.21-18.21c2.62-2.62,4.05-6.1,4.05-9.78s-1.43-7.16-4.05-9.78h.08Z"/>
+                        <path d="m45.03,7.81c-2.62-2.62-6.1-4.09-9.78-4.09s-7.16,1.43-9.78,4.05l-.45.45-.45-.45c-2.62-2.62-6.1-4.05-9.78-4.05s-7.12,1.43-9.74,4.05c-2.62,2.62-4.05,6.1-4.05,9.78s1.43,7.16,4.05,9.78l18.25,18.25c.45.45,1.06.7,1.72.7s1.27-.25,1.72-.7l18.21-18.21c2.62-2.62,4.05-6.1,4.05-9.78s-1.43-7.16-4.05-9.78h.08Zm-18.29,5.69l2.25-2.25c1.68-1.68,3.93-2.62,6.3-2.62s4.62.94,6.3,2.62c1.68,1.68,2.62,3.93,2.62,6.3s-.94,4.62-2.62,6.3l-16.49,16.49L8.53,23.81c-1.68-1.68-2.62-3.93-2.62-6.3s.94-4.62,2.58-6.3c1.68-1.68,3.93-2.62,6.3-2.62s4.62.94,6.3,2.62l2.21,2.21c.94.9,2.46.94,3.44.04v.04Z"/>
+                      </svg>
+                    </span>
+                    <span class="p-topElementSliderCardLike__text">{{ item.likes_count }}</span>
+                  </button>
+                </span>
               </li>
             </ul>
           </div>
@@ -182,7 +188,7 @@
           </div>
         </div>
         
-        <div class="p-topColumn__slider splide">
+        <div class="p-topColumn__slider splide" ref="topColumnSlider">
           <div class="p-topColumn__heading">
             <div class="p-topColumn__text">
               <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
@@ -222,15 +228,17 @@
             <div class="p-topColumn__article splide__list">
               <div class="splide__slide p-topColumnArticle" v-for="article in articles" :key="article.id">
                 <a :href="`/article/${article.id}`" class="p-topColumnArticle__link">
-                  <div class="p-topColumnArticle__image">
+                  <span class="p-topColumnArticle__image">
                     <img :src="article.image_src" alt="" width="" height="">
-                  </div>
-                  <div class="p-topColumnArticle__detail">
+                  </span>
+                  <span class="p-topColumnArticle__detail">
                     <ul class="p-topColumnArticle__tag" v-if="article.tags && article.tags.length">
                       <li v-for="(tag, index) in article.tags" :key="tag.term_id">{{ tag.name }}</li>
                     </ul>
-                    <p class="p-topColumnArticle__title">{{ article.title }}</p>
-                  </div>
+                    <span class="p-topColumnArticle__title">
+                      <p>{{ article.title }}</p>
+                    </span>
+                  </span>
                 </a>
               </div>
             </div>
@@ -359,7 +367,7 @@
                 <span class="p-topNewsTitleEn">News&<br class="u-device__min--sm">Event</span>
               </div>
               <div class="p-topNewsTitle__ja">
-                <p class="p-topNewsTitleJa">お知らせとイベント</p>
+                <p>お知らせとイベント</p>
               </div>
             </div>
           </div>
@@ -378,7 +386,9 @@
                     <span class="p-topNewsItem__category">{{ item.category_slug }}</span>
                   </span>
                   <div class="p-topNewsItem__main">
-                    <p class="p-topNewsItem__title">{{ item.title }}</p>
+                    <span class="p-topNewsItem__title">
+                      <p>{{ item.title }}</p>
+                    </span>
                     <span class="p-topNewsItem__icon">
                       <span :class="`p-topNewsItemIcon--${item.icon}`">
                         <svg>
@@ -405,7 +415,9 @@
                     <span class="p-topNewsItem__category">{{ item.category_slug }}</span>
                   </span>
                   <div class="p-topNewsItem__main">
-                    <p class="p-topNewsItem__title">{{ item.title }}</p>
+                    <span class="p-topNewsItem__title">
+                      <p>{{ item.title }}</p>
+                    </span>
                     <span class="p-topNewsItem__icon">
                       <span :class="`p-topNewsItemIcon--${item.icon}`">
                         <span class="p-topNewsItemIcon__line"></span>
@@ -473,6 +485,8 @@
         articleTotalSlides: 0,
         elementCurrentSlideNumber: 0,
         elementTotalSlides: 0,
+        elementSplide: null,
+        isProcessingLike: false, // like処理中フラグ
       }
     },
 
@@ -524,47 +538,194 @@
         await this.fetchStudies()
       },
       async selectedItemCategory () {
+        
+        if (window.innerWidth >= 768) {
+          this.destroyElementSplide()
+        }
+        
         await this.fetchItems()
+
+        if (window.innerWidth >= 768) {
+          this.initializeElementSplide()
+        }
       },
       async selectedItemBrand () {
+        
+        if (window.innerWidth >= 768) {
+          this.destroyElementSplide()
+        }
+        
         await this.fetchItems()
+        
+        if (window.innerWidth >= 768) {
+          this.initializeElementSplide()
+        }
       },
       async selectedItemPrice () {
+        
+        if (window.innerWidth >= 768) {
+          this.destroyElementSplide()
+        }
+        
         await this.fetchItems()
+        
+        if (window.innerWidth >= 768) {
+          this.initializeElementSplide()
+        }
       },
       async selectedItemStyle () {
+        
+        if (window.innerWidth >= 768) {
+          this.destroyElementSplide()
+        }
+        
         await this.fetchItems()
+        
+        if (window.innerWidth >= 768) {
+          this.initializeElementSplide()
+        }
       },
+    },
+
+    created () {
+      if (process.client) {
+        this.likedInit()
+      }
     },
 
     mounted () {
       this.initNewsAccordions()
+      if (!process.client) {
+        this.likedInit()
+      }
 
-      if (process.client) {
-        const splideArtileItem = document.querySelector('.p-topColumn__slider')
-        const splideElementItem = document.querySelector('.p-topElement__slider')
-        splideArtileItem.style.visibility = 'visible'
-        splideElementItem.style.visibility = 'visible'
+      const splideArtileItem = this.$refs.topColumnSlider
+      const splideElementItem = this.$refs.topElementSlider
+      splideArtileItem.style.visibility = 'visible'
+      splideElementItem.style.visibility = 'visible'
 
-        if (window.innerWidth >= 768) {
+      if (window.innerWidth >= 768) {
+        this.initializeElementSplide()
+        this.initializeArticleSplide()
+      }
+
+      window.addEventListener('resize', () => {
+        
+        if (window.innerWidth < 768) {
+          this.destroyElementSplide()
+          this.destroyArticleSplide()
+        } else {
           this.initializeElementSplide()
           this.initializeArticleSplide()
         }
-
-        window.addEventListener('resize', () => {
-          
-          if (window.innerWidth < 768) {
-            this.destroyElementSplide()
-            this.destroyArticleSplide()
-          } else {
-            this.initializeElementSplide()
-            this.initializeArticleSplide()
-          }
-        })
-      }
+      })
     },
 
     methods: {
+
+      async likePost (postId) {
+
+        // 処理中なら何もしない
+        if (this.isProcessingLike) return
+        this.isProcessingLike = true // フラグを立てる
+
+        const storageKey = `liked_${postId}`
+        
+        // Cookieが利用可能か確認
+        let canUseCookies
+        let hasLiked
+        if (process.client) {
+          canUseCookies = navigator.cookieEnabled
+          hasLiked = this.hasUserLiked(postId)
+        } else {
+          hasLiked = false
+        }
+
+        const isUnlike = hasLiked ? true : false
+
+        // ポストを探す
+        let post = this.items.find(item => item.id === postId)
+        if (!post) return
+
+        // オプティミスティックUI更新：サーバーレスポンスを待たずにUIを更新
+        post.isLiked = !isUnlike
+        post.likes_count = post.isLiked ? post.likes_count + 1 : post.likes_count - 1
+
+        try {
+
+          const response = await this.$axios.$post(`${this.$nuxt.$url}/likes/change/${postId}`, {
+            unlike: isUnlike ? '1' : '0',
+          })
+
+          // サーバーからのレスポンスを元に、最終的な値を更新
+          if (response.data && response.data.likes_count !== undefined) {
+            post.likes_count = response.data.likes_count
+          }
+            
+          // Cookieが利用可能な場合、like情報をCookieに保存
+          if (canUseCookies) {
+
+            if (isUnlike) {
+              // Unlikeの場合、Cookieから情報を削除
+              this.$cookies.remove(storageKey)
+            } else {
+              // Likeの場合、情報をCookieに保存
+              this.$cookies.set(storageKey, true)
+            }
+
+          } else {
+
+            // Cookieが利用不可能な場合、like情報をローカルストレージに保存
+            
+            if (isUnlike) {
+              // Unlikeの場合、ローカルストレージから情報を削除
+              window.localStorage.removeItem(storageKey)
+            } else {
+              // Likeの場合、情報をローカルストレージに保存
+              window.localStorage.setItem(storageKey, true)
+            }
+          }
+
+        } catch (error) {
+          // エラー発生時はUIを元に戻す
+          post.isLiked = isUnlike
+          post.likes_count = post.isLiked ? post.likes_count + 1 : post.likes_count - 1
+          console.error('Error liking post:', error)
+        } finally {
+          this.isProcessingLike = false // フラグを下す
+        }
+      },
+
+      async fetchLikesCount(postId) {
+
+        try {
+          const response = await this.$axios.$get(`${this.$nuxt.$url}/likes/fetch/${postId}`)
+          let post = this.items.find(item => item.id === postId)
+          if (post) post.likes_count = (response.data && response.data.likes_count) ? response.data.likes_count : 0
+        } catch (error) {
+          console.error('Error fetching likes count:', error)
+        }
+      },
+
+      hasUserLiked (postId) {
+        const storageKey = `liked_${postId}`
+        const canUseCookies = navigator.cookieEnabled
+        
+        if (canUseCookies) {
+          return this.$cookies.get(storageKey) ? true : false
+        } else {
+          return window.localStorage.getItem(storageKey) ? true : false
+        }
+      },
+      
+      likedInit () {
+
+        this.items.forEach(item => {
+          this.fetchLikesCount(item.id)
+          item.isLiked = this.hasUserLiked(item.id)
+        })
+      },
+
       async fetchStudies () {
         try {
           const responseStudies = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/studies`, {
@@ -595,7 +756,12 @@
           url = queryParams ? `${url}?${queryParams}` : url
           const responseItems = await this.$axios.get(url)
           this.items = responseItems.data
+
+          // fetchItemsが完了したらlikedInitを呼び出す
+          this.likedInit()
+
         } catch (error) {
+
           console.log(error)
           this.items = []
         }
@@ -625,7 +791,7 @@
 
       initializeArticleSplide () {
         const slidesPerPage = 4
-        const splide = new Splide('.p-topColumn__slider', {
+        const splide = new Splide(this.$refs.topColumnSlider, {
           type: 'slide',
           perPage: 4,
           autoWidth: true,
@@ -652,7 +818,7 @@
       },
 
       destroyArticleSplide () {
-        const splide = document.querySelector('.p-topColumn__slider')
+        const splide = this.$refs.topColumnSlider
 
         if (splide && splide.splide) {
           splide.splide.destroy()
@@ -660,8 +826,8 @@
       },
 
       initializeElementSplide () {
-        const slidesPerPage = 5
-        const splide = new Splide('.p-topElement__slider', {
+        let slidesPerPage = 5
+        this.elementSplide = new Splide(this.$refs.topElementSlider, {
           type: 'slide',
           perPage: 5,
           autoWidth: true,
@@ -679,19 +845,20 @@
           }
         }).mount()
 
-        splide.on('moved', () => {
-          this.elementCurrentSlideNumber = Math.ceil(splide.index / slidesPerPage) + 1
-          this.elementTotalSlides = Math.ceil(splide.length / slidesPerPage)
+        this.elementSplide.on('moved', () => {
+          this.elementCurrentSlideNumber = Math.ceil(this.elementSplide.index / slidesPerPage) + 1
+          this.elementTotalSlides = Math.ceil(this.elementSplide.length / slidesPerPage)
         })
 
-        splide.emit('moved')
+        this.elementSplide.emit('moved')
       },
 
       destroyElementSplide () {
-        const splide = document.querySelector('.p-topElement__slider')
+        this.elementCurrentSlideNumber = 1 // カウンターをリセット
+        this.elementTotalSlides = 1 // カウンターをリセット
 
-        if (splide && splide.splide) {
-          splide.splide.destroy()
+        if (this.elementSplide) {
+          this.elementSplide.destroy()
         }
       },
     },
@@ -922,10 +1089,6 @@
       }
     }
 
-    // .p-topElementSlider__heading
-    &__heading {
-    }
-
     &__line {
       width: calc(100% - 200px);
 
@@ -1003,6 +1166,7 @@
     display: inline-block;
     white-space: normal;
     vertical-align: top;
+    position: relative;
 
     @include responsive(sm, min) {
       width: per(208, 1120);
@@ -1063,16 +1227,12 @@
       }
     }
 
+    // .p-topElementSliderCard__like
     &__like {
       position: absolute;
-      bottom: rem(15);
-      left: 17px;
-      display: flex;
-      align-items: center;
-
-      @include responsive(md, min) {
-        left: vw(17);
-      }
+      bottom: 0;
+      left: 0;
+      z-index: 10;
     }
 
     // .p-topElementItem__image
@@ -1115,20 +1275,67 @@
   }
 
   .p-topElementSliderCardLike {
+    $this: &;
     display: flex;
     align-items: center;
+    padding: rem(15) 15px;
 
+    @include responsive(md, min) {
+      padding: vw(15);
+    }
+
+    @include hover {
+
+      #{$this}__icon {
+        color: color(darkgray);
+      }
+
+      #{$this}__text {
+        color: color(darkgray);
+      }
+    }
+
+    &.is-liked {
+
+      #{$this}__icon {
+        color: color(main);
+
+        svg {
+          
+          path {
+    
+            &:nth-of-type(1) {
+              display: none;
+            }
+          }
+        }
+      }
+
+      #{$this}__text {
+        color: color(main);
+      }
+    }
+
+    // .p-topElementSliderCardLike__icon
     &__icon {
       display: flex;
-      color: color(main);
-      
+      color: color(beige);
+      transition: color 0.3s ease;
+          
       svg {
-        width: 11.34px;
-        height: 10px;
+        width: 11px;
+        height: 11px;
 
         @include responsive(md, min) {
-          width: vw(11.34);
-          height: vw(10);
+          width: vw(11);
+          height: vw(11);
+        }
+
+        path {
+
+          &:nth-of-type(1) {
+            display: block;
+          }
         }
       }
     }
@@ -1136,12 +1343,13 @@
     &__text {
       @include Optima;
       @include font(10, 12, -100);
-      color: color(main);
-      margin-left: 3.66px;
+      color: color(beige);
+      margin-left: 3px;
+      transition: color 0.3s ease;
       
       @include responsive(md, min) {
-        @include vwfont(1280, 10, 12, -100);
-        margin-left: vw(4);
+        @include vwfont(1280, 10);
+        margin-left: vw(3);
       }
     }
   }
@@ -1324,6 +1532,7 @@
 
     // .p-topColumnArticle__image
     &__image {
+      display: block;
       aspect-ratio: 236.83 / 287.5;
       border-radius: rem(6);
       overflow: hidden;
@@ -1343,21 +1552,24 @@
       row-gap: rem(8);
 
       @include responsive(md, min) {
-        margin-top: vw(20);
+        margin-top: vw(18);
         row-gap: vw(8);
       }
     }
 
     // .p-topColumnArticle__title
     &__title {
-      @include font(14, 23, 0, 700);
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 3;
       overflow: hidden;
       
-      @include responsive(md, min) {
-        @include vwfont(1280, 14);
+      p {
+        @include font(14, 22.4, 0);
+        
+        @include responsive(md, min) {
+          @include vwfont(1280, 14);
+        }
       }
     }
     
@@ -1450,7 +1662,9 @@
       }
     }
 
+    // .p-topStudy__sort
     &__sort {
+      display: none;
       margin-top: rem(24);
 
       @include responsive(md, min) {
@@ -1458,8 +1672,10 @@
       }
     }
 
+    // .p-topStudy__button
     &__button {
       margin-top: rem(36);
+      display: none;
 
       @include responsive(sm, min) {
         margin-top: rem(60);
@@ -1729,7 +1945,19 @@
     }
 
     &__ja {
-      margin-top: vw(14);
+      margin-top: rem(12);
+
+      @include responsive(md, min) {
+        margin-top: vw(18);
+      }
+
+      p {
+        @include font(13, 19.5, 40, 500);
+    
+        @include responsive(md, min) {
+          @include vwfont(1280, 14);
+        }
+      }
     }
   }
 
@@ -1743,13 +1971,6 @@
     }
   }
 
-  .p-topNewsTitleJa {
-    @include font(14, 26, 40, 500);
-    
-    @include responsive(md, min) {
-      @include vwfont(1280, 14);
-    }
-  }
 
   // .p-topNewsItem
   .p-topNewsItem {
@@ -1808,15 +2029,19 @@
 
     // .p-topNewsItem__title
     &__title {
-      @include font(14, 22, 40);
+      display: block;
       padding-right: 57px;
 
-      @include responsive(sm, min) {
+      @include responsive(md, min) {
+        padding-right: vw(80);
       }
 
-      @include responsive(md, min) {
-        @include vwfont(1280, 14);
-        padding-right: vw(80);
+      p {
+        @include font(14, 22.4, 40);
+
+        @include responsive(md, min) {
+          @include vwfont(1280, 14);
+        }
       }
     }
 
