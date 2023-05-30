@@ -4,10 +4,40 @@
     'post_type' => 'element',
     'posts_per_page' => $param['per_page'] ?: 20,
     'post_status' => 'publish',
-    'orderby' => 'date',
-    'order' => 'DESC',
     'paged' => $param['page'] ?: 1,
   ];
+
+  // sortパラメータに基づいてソートを設定
+  switch($param['sort']) {
+    case 'date_desc':
+      $post_args['orderby'] = 'date';
+      $post_args['order'] = 'DESC';
+      break;
+    case 'likes_desc':
+      $post_args['orderby'] = 'meta_value_num';
+      $post_args['meta_key'] = 'likes_count';
+      $post_args['order'] = 'DESC';
+      break;
+    case 'price_desc':
+      $post_args['orderby'] = 'meta_value_num';
+      $post_args['meta_key'] = 'p-elementItem__price';
+      $post_args['order'] = 'DESC';
+      break;
+    case 'price_asc':
+      $post_args['orderby'] = 'meta_value_num';
+      $post_args['meta_key'] = 'p-elementItem__price';
+      $post_args['order'] = 'ASC';
+      break;
+    default:
+      $post_args['orderby'] = 'date';
+      $post_args['order'] = 'DESC';
+  }
+
+  // liked_idsパラメータがある場合、それらのIDのアイテムだけを取得
+  if (!empty($param['liked_ids'])) {
+    $post_args['post__in'] = $param['liked_ids'];
+  }
+  
   if (!empty($param['classes'])) {
     $post_args['tax_query'][] = [
       'taxonomy' => 'class',

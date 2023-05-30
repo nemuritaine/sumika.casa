@@ -118,6 +118,37 @@
         </div>
       </aside>
       <article class="p-archive__article" ref="archiveArticle" @scroll.passive="handleScroll">
+        <div class="p-archive__order">
+          <div class="p-archiveOrder__like">
+            <div class="p-archiveOrderLike">
+              <input type="checkbox" id="like-item" v-model="onlyLikedItems">
+              <label for="like-item">いいねのみ表示</label>
+            </div>
+          </div>
+          <div class="c-sort">
+            <div class="c-sort__title">
+              <div class="c-sortTitle">並び替え</div>
+            </div>
+            <div class="c-sort__type">
+              <div class="c-sortType">
+                <div class="c-sortType__selector">
+                  <div class="c-sortTypeSelector">
+                    <select name="style" v-model="selectedSortOrder">
+                      <option value="date_desc">新しい順</option>
+                      <option value="likes_desc">いいね順</option>
+                      <option value="price_desc">価格が高い順</option>
+                      <option value="price_asc">価格が低い順</option>
+                    </select>
+                    <div class="c-sortTypeSelector__icon">
+                      <div class="c-sortTypeSelectorIcon"></div>
+                      <div class="c-sortTypeSelectorIcon"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="p-elementIndex__item">
           <li v-for="element in elements" :key="element.id" class="p-elementIndexItem">
             <nuxt-link :to="`/element/${element.id}`" class="p-elementIndexItem__link">
@@ -194,6 +225,8 @@
         // end aside stiky
         isFetching: false,
         isProcessingLike: false, // like処理中フラグ
+        selectedSortOrder: 'date_desc', // 並び替え
+        onlyLikedItems: false, // いいねのみ表示
       }
     },
 
@@ -246,6 +279,14 @@
     },
 
     watch: {
+      onlyLikedItems: {
+        handler: 'handleSelectionChange',
+        deep: true,
+      },
+      selectedSortOrder: {
+        handler: 'handleSelectionChange',
+        deep: true,
+      },
       selectedClasses: {
         handler: 'handleSelectionChange',
         deep: true,
@@ -315,7 +356,8 @@
         if (this.isProcessingLike) return
         this.isProcessingLike = true // フラグを立てる
 
-        const storageKey = `liked_${postId}`
+        const storageKey = 'liked_posts'
+        let likedPosts
         
         // Cookieが利用可能か確認
         const canUseCookies = navigator.cookieEnabled
@@ -348,28 +390,41 @@
             post.likes_count = response.data.likes_count
           }
 
-          // Cookieが利用可能な場合、like情報をCookieに保存
           if (canUseCookies) {
+            
+            // Cookieが利用可能な場合、like情報をCookieに保存
+            likedPosts = this.$cookies.get(storageKey) || []
 
             if (isUnlike) {
+
               // Unlikeの場合、Cookieから情報を削除
-              this.$cookies.remove(storageKey)
+              likedPosts = likedPosts.filter(id => id !== postId)
+
             } else {
+
               // Likeの場合、情報をCookieに保存
-              this.$cookies.set(storageKey, true)
+              likedPosts.push(postId)
             }
+
+            this.$cookies.set(storageKey, likedPosts)
 
           } else {
 
             // Cookieが利用不可能な場合、like情報をローカルストレージに保存
+            likedPosts = JSON.parse(window.localStorage.getItem(storageKey)) || []
             
             if (isUnlike) {
+
               // Unlikeの場合、ローカルストレージから情報を削除
-              window.localStorage.removeItem(storageKey)
+              likedPosts = likedPosts.filter(id => id !== postId)
+
             } else {
+
               // Likeの場合、情報をローカルストレージに保存
-              window.localStorage.setItem(storageKey, true)
+              likedPosts.push(postId)
             }
+
+            window.localStorage.setItem(storageKey, JSON.stringify(likedPosts))
           }
 
         } catch (error) {
@@ -394,14 +449,19 @@
       },
 
       hasUserLiked (postId) {
-        const storageKey = `liked_${postId}`
+
+        const storageKey = 'liked_posts'
         const canUseCookies = navigator.cookieEnabled
 
+        let likedPosts
+
         if (canUseCookies) {
-          return this.$cookies.get(storageKey) ? true : false
+          likedPosts = this.$cookies.get(storageKey) || []
         } else {
-          return window.localStorage.getItem(storageKey) ? true : false
+          likedPosts = JSON.parse(window.localStorage.getItem(storageKey)) || []
         }
+
+        return likedPosts.includes(postId)
       },
 
       likedInit () {
@@ -420,22 +480,36 @@
           return
         }
 
+        // いいねした投稿のIDを取得
+        const storageKey = 'liked_posts'
+        const canUseCookies = navigator.cookieEnabled
+        let likedPosts
+        if (canUseCookies) {
+          likedPosts = this.$cookies.get(storageKey) || []
+        } else {
+          likedPosts = JSON.parse(window.localStorage.getItem(storageKey)) || []
+        }
+
         try {
           const response = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/elements`, {
             params: {
               per_page: this.initialSortFetch ? 20 : this.perPage, // 初回取得フラグがtrueなら20件、そうでなければ10件取得
               page: page,
+              sort: this.selectedSortOrder,
               classes: this.selectedClasses,
               brands: this.selectedBrands,
               prices: this.selectedPrices,
               styles: this.selectedStyles,
+              liked_ids: this.onlyLikedItems ? likedPosts : undefined, // onlyLikedItemsがtrueの場合、いいねした投稿のIDをパラメータに含める
             },
           })
 
+          let fetchedElements = response.data
+
           if (page === 1) {
-            this.elements = response.data
+            this.elements = fetchedElements
           } else {
-            this.elements = this.elements.concat(response.data)
+            this.elements = this.elements.concat(fetchedElements)
           }
 
           if (response.data.length < this.perPage) {
@@ -798,10 +872,16 @@
       flex-wrap: wrap;
       column-gap: per(15, 335);
       row-gap: rem(15);
+      margin-top: rem(22);
 
       @include responsive(sm, min) {
         column-gap: per(20, 832);
         row-gap: rem(20);
+        margin-top: rem(24);
+      }
+
+      @include responsive(md, min) {
+        margin-top: vw(24);
       }
     }
   }

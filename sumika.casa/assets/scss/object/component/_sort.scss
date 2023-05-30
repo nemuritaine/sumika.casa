@@ -8,10 +8,6 @@
     align-items: center;
   }
 
-  &__title {
-
-  }
-
   // .c-sort__type
   &__type {
     display: flex;
@@ -26,6 +22,10 @@
 
     @include responsive(sm, min) {
       position: relative;
+      padding-left: 60px;
+    }
+
+    @include responsive(md, min) {
       padding-left: vw(60);
     }
 
@@ -41,12 +41,13 @@
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        left: vw(30);
+        left: 30px;
       }
 
       @include responsive(md, min) {
         width: vw(2);
         height: vw(20);
+        left: vw(30);
       }
     }
   }
@@ -56,7 +57,7 @@
   @include font(13, 18, 40, 700);
   
   @include responsive(md, min) {
-    @include vwfont(1280, 13, 18, 40, 700);
+    @include vwfont(1280, 13);
   }
 }
 
@@ -83,19 +84,23 @@
     @include font(13, 18, 40, 500);
     
     @include responsive(md, min) {
-      @include vwfont(1280, 13, 18, 40, 500);
+      @include vwfont(1280, 13);
+    }
+
+    & + #{$this}__selector {
+
+      @include responsive(sm, max) {
+        margin-top: rem(8);
+      }
+    
+      @include responsive(sm, min) {
+        margin-left: vw(16);
+      }
     }
   }
 
   &__selector {
     
-    @include responsive(sm, max) {
-      margin-top: rem(8);
-    }
-
-    @include responsive(sm, min) {
-      margin-left: vw(16);
-    }
   }
 }
 
@@ -125,7 +130,7 @@
     color: color(text);
     
     @include responsive(md, min) {
-      @include vwfont(1280, 13, 18, 40, 500);
+      @include vwfont(1280, 13, 18);
       width: vw(160);
     }
   }

@@ -64,6 +64,51 @@
     }
   }
 
+  &__order {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .c-sort {
+
+      &__title {
+
+        @include responsive(sm, max) {
+          display: none;
+        }
+      }
+
+      &__type {
+        
+        @include responsive(md, max) {
+          margin-top: 0;
+        }
+      }
+    }
+
+    .c-sortType {
+
+      @include responsive(md, max) {
+        width: 100%;
+      }
+    }
+
+    .c-sortTypeSelector {
+      
+      // .c-sortTypeSelector select
+      select {
+        
+        @include responsive(md, max) {
+          width: 160px;
+        }
+
+        @include responsive(sm, max) {
+          width: 140px;
+        }
+      }
+    }
+  }
+
   &__sort {
     position: fixed;
     // opacity: 0;
@@ -79,6 +124,70 @@
 
     @include responsive(md, min) {
       display: none;
+    }
+  }
+}
+
+.p-archiveOrder {
+
+  &__like {
+
+    @include responsive(sm, max) {
+    }
+  }
+}
+
+.p-archiveOrderLike {
+  display: flex;
+  column-gap: 9px;
+
+  @include responsive(md, min) {
+    column-gap: vw(9);
+  }
+
+  &:not(:first-of-type) {
+    margin-top: rem(12);
+
+    @include responsive(md, min) {
+      margin-top: vw(12);
+    }
+  }
+
+  input[type="checkbox"] {
+    cursor: pointer;
+    background-color: color(beige);
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-top: rem(1);
+
+    @include responsive(md, min) {
+      width: vw(20);
+      height: vw(20);
+      border-radius: vw(4);
+      margin-top: vw(1);
+    }
+
+    &:checked {
+      background-image: url(/assets/images/common/ico_check.svg);
+      background-color: color(main);
+      background-size: 13px;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      @include responsive(md, min) {
+        background-size: vw(13);
+      }
+    }
+  }
+
+  label {
+    @include font(15, 22.5, 0);
+    width: calc(100% - 20px - 9px);
+  
+    @include responsive(md, min) {
+      @include vwfont(1280, 16);
+      width: calc(100% - vw(20) - vw(9));
     }
   }
 }

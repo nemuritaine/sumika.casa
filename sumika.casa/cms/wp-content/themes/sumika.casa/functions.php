@@ -190,6 +190,24 @@ function add_custom_endpoint() {
 					},
 					'default' => 1
 				],
+				'sort' => [
+					'validate_callback' => function($param, $request, $key) {
+						return is_string($param);
+					},
+					'sanitize_callback' => function($param, $request, $key) {
+						return sanitize_text_field($param);
+					},
+					'default' => 'date_desc'
+				],
+				'liked_ids' => [
+					'validate_callback' => function($param, $request, $key) {
+						return is_array($param);
+					},
+					'sanitize_callback' => function($param, $request, $key) {
+						return array_map('sanitize_text_field', $param);
+					},
+					'default' => []
+				],
 			],
 		]
 	);

@@ -361,13 +361,14 @@
         if (this.isProcessingRelationLike) return
         this.isProcessingRelationLike = true // フラグを立てる
 
-        const storageKey = `liked_${postId}`
-        
+        const storageKey = 'liked_posts'
+        let likedPosts
+
         // Cookieが利用可能か確認
-        let canUseCookies
+        const canUseCookies = navigator.cookieEnabled
+
         let hasLiked
         if (process.client) {
-          canUseCookies = navigator.cookieEnabled
           hasLiked = this.hasUserLiked(postId)
         } else {
           hasLiked = false
@@ -394,28 +395,40 @@
             post.likes_count = response.data.likes_count
           }
             
-          // Cookieが利用可能な場合、like情報をCookieに保存
           if (canUseCookies) {
 
+            // Cookieが利用可能な場合、like情報をCookieに保存
+            likedPosts = this.$cookies.get(storageKey) || []
+
             if (isUnlike) {
+
               // Unlikeの場合、Cookieから情報を削除
-              this.$cookies.remove(storageKey)
+              likedPosts = likedPosts.filter(id => id !== postId)
+
             } else {
+
               // Likeの場合、情報をCookieに保存
-              this.$cookies.set(storageKey, true)
+              likedPosts.push(postId)
             }
+
+            this.$cookies.set(storageKey, likedPosts)
 
           } else {
 
             // Cookieが利用不可能な場合、like情報をローカルストレージに保存
             
             if (isUnlike) {
+
               // Unlikeの場合、ローカルストレージから情報を削除
-              window.localStorage.removeItem(storageKey)
+              likedPosts = likedPosts.filter(id => id !== postId)
+
             } else {
+
               // Likeの場合、情報をローカルストレージに保存
-              window.localStorage.setItem(storageKey, true)
+              likedPosts.push(postId)
             }
+
+            window.localStorage.setItem(storageKey, JSON.stringify(likedPosts))
           }
           
         } catch (error) {
@@ -434,13 +447,14 @@
         if (this.isProcessingCoordinationLike) return
         this.isProcessingCoordinationLike = true // フラグを立てる
 
-        const storageKey = `liked_${postId}`
+        const storageKey = 'liked_posts'
+        let likedPosts
         
         // Cookieが利用可能か確認
-        let canUseCookies
+        const canUseCookies = navigator.cookieEnabled
+
         let hasLiked
         if (process.client) {
-          canUseCookies = navigator.cookieEnabled
           hasLiked = this.hasUserLiked(postId)
         } else {
           hasLiked = false
@@ -467,28 +481,40 @@
             post.likes_count = response.data.likes_count
           }
           
-          // Cookieが利用可能な場合、like情報をCookieに保存
           if (canUseCookies) {
 
+            // Cookieが利用可能な場合、like情報をCookieに保存
+            likedPosts = this.$cookies.get(storageKey) || []
+
             if (isUnlike) {
+
               // Unlikeの場合、Cookieから情報を削除
-              this.$cookies.remove(storageKey)
+              likedPosts = likedPosts.filter(id => id !== postId)
+
             } else {
               // Likeの場合、情報をCookieに保存
-              this.$cookies.set(storageKey, true)
+              likedPosts.push(postId)
             }
+
+            this.$cookies.set(storageKey, likedPosts)
 
           } else {
 
             // Cookieが利用不可能な場合、like情報をローカルストレージに保存
+            likedPosts = JSON.parse(window.localStorage.getItem(storageKey)) || []
             
             if (isUnlike) {
+
               // Unlikeの場合、ローカルストレージから情報を削除
-              window.localStorage.removeItem(storageKey)
+              likedPosts = likedPosts.filter(id => id !== postId)
+
             } else {
+
               // Likeの場合、情報をローカルストレージに保存
-              window.localStorage.setItem(storageKey, true)
+              likedPosts.push(postId)
             }
+
+            window.localStorage.setItem(storageKey, JSON.stringify(likedPosts))
           }
           
         } catch (error) {
@@ -524,14 +550,18 @@
       },
 
       hasUserLiked (postId) {
-        const storageKey = `liked_${postId}`
+        const storageKey = 'liked_posts'
         const canUseCookies = navigator.cookieEnabled
-        
+
+        let likedPosts
+
         if (canUseCookies) {
-          return this.$cookies.get(storageKey) ? true : false
+          likedPosts = this.$cookies.get(storageKey) || []
         } else {
-          return window.localStorage.getItem(storageKey) ? true : false
+          likedPosts = JSON.parse(window.localStorage.getItem(storageKey)) || []
         }
+
+        return likedPosts.includes(postId)
       },
       
       likedInit () {
