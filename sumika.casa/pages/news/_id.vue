@@ -27,9 +27,27 @@
 
   export default {
 
+    head () {
+      const defaultHead = this.$nuxt.$options.head
+      const title = this.post.title || defaultHead.title
+      const description = this.post.excerpt || defaultHead.meta.find(meta => meta.hid === 'description').content
+      const image = this.post.image || defaultHead.meta.find(meta => meta.hid === 'og:image').content
+
+      return {
+        title,
+        meta: [
+          { hid: 'description', name: 'description', content: description },
+          { hid: 'og:title', property: 'og:title', content: title },
+          { hid: 'og:description', property: 'og:description', content: description },
+          { hid: 'og:url', property: 'og:url', content: `${process.env.BASE_URL}news/${this.post.ID}` },
+          { hid: 'og:image', property: 'og:image', content: image },
+        ],
+      }
+    },
+
     async asyncData({ app, params, $axios }) {
 
-      const post = await $axios.$get(`${app.$url}/custom/v0/single_news?id=${params.id}`)
+      const post = await $axios.$get(`${app.$url}/custom/v0/news?id=${params.id}`)
       return {
         post
       }

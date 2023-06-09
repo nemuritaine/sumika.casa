@@ -70,7 +70,7 @@
       <article class="p-archive__article" ref="archiveArticle" @scroll.passive="handleScroll">
         <ul class="p-articleIndex__item">
           <li v-for="article in articles" :key="article.id" class="p-articleIndexItem">
-            <nuxt-link :to="`/article/${article.id}`">
+            <nuxt-link :to="`/post/${article.id}`">
               <div class="p-articleIndexItem__image">
                 <img :src="article.image_src" alt="" width="" height="">
               </div>

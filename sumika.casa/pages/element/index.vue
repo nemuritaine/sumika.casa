@@ -230,6 +230,38 @@
       }
     },
 
+    async asyncData ({ $axios, query, app }) {
+      try {
+        const responseClasses = await $axios.get(`${app.$url}/custom/v0/element_class`)
+        const responseBrands = await $axios.get(`${app.$url}/custom/v0/element_brand`)
+        const responsePrices = await $axios.get(`${app.$url}/custom/v0/element_price`)
+        const responseStyles = await $axios.get(`${app.$url}/custom/v0/element_style`)
+        const responseElements = await $axios.get(`${app.$url}/custom/v0/elements`, {
+          params: {
+            per_page: 20,
+            page: 1,
+          },
+        })
+
+        return {
+          classes: responseClasses.data,
+          brands: responseBrands.data,
+          prices: responsePrices.data,
+          styles: responseStyles.data,
+          elements: responseElements.data,
+        }
+      } catch (error) {
+        console.error(error)
+        return {
+          classes: [],
+          brands: [],
+          prices: [],
+          styles: [],
+          elements: [],
+        }
+      }
+    },
+
     computed: {
 
       bodyClass () {
@@ -303,38 +335,6 @@
         handler: 'handleSelectionChange',
         deep: true,
       },
-    },
-
-    async asyncData ({ $axios, query, app }) {
-      try {
-        const responseClasses = await $axios.get(`${app.$url}/custom/v0/element_class`)
-        const responseBrands = await $axios.get(`${app.$url}/custom/v0/element_brand`)
-        const responsePrices = await $axios.get(`${app.$url}/custom/v0/element_price`)
-        const responseStyles = await $axios.get(`${app.$url}/custom/v0/element_style`)
-        const responseElements = await $axios.get(`${app.$url}/custom/v0/elements`, {
-          params: {
-            per_page: 20,
-            page: 1,
-          },
-        })
-
-        return {
-          classes: responseClasses.data,
-          brands: responseBrands.data,
-          prices: responsePrices.data,
-          styles: responseStyles.data,
-          elements: responseElements.data,
-        }
-      } catch (error) {
-        console.error(error)
-        return {
-          classes: [],
-          brands: [],
-          prices: [],
-          styles: [],
-          elements: [],
-        }
-      }
     },
 
     methods: {
@@ -437,14 +437,17 @@
         }
       },
 
-      async fetchLikesCount (postId) {
+      async fetchLikesCount () {
 
         try {
-          const response = await this.$axios.$get(`${this.$nuxt.$url}/likes/fetch/${postId}`)
-          let post = this.elements.find(item => item.id === postId)
-          if (post) post.likes_count = (response.data && response.data.likes_count) ? response.data.likes_count : 0
+          const response = await this.$axios.$get(`${this.$nuxt.$url}/likes/fetch_all`)
+          const likesCount = response.data
+
+          this.elements.forEach(item => {
+            item.likes_count = likesCount[item.id] ? likesCount[item.id] : 0
+          })
         } catch (error) {
-          console.error('Error fetching likes count:', error)
+          console.error('Error fetching all likes count:', error)
         }
       },
 
@@ -465,9 +468,9 @@
       },
 
       likedInit () {
-        
+
+        this.fetchLikesCount()
         this.elements.forEach(item => {
-          this.fetchLikesCount(item.id)
           item.isLiked = this.hasUserLiked(item.id)
         })
       },
@@ -506,6 +509,11 @@
 
           let fetchedElements = response.data
 
+          // fetchElementsしたアイテムのlike済みを定義する
+          fetchedElements.forEach(item => {
+            item.isLiked = this.hasUserLiked(item.id)
+          })
+
           if (page === 1) {
             this.elements = fetchedElements
           } else {
@@ -517,9 +525,6 @@
           } else {
             this.isLastPage = false
           }
-
-          // fetchElementsが完了したらlikedInitを呼び出す
-          this.likedInit()
 
           if (this.initialSortFetch) { // 初回取得フラグがtrueならfalseにする
             this.initialSortFetch = false
@@ -580,6 +585,7 @@
       },
 
       selectAll (type, checked) {
+        
         if (type === 'class') {
           if (checked) {
             this.selectedClasses = this.classes.map(classes => classes.cat_slug)
@@ -919,6 +925,7 @@
       padding-right: 16px;
       padding-left: 16px;
       z-index: 2;
+      user-select: none;
       
       @include responsive(sm, min) {
         padding-right: 17px;
@@ -951,6 +958,7 @@
       
       // .p-elementIndexItem__image img
       img {
+        user-select: none;
         object-fit: contain;
         width: 100%;
         aspect-ratio: 200 / 200;

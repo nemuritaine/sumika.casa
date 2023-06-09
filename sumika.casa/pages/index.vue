@@ -18,7 +18,7 @@
             </div>
           </div>
           <div class="p-topElement__text">
-            <p class="p-topElementText">テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
+            <p class="p-topElementText">色々な家具を紹介しています。<br>家具を検索したり、保存しておく機能があるので活用してみて欲しいです！<br>紹介している家具はコツコツ増量していて、更新状況を各SNSで発信しています🐛</p>
           </div>
         </div>
         <div class="p-topElement__slider splide" ref="topElementSlider">
@@ -105,20 +105,20 @@
                   <div class="c-controllerNavigation --prev splide__arrow--prev">
                     <div class="c-controllerNavigation__icon">
                       <svg class="c-controllerNavigationIcon --arrow">
-                        <use xlink:href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
+                        <use href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
                       </svg>
                       <svg class="c-controllerNavigationIcon --frame">
-                        <use xlink:href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
+                        <use href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
                       </svg>
                     </div>
                   </div>
                   <div class="c-controllerNavigation --next splide__arrow--next">
                     <div class="c-controllerNavigation__icon">
                       <svg class="c-controllerNavigationIcon --arrow">
-                        <use xlink:href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
+                        <use href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
                       </svg>
                       <svg class="c-controllerNavigationIcon --frame">
-                        <use xlink:href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
+                        <use href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
                       </svg>
                     </div>
                   </div>
@@ -164,7 +164,7 @@
               </span>
               <span class="p-topButton__icon">
                 <svg>
-                  <use xlink:href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
+                  <use href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
                 </svg>
               </span>
             </a>
@@ -191,7 +191,7 @@
         <div class="p-topColumn__slider splide" ref="topColumnSlider">
           <div class="p-topColumn__heading">
             <div class="p-topColumn__text">
-              <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
+              <p>主にインスタグラマーさんのお部屋紹介やインタビューの記事を作成しています。<br>「記事にしてもいいよ」という方、「こういう記事を作るのどう？」などのアイデアは、<br class="u-device__min--md"><a href="https://instagram.com/sumika.casa/" target="_blank">Instagram</a>か<a href="https://www.tiktok.com/@sumika.casa/" target="_blank">TikTok</a>のDMからご連絡もらえると嬉しいです🍏</p>
             </div>
             <div class="p-topColumn__controller">
               <div class="c-controller">
@@ -203,20 +203,20 @@
                   <div class="c-controllerNavigation --prev splide__arrow--prev">
                     <div class="c-controllerNavigation__icon">
                       <svg class="c-controllerNavigationIcon --arrow">
-                        <use xlink:href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
+                        <use href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
                       </svg>
                       <svg class="c-controllerNavigationIcon --frame">
-                        <use xlink:href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
+                        <use href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
                       </svg>
                     </div>
                   </div>
                   <div class="c-controllerNavigation --next splide__arrow--next">
                     <div class="c-controllerNavigation__icon">
                       <svg class="c-controllerNavigationIcon --arrow">
-                        <use xlink:href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
+                        <use href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
                       </svg>
                       <svg class="c-controllerNavigationIcon --frame">
-                        <use xlink:href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
+                        <use href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
                       </svg>
                     </div>
                   </div>
@@ -227,7 +227,7 @@
           <div class="p-topColumnSlider splide__track">
             <div class="p-topColumn__article splide__list">
               <div class="splide__slide p-topColumnArticle" v-for="article in articles" :key="article.id">
-                <a :href="`/article/${article.id}`" class="p-topColumnArticle__link">
+                <a :href="`/post/${article.id}`" class="p-topColumnArticle__link">
                   <span class="p-topColumnArticle__image">
                     <img :src="article.image_src" alt="" width="" height="">
                   </span>
@@ -248,13 +248,13 @@
         <div class="p-topColumn__button">
           <div class="p-topButton">
             <div class="p-topButton__line"></div>
-            <a class="p-topButton__link" href="/article">
+            <a class="p-topButton__link" href="/post">
               <span class="p-topButton__text">
                 <span>VIEW ALL</span>
               </span>
               <span class="p-topButton__icon">
                 <svg>
-                  <use xlink:href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
+                  <use href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
                 </svg>
               </span>
             </a>
@@ -279,7 +279,7 @@
             </div>
           </div>
           <div class="p-topStudy__text">
-            <p class="p-topStudyText">インテリア資格試験の勉強に役立つ情報トテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
+            <p class="p-topStudyText">インテリアの歴史やデザイナーの紹介、インテリア資格取得に役立つ情報を発信します。<br>いま準備中なので近々公開します🌱</p>
           </div>
         </div>
         <div class="p-topStudy__sort">
@@ -348,7 +348,7 @@
               </span>
               <span class="p-topButton__icon">
                 <svg>
-                  <use xlink:href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
+                  <use href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
                 </svg>
               </span>
             </span>
@@ -392,12 +392,12 @@
                     <span class="p-topNewsItem__icon">
                       <span :class="`p-topNewsItemIcon--${item.icon}`">
                         <svg>
-                          <use xlink:href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
+                          <use href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
                         </svg>
                       </span>
                       <span class="p-topNewsItemIcon--frame">
                         <svg>
-                          <use xlink:href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
+                          <use href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
                         </svg>
                       </span>
                     </span>
@@ -425,7 +425,7 @@
                       </span>
                       <span class="p-topNewsItemIcon--frame">
                         <svg>
-                          <use xlink:href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
+                          <use href="@/static/assets/images/common/graphics.svg#ico_frame"></use>
                         </svg>
                       </span>
                     </span>
@@ -444,7 +444,7 @@
                   </span>
                   <span class="p-topButton__icon">
                     <svg>
-                      <use xlink:href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
+                      <use href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
                     </svg>
                   </span>
                 </a>
@@ -458,6 +458,7 @@
 </template>
 
 <script>
+  import TopFacade from '~/components/top/Facade.vue'
   import { gsap } from 'gsap'
   import Splide from '@splidejs/splide'
   import '@splidejs/splide/dist/css/splide.min.css'
@@ -465,6 +466,10 @@
 
   export default {
     name: 'IndexPage',
+
+    components: {
+      TopFacade
+    },
 
     data () {
       return {
@@ -491,9 +496,10 @@
     },
 
     async asyncData({ $axios, app }) {
+      
       try {
         const responseArticles = await $axios.get(`${app.$url}/custom/v0/posts`)
-        const responseNews = await $axios.get(`${app.$url}/custom/v0/news`)
+        const responseNews = await $axios.get(`${app.$url}/custom/v0/newses`)
         const responseStudies = await $axios.get(`${app.$url}/custom/v0/studies`)
         const responseStudyCategories = await $axios.get(`${app.$url}/custom/v0/study_cat`)
         const responseItems = await $axios.get(`${app.$url}/custom/v0/elements`)
@@ -531,94 +537,6 @@
           counts: [],
         }
       }
-    },
-
-    watch: {
-      async selectedStudyCategory () {
-        await this.fetchStudies()
-      },
-      async selectedItemCategory () {
-        
-        if (window.innerWidth >= 768) {
-          this.destroyElementSplide()
-        }
-        
-        await this.fetchItems()
-
-        if (window.innerWidth >= 768) {
-          this.initializeElementSplide()
-        }
-      },
-      async selectedItemBrand () {
-        
-        if (window.innerWidth >= 768) {
-          this.destroyElementSplide()
-        }
-        
-        await this.fetchItems()
-        
-        if (window.innerWidth >= 768) {
-          this.initializeElementSplide()
-        }
-      },
-      async selectedItemPrice () {
-        
-        if (window.innerWidth >= 768) {
-          this.destroyElementSplide()
-        }
-        
-        await this.fetchItems()
-        
-        if (window.innerWidth >= 768) {
-          this.initializeElementSplide()
-        }
-      },
-      async selectedItemStyle () {
-        
-        if (window.innerWidth >= 768) {
-          this.destroyElementSplide()
-        }
-        
-        await this.fetchItems()
-        
-        if (window.innerWidth >= 768) {
-          this.initializeElementSplide()
-        }
-      },
-    },
-
-    created () {
-      if (process.client) {
-        this.likedInit()
-      }
-    },
-
-    mounted () {
-      this.initNewsAccordions()
-      if (!process.client) {
-        this.likedInit()
-      }
-
-      const splideArtileItem = this.$refs.topColumnSlider
-      const splideElementItem = this.$refs.topElementSlider
-      splideArtileItem.style.visibility = 'visible'
-      splideElementItem.style.visibility = 'visible'
-
-      if (window.innerWidth >= 768) {
-        this.initializeElementSplide()
-        this.initializeArticleSplide()
-      }
-
-      window.addEventListener('resize', () => {
-        
-        if (window.innerWidth < 768) {
-          this.destroyElementSplide()
-          this.destroyArticleSplide()
-        } else {
-          this.initializeElementSplide()
-          this.initializeArticleSplide()
-        }
-      })
     },
 
     methods: {
@@ -708,14 +626,17 @@
         }
       },
 
-      async fetchLikesCount(postId) {
+      async fetchLikesCount () {
 
         try {
-          const response = await this.$axios.$get(`${this.$nuxt.$url}/likes/fetch/${postId}`)
-          let post = this.items.find(item => item.id === postId)
-          if (post) post.likes_count = (response.data && response.data.likes_count) ? response.data.likes_count : 0
+          const response = await this.$axios.$get(`${this.$nuxt.$url}/likes/fetch_all`)
+          const likesCount = response.data
+
+          this.items.forEach(item => {
+            item.likes_count = likesCount[item.id] ? likesCount[item.id] : 0
+          })
         } catch (error) {
-          console.error('Error fetching likes count:', error)
+          console.error('Error fetching all likes count:', error)
         }
       },
 
@@ -736,9 +657,9 @@
       },
       
       likedInit () {
-
+        
+        this.fetchLikesCount()
         this.items.forEach(item => {
-          this.fetchLikesCount(item.id)
           item.isLiked = this.hasUserLiked(item.id)
         })
       },
@@ -880,6 +801,95 @@
       },
     },
 
+    watch: {
+      async selectedStudyCategory () {
+        await this.fetchStudies()
+      },
+      async selectedItemCategory () {
+        
+        if (window.innerWidth >= 768) {
+          this.destroyElementSplide()
+        }
+        
+        await this.fetchItems()
+
+        if (window.innerWidth >= 768) {
+          this.initializeElementSplide()
+        }
+      },
+      async selectedItemBrand () {
+        
+        if (window.innerWidth >= 768) {
+          this.destroyElementSplide()
+        }
+        
+        await this.fetchItems()
+        
+        if (window.innerWidth >= 768) {
+          this.initializeElementSplide()
+        }
+      },
+      async selectedItemPrice () {
+        
+        if (window.innerWidth >= 768) {
+          this.destroyElementSplide()
+        }
+        
+        await this.fetchItems()
+        
+        if (window.innerWidth >= 768) {
+          this.initializeElementSplide()
+        }
+      },
+      async selectedItemStyle () {
+        
+        if (window.innerWidth >= 768) {
+          this.destroyElementSplide()
+        }
+        
+        await this.fetchItems()
+        
+        if (window.innerWidth >= 768) {
+          this.initializeElementSplide()
+        }
+      },
+    },
+
+    created () {
+      if (process.client) {
+        this.likedInit()
+      }
+    },
+
+    mounted () {
+      
+      this.initNewsAccordions()
+      if (!process.client) {
+        this.likedInit()
+      }
+
+      const splideArtileItem = this.$refs.topColumnSlider
+      const splideElementItem = this.$refs.topElementSlider
+      splideArtileItem.style.visibility = 'visible'
+      splideElementItem.style.visibility = 'visible'
+
+      if (window.innerWidth >= 768) {
+        this.initializeElementSplide()
+        this.initializeArticleSplide()
+      }
+
+      window.addEventListener('resize', () => {
+        
+        if (window.innerWidth < 768) {
+          this.destroyElementSplide()
+          this.destroyArticleSplide()
+        } else {
+          this.initializeElementSplide()
+          this.initializeArticleSplide()
+        }
+      })
+    },
+
     computed: {
 
       bodyClass () {
@@ -983,10 +993,11 @@
       }
     }
 
+    // .topElement__text
     &__text {
       
       @include responsive(sm, max) {
-        margin-top: rem(32);
+        margin-top: rem(24);
       }
 
       @include responsive(md, min) {
@@ -1223,6 +1234,7 @@
 
     // .p-topElementSliderCard__detail
     &__detail {
+      user-select: none;
       width: 100%;
       position: absolute;
       top: 0;
@@ -1252,7 +1264,7 @@
       z-index: 10;
     }
 
-    // .p-topElementItem__image
+    // ..p-topElementSliderCard__image
     &__image {
       display: flex;
       align-items: center;
@@ -1261,15 +1273,16 @@
       margin-right: auto;
       margin-left: auto;
       
-      // .p-topElementItem__image img
+      // ..p-topElementSliderCard__image img
       img {
+        user-select: none;
         object-fit: contain;
         width: 100%;
         aspect-ratio: 200 / 200;
       }
     }
 
-    // .p-topElementItem__title
+    // ..p-topElementSliderCard__title
     &__title {
       @include Alokary;
       @include font(12, 24, 140);
@@ -1386,12 +1399,12 @@
       @include inner(md);
     }
 
-    // .p-topColumn__header
+    // .p-topColumn__heading
     &__heading {
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
-      margin-top: rem(32);
+      margin-top: rem(24);
 
       @include responsive(md, min) {
         margin-top: vw(16);
@@ -1417,8 +1430,9 @@
         max-width: vw(560);
       }
       
+      // .p-topColumn__text p
       p {
-        @include font(13, 23.4, 40, 500);
+        @include font(13, 23.4, 40);
 
         @include responsive(sm, min) {
           @include font(14);
@@ -1426,6 +1440,16 @@
         
         @include responsive(md, min) {
           @include vwfont(1280, 14);
+        }
+      }
+
+      a {
+        text-decoration: underline;
+        text-underline-offset: rem(4);
+        text-decoration-color: color(lightgray);
+
+        @include responsive(md, min) {
+          text-underline-offset: vw(4);
         }
       }
     }
@@ -1659,9 +1683,10 @@
       }
     }
 
+    // .p-topStudy__text
     &__text {
       @include responsive(sm, max) {
-        margin-top: rem(32);
+        margin-top: rem(24);
       }
 
       @include responsive(md, min) {
@@ -1792,12 +1817,12 @@
   
       // .p-topStudyArticle:nth-child(1)
       &:nth-child(1) {
-        animation: infiniteAnimation 200s -100s linear infinite;
+        animation: infiniteAnimationX 200s -100s linear infinite;
       }
   
       // .p-topStudyArticle:nth-child(2)
       &:nth-child(2) {
-        animation: infiniteAnimationClone 200s linear infinite;
+        animation: infiniteAnimationXClone 200s linear infinite;
       }
     }
   }

@@ -4,7 +4,7 @@
 .p-topNewsItemText {
 
   p {
-    @include font(14, 22, 40);
+    @include font(14, 25.2, 40);
 
     @include responsive(md, min) {
       @include vwfont(1280, 14);

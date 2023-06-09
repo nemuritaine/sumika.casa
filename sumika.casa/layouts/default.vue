@@ -10,7 +10,9 @@
 
 <script>
   export default {
+
     methods: {
+
       getBodyClass() {
         for (const matchedRoute of this.$route.matched) {
           const bodyClass =
@@ -24,6 +26,7 @@
     },
 
     head() {
+
       const bodyClass = this.getBodyClass()
       return {
         bodyAttrs: {

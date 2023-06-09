@@ -69,7 +69,7 @@
         'categories' => $categories_data,
         'tags' => $tags_data,
         //リンク
-        'link' => get_the_permalink()
+        'link' => get_the_permalink(),
       ];
     endwhile;
     wp_reset_postdata();

@@ -58,7 +58,7 @@
             </a>
           </li>
           <li class="l-footerMenuItem">
-            <a href="/article" class="l-footerMenuItem__link">
+            <a href="/post" class="l-footerMenuItem__link">
               <span class="l-footerMenuItem__icon --article">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
                   <rect class="st0" x="13" y="3" width="31" height="37"/>

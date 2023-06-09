@@ -24,15 +24,24 @@ add_action('rest_api_init', 'register_custom_blocks_in_rest');
 /*-------------------------------------------*/
 function add_custom_endpoint() {
 
+	register_rest_route(
+		'custom/v0',
+		'/timestamp',
+		[
+			'methods'  => WP_REST_Server::READABLE,
+      'permission_callback' => '__return_true', 
+			'callback' => 'get_timestamp_data',
+		]
+	);
+
 	// ライクデータ取得
-  register_rest_route(
+	register_rest_route(
     'likes',
-    '/fetch/(?P<id>\d+)',
+    '/fetch_all',
     [
       'methods'  => WP_REST_Server::READABLE,
-			// 'permission_callback' => 'rest_permission', // 関数名指定
-      'permission_callback' => '__return_true', // どこからでもアクセス可能
-      'callback' => 'fetch_like_count'
+      'permission_callback' => '__return_true', 
+      'callback' => 'fetch_all_likes_count'
     ]
   );
 
@@ -104,11 +113,18 @@ function add_custom_endpoint() {
 	// 投稿詳細データ取得
 	register_rest_route(
 		'custom/v0',
-		'/single_article(?P<id>.*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+)',
+		'/post(?P<id>.*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+)',
 		[
 			'methods' => WP_REST_Server::READABLE,
 			'permission_callback' => '__return_true', // どこからでもアクセス可能
 			'callback' => 'fetch_single_posts_data',
+			'args' => [
+				'id' => [
+					'validate_callback' => function($param, $request, $key) {
+						return is_numeric($param);
+					}
+				],
+			]
 		]
 	);
 
@@ -212,17 +228,6 @@ function add_custom_endpoint() {
 		]
 	);
 
-	// エレメント詳細データ取得
-	register_rest_route(
-		'custom/v0',
-		'/single_element(?P<id>.*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+)',
-		[
-			'methods' => WP_REST_Server::READABLE,
-			'permission_callback' => '__return_true', // どこからでもアクセス可能
-			'callback' => 'fetch_single_elements_data',
-		]
-	);
-
 	// エレメントクラスデータ取得
 	register_rest_route(
 		'custom/v0', // ネームスペース
@@ -270,11 +275,22 @@ function add_custom_endpoint() {
 			'callback' => 'fetch_element_style_data'
 		]
 	);
+	
+	// エレメント詳細データ取得
+	register_rest_route(
+		'custom/v0',
+		'/element(?P<id>.*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+)',
+		[
+			'methods' => WP_REST_Server::READABLE,
+			'permission_callback' => '__return_true', // どこからでもアクセス可能
+			'callback' => 'fetch_single_elements_data',
+		]
+	);
 
 	// ニュースデータ取得
 	register_rest_route(
 		'custom/v0', // ネームスペース
-		'/news', // ベースURL
+		'/newses', // ベースURL
 		[ // オプション
 			'methods'  =>  WP_REST_Server::READABLE,
 			// 'permission_callback' => 'rest_permission', // 関数名指定
@@ -318,7 +334,7 @@ function add_custom_endpoint() {
 	// ニュース詳細データ取得
 	register_rest_route(
 		'custom/v0',
-		'/single_news(?P<id>.*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+)',
+		'/news(?P<id>.*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+)',
 		[
 			'methods' => WP_REST_Server::READABLE,
 			'permission_callback' => '__return_true', // どこからでもアクセス可能
@@ -373,7 +389,7 @@ function add_custom_endpoint() {
 	// 資格試験詳細データ取得
 	register_rest_route(
 		'custom/v0',
-		'/single_study(?P<id>.*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+)',
+		'/study(?P<id>.*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+)',
 		[
 			'methods' => WP_REST_Server::READABLE,
 			'permission_callback' => '__return_true', // どこからでもアクセス可能
@@ -413,9 +429,14 @@ function rest_response($file_name, $param = null) {
 	return $response;
 }
 
+// タイムスタンプデータ取得
+function get_timestamp_data($param) {
+	return rest_response('get-timestamp-data', $param);
+}
+
 // ライクデータ取得
-function fetch_like_count($param) {
-	return rest_response('fetch-like-count', $param);
+function fetch_all_likes_count($param) {
+	return rest_response('fetch-all-likes-count', $param);
 }
 
 // ライクデータ操作（増加・減少）

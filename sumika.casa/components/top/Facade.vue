@@ -22,10 +22,10 @@
                     </span>
                   </p>
                 </a>
-                <a href="/element/4983">
+                <a href="/element/4989">
                   <p class="p-topFacadeShowcaseItem__image" data-size="m">
                     <span>
-                      <img :src="`${BASE_URL}clock/img__clock013.png`" alt="" width="" height="">
+                      <img :src="`${BASE_URL}clock/img__clock012.png`" alt="" width="" height="">
                     </span>
                   </p>
                 </a>
@@ -36,10 +36,10 @@
                     </span>
                   </p>
                 </a>
-                <a href="/element/4983">
+                <a href="/element/4989">
                   <p class="p-topFacadeShowcaseItem__image" data-size="m">
                     <span>
-                      <img :src="`${BASE_URL}clock/img__clock013.png`" alt="" width="" height="">
+                      <img :src="`${BASE_URL}clock/img__clock012.png`" alt="" width="" height="">
                     </span>
                   </p>
                 </a>
@@ -90,10 +90,10 @@
                     </span>
                   </p>
                 </a>
-                <a href="/element/4957">
+                <a href="/element/4969">
                   <p class="p-topFacadeShowcaseItem__image" data-size="m">
                     <span>
-                      <img :src="`${BASE_URL}chair/img__chair008.png`" alt="" width="" height="">
+                      <img :src="`${BASE_URL}chair/img__chair009.png`" alt="" width="" height="">
                     </span>
                   </p>
                 </a>
@@ -104,10 +104,10 @@
                     </span>
                   </p>
                 </a>
-                <a href="/element/4957">
+                <a href="/element/4495">
                   <p class="p-topFacadeShowcaseItem__image" data-size="m">
                     <span>
-                      <img :src="`${BASE_URL}chair/img__chair008.png`" alt="" width="" height="">
+                      <img :src="`${BASE_URL}chair/img__chair006.png`" alt="" width="" height="">
                     </span>
                   </p>
                 </a>
@@ -140,10 +140,10 @@
                     </span>
                   </p>
                 </a>
-                <a href="/element/5007">
+                <a href="/element/5102">
                   <p class="p-topFacadeShowcaseItem__image" data-size="m">
                     <span>
-                      <img :src="`${BASE_URL}lighting/img__lighting001.png`" alt="" width="" height="">
+                      <img :src="`${BASE_URL}chair/img__chair004.png`" alt="" width="" height="">
                     </span>
                   </p>
                 </a>
@@ -154,10 +154,10 @@
                     </span>
                   </p>
                 </a>
-                <a href="/element/5007">
+                <a href="/element/5099">
                   <p class="p-topFacadeShowcaseItem__image" data-size="m">
                     <span>
-                      <img :src="`${BASE_URL}lighting/img__lighting001.png`" alt="" width="" height="">
+                      <img :src="`${BASE_URL}chair/img__chair005.png`" alt="" width="" height="">
                     </span>
                   </p>
                 </a>
@@ -173,13 +173,36 @@
               </a>
             </div>
             <div class="p-topFacadeShowcaseItem" data-pos="12">
-              <a href="/element/4999">
-                <p class="p-topFacadeShowcaseItem__image" data-size="m">
-                  <span>
-                    <img :src="`${BASE_URL}sidetable/img__sidetable010.png`" alt="" width="" height="">
-                  </span>
-                </p>
-              </a>
+              <div class="p-topFacadeShowcaseItem__animation">
+                <a href="/element/4999">
+                  <p class="p-topFacadeShowcaseItem__image" data-size="m">
+                    <span>
+                      <img :src="`${BASE_URL}sidetable/img__sidetable010.png`" alt="" width="" height="">
+                    </span>
+                  </p>
+                </a>
+                <a href="/element/5095">
+                  <p class="p-topFacadeShowcaseItem__image" data-size="m">
+                    <span>
+                      <img :src="`${BASE_URL}sidetable/img__sidetable005.png`" alt="" width="" height="">
+                    </span>
+                  </p>
+                </a>
+                <a href="/element/4999">
+                  <p class="p-topFacadeShowcaseItem__image" data-size="m">
+                    <span>
+                      <img :src="`${BASE_URL}sidetable/img__sidetable010.png`" alt="" width="" height="">
+                    </span>
+                  </p>
+                </a>
+                <a href="/element/5095">
+                  <p class="p-topFacadeShowcaseItem__image" data-size="m">
+                    <span>
+                      <img :src="`${BASE_URL}sidetable/img__sidetable005.png`" alt="" width="" height="">
+                    </span>
+                  </p>
+                </a>
+              </div>
             </div>
             <div class="p-topFacadeShowcaseItem" data-pos="13">
               <a href="/element/4501">
@@ -191,36 +214,13 @@
               </a>
             </div>
             <div class="p-topFacadeShowcaseItem" data-pos="14">
-              <div class="p-topFacadeShowcaseItem__animation">
-                <a href="/element/4973">
-                  <p class="p-topFacadeShowcaseItem__image" data-size="m">
-                    <span>
-                      <img :src="`${BASE_URL}lamp/img__lamp002.png`" alt="" width="" height="">
-                    </span>
-                  </p>
-                </a>
-                <a href="/element/4973">
-                  <p class="p-topFacadeShowcaseItem__image" data-size="m">
-                    <span>
-                      <img :src="`${BASE_URL}lamp/img__lamp002.png`" alt="" width="" height="">
-                    </span>
-                  </p>
-                </a>
-                <a href="/element/4973">
-                  <p class="p-topFacadeShowcaseItem__image" data-size="m">
-                    <span>
-                      <img :src="`${BASE_URL}lamp/img__lamp002.png`" alt="" width="" height="">
-                    </span>
-                  </p>
-                </a>
-                <a href="/element/4973">
-                  <p class="p-topFacadeShowcaseItem__image" data-size="m">
-                    <span>
-                      <img :src="`${BASE_URL}lamp/img__lamp002.png`" alt="" width="" height="">
-                    </span>
-                  </p>
-                </a>
-              </div>
+              <a href="/element/4973">
+                <p class="p-topFacadeShowcaseItem__image" data-size="m">
+                  <span>
+                    <img :src="`${BASE_URL}lamp/img__lamp002.png`" alt="" width="" height="">
+                  </span>
+                </p>
+              </a>
             </div>
             <div class="p-topFacadeShowcaseItem" data-pos="15">
               <a href="/element/4497">
@@ -241,45 +241,45 @@
               </a>
             </div>
             <div class="p-topFacadeShowcaseItem" data-pos="17">
-              <a href="/element/4995">
-                <p class="p-topFacadeShowcaseItem__image" data-size="m">
-                  <span>
-                    <img :src="`${BASE_URL}sidetable/img__sidetable014.png`" alt="" width="" height="">
-                  </span>
-                </p>
-              </a>
-            </div>
-            <div class="p-topFacadeShowcaseItem" data-pos="18">
               <div class="p-topFacadeShowcaseItem__animation">
-                <a href="/element/4997">
+                <a href="/element/4995">
                   <p class="p-topFacadeShowcaseItem__image" data-size="m">
                     <span>
-                      <img :src="`${BASE_URL}sofa/img__sofa001.png`" alt="" width="" height="">
+                      <img :src="`${BASE_URL}sidetable/img__sidetable014.png`" alt="" width="" height="">
                     </span>
                   </p>
                 </a>
-                <a href="/element/4997">
+                <a href="/element/5090">
                   <p class="p-topFacadeShowcaseItem__image" data-size="m">
                     <span>
-                      <img :src="`${BASE_URL}sofa/img__sofa001.png`" alt="" width="" height="">
+                      <img :src="`${BASE_URL}sidetable/img__sidetable003.png`" alt="" width="" height="">
                     </span>
                   </p>
                 </a>
-                <a href="/element/4997">
+                <a href="/element/4995">
                   <p class="p-topFacadeShowcaseItem__image" data-size="m">
                     <span>
-                      <img :src="`${BASE_URL}sofa/img__sofa001.png`" alt="" width="" height="">
+                      <img :src="`${BASE_URL}sidetable/img__sidetable014.png`" alt="" width="" height="">
                     </span>
                   </p>
                 </a>
-                <a href="/element/4997">
+                <a href="/element/5090">
                   <p class="p-topFacadeShowcaseItem__image" data-size="m">
                     <span>
-                      <img :src="`${BASE_URL}sofa/img__sofa001.png`" alt="" width="" height="">
+                      <img :src="`${BASE_URL}sidetable/img__sidetable003.png`" alt="" width="" height="">
                     </span>
                   </p>
                 </a>
               </div>
+            </div>
+            <div class="p-topFacadeShowcaseItem" data-pos="18">
+              <a href="/element/4997">
+                <p class="p-topFacadeShowcaseItem__image" data-size="m">
+                  <span>
+                    <img :src="`${BASE_URL}sofa/img__sofa001.png`" alt="" width="" height="">
+                  </span>
+                </p>
+              </a>
             </div>
             <div class="p-topFacadeShowcaseItem" data-pos="19">
               <div class="p-topFacadeShowcaseItem__animation">
@@ -290,24 +290,24 @@
                     </span>
                   </p>
                 </a>
-                <a href="">
+                <a href="/element/5130">
+                  <p class="p-topFacadeShowcaseItem__image" data-size="m">
+                    <span>
+                      <img :src="`${BASE_URL}clock/img__clock004.png`" alt="" width="" height="">
+                    </span>
+                  </p>
+                </a>
+                <a href="/element/4981">
                   <p class="p-topFacadeShowcaseItem__image" data-size="m">
                     <span>
                       <img :src="`${BASE_URL}clock/img__clock006.png`" alt="" width="" height="">
                     </span>
                   </p>
                 </a>
-                <a href="">
+                <a href="/element/5130">
                   <p class="p-topFacadeShowcaseItem__image" data-size="m">
                     <span>
-                      <img :src="`${BASE_URL}clock/img__clock006.png`" alt="" width="" height="">
-                    </span>
-                  </p>
-                </a>
-                <a href="">
-                  <p class="p-topFacadeShowcaseItem__image" data-size="m">
-                    <span>
-                      <img :src="`${BASE_URL}clock/img__clock006.png`" alt="" width="" height="">
+                      <img :src="`${BASE_URL}clock/img__clock004.png`" alt="" width="" height="">
                     </span>
                   </p>
                 </a>
@@ -366,15 +366,11 @@
     async fetch () {
 
       try {
-        const responseNews = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/news`)
+        const responseNews = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/newses`)
         this.news = responseNews.data
       } catch (error) {
         console.log(error)
       }
-    },
-    
-    mounted () {
-      this.counterChange()
     },
 
     methods: {
@@ -396,39 +392,22 @@
           }
         }, 5000)
       },
-    }
+    },
+
+    mounted () {
+      this.counterChange()
+    },
   }
 </script>
 
 <style lang="scss" scoped>
-
-  @keyframes pcScroll {
-
-    0% {
-      transform: translateY(100%);
-    }
-
-    100% {
-      transform: translateY(-100%);
-    }
-  }
-  @keyframes pcScrollClone {
-
-    0% {
-      transform: translateY(0);
-    }
-
-    100% {
-      transform: translateY(-200%);
-    }
-  }
 
   .p-topFacade {
     background-color: color(bg);
 
     // .p-topFacade__wrapper
     &__wrapper {
-      aspect-ratio: 375 / 526;
+      aspect-ratio: 375 / 540;
       overflow: hidden;
       position: relative;
 
@@ -480,11 +459,11 @@
     color: #565853;
     
     &:nth-of-type(1) {
-      animation: infiniteAnimation 40s -20s linear infinite;
+      animation: infiniteAnimationX 40s -20s linear infinite;
     }
     
     &:nth-of-type(2) {
-      animation: infiniteAnimationClone 40s linear infinite;
+      animation: infiniteAnimationXClone 40s linear infinite;
     }
     
     p {
@@ -528,11 +507,11 @@
       }
 
       &:nth-of-type(1) {
-        animation: pcScroll linear 40s -20s infinite;
+        animation: infiniteAnimationY linear 40s -20s infinite;
       }
 
       &:nth-of-type(2) {
-        animation: pcScrollClone linear 40s infinite;
+        animation: infiniteAnimationYClone linear 40s infinite;
       }
     }
 
@@ -1051,6 +1030,7 @@
       }
     }
 
+    // .p-topFacadeShowcaseItem__image
     &__image {
 
       &[data-size="s"] {
@@ -1083,7 +1063,9 @@
         }
       }
 
+      // .p-topFacadeShowcaseItem__image img
       img {
+        user-select: none;
         width: 100%;
         height: 100%;
         position: relative;

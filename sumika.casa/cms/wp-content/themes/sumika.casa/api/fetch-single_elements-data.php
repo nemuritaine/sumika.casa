@@ -7,13 +7,16 @@
   );
   $single_post = get_posts($args_single);
   $targets = $single_post;
+  $room_presence;
   $result = [];
   foreach($targets as $post):
     $brands = get_the_terms($post->ID, 'brand');
+    $styles = get_the_terms($post->ID, 'style');
 
     $rooms = get_field('p-elementItem__room', $post->ID);
     $room_data = [];
     if ($rooms) {
+      $room_presence = true;
       foreach ($rooms as $room) {
         $room_item = array(
           'id' => $room,
@@ -25,8 +28,54 @@
         );
         array_push($room_data, $room_item);
       }
-    }
+    } else {
+      // $roomsが存在しない場合、カテゴリーinteriorの記事を取得
+      $room_presence = false;
+      $styles = get_the_terms($post->ID, 'style');
+      $style_slugs = array();
+      if ($styles && !is_wp_error($styles)) {
+        foreach ($styles as $style) {
+          array_push($style_slugs, $style->slug);
+        }
+      }
+      $added_ids = array();
+      $room_posts = get_posts(array(
+        'post_type' => 'post',
+        'post_status' => 'publish',
+        'posts_per_page' => 2,
+        'orderby' => 'rand',
+        'post__not_in' => array('1597', '260', '249', '44', '238', '66', '131', '63'),
+        'tax_query' => array(
+          'relation'  => 'AND',
+          array(
+            'taxonomy' => 'category',
+            'field' => 'slug',
+            'terms' => 'interior',
+            'operator' => 'AND',
+          ),
+          array(
+            'taxonomy' => 'post_tag',
+            'field' => 'slug',
+            'terms' => $style_slugs,
+            'operator' => 'IN',
+          ),
+        ),
+      ));
+      foreach ($room_posts as $room_post) {
 
+        if (!in_array($room_post->ID, $added_ids)) {
+          $room_item = array(
+            'id' => $room_post->ID,
+            'title' => get_the_title($room_post->ID),
+            'tags' => get_the_terms($room_post->ID, 'post_tag'),
+            'thumbnail' => get_the_post_thumbnail_url($room_post->ID, 'full'),
+            'link' => get_permalink($room_post->ID),
+          );
+          array_push($room_data, $room_item);
+          array_push($added_ids, $room_post->ID);
+        }
+      }
+    }
 
     $taxonomies = get_terms(array(
       'taxonomy' => 'class',
@@ -41,7 +90,6 @@
     }
     shuffle($valid_terms); // 配列をシャッフルする
     $valid_terms = array_slice($valid_terms, 0, 3); // ランダムに3つのtermを取得する
-
 
     $carousels = [];
     foreach ($valid_terms as $taxonomy) {
@@ -95,6 +143,14 @@
       // $coordinationsが存在しない場合、$stylesと同じtermの記事を取得
       $added_ids = array();
       $styles = get_the_terms($post->ID, 'style');
+      $class_terms = get_the_terms($post->ID, 'class');
+      $class_slugs = array();
+      if ($class_terms && !is_wp_error($class_terms)) {
+        foreach ($class_terms as $class_term) {
+          array_push($class_slugs, $class_term->slug);
+        }
+      }
+
       if ($styles && !is_wp_error($styles)) {
         foreach ($styles as $style) {
           $style_posts = get_posts(array(
@@ -104,10 +160,17 @@
             'orderby' => 'rand',
             'post__not_in' => array($post->ID),
             'tax_query' => array(
+              'relation' => 'AND',
               array(
                 'taxonomy' => 'style',
                 'field' => 'slug',
                 'terms' => $style->slug,
+              ),
+              array(
+                'taxonomy' => 'class',
+                'field' => 'slug',
+                'terms' => $class_slugs,
+                'operator' => 'NOT IN',
               ),
             ),
           ));
@@ -136,7 +199,6 @@
         }
       }
     }
-
 
     $relations = get_field('p-elementItem__relation', $post->ID);
     $relation_data = [];
@@ -194,7 +256,6 @@
       }
     }
 
-
     $price = get_field('p-elementItem__price', $post->ID);
     if(is_numeric($price)) {
       $price = number_format($price);
@@ -212,10 +273,14 @@
       'affiliate' => get_field('p-elementItem__affiliate', $post->ID),
       'store' => get_field('p-elementItem__store', $post->ID),
       'category' => get_the_terms($post->ID, 'class')[0]->name,
+      'room_presence' => $room_presence,
       'room_data' => $room_data,
       'coordination_data' => $coordination_data,
       'relation_data' => $relation_data,
       'carousel_data' => $carousels,
+      'likes_count' => get_field('likes_count', $post->ID),
+      'style_name' => $styles && !is_wp_error($styles) && isset($styles[0]) ? $styles[0]->name : '',
+      'style_slug' => $styles && !is_wp_error($styles) && isset($styles[0]) ? $styles[0]->slug : '',
     );
     array_push($result, $data);
   endforeach;

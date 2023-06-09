@@ -13,7 +13,7 @@
             <p>{{ post.excerpt }}</p>
           </div>
           <div v-if="post.category" class="p-articleDetailFacade__category">
-            <a href="">{{ post.category }}</a>
+            <span>{{ post.category }}</span>
           </div>
         </section>
         <div class="p-articleDetailFacade__eyecatch">
@@ -32,27 +32,40 @@
 </template>
 
 <script>
-  import { gsap } from 'gsap'
-  const tl = gsap.timeline()
 
   export default {
 
+    head () {
+      const defaultHead = this.$nuxt.$options.head
+      const title = this.post.title || defaultHead.title
+      const description = this.post.excerpt || defaultHead.meta.find(meta => meta.hid === 'description').content
+      const image = this.post.thumbnail || defaultHead.meta.find(meta => meta.hid === 'og:image').content
+
+      return {
+        title,
+        meta: [
+          { hid: 'description', name: 'description', content: description },
+          { hid: 'og:title', property: 'og:title', content: title },
+          { hid: 'og:description', property: 'og:description', content: description },
+          { hid: 'og:url', property: 'og:url', content: `${process.env.BASE_URL}post/${this.post.ID}` },
+          { hid: 'og:image', property: 'og:image', content: image },
+        ],
+      }
+    },
+
     async asyncData ({ app, params, $axios }) {
 
-      const post = await $axios.$get(`${app.$url}/custom/v0/single_article?id=${params.id}`)
+      const post = await $axios.$get(`${app.$url}/custom/v0/post?id=${params.id}`)
       return {
         post
       }
     },
 
     computed: {
+      
       bodyClass () {
         return 'p-articleDetail p-single'
       }
-    },
-
-    mounted () {
-      this.roomtourHoverAnimation()
     },
 
     methods: {
@@ -72,7 +85,11 @@
             roomTour.classList.remove('is-active')
           })
         })
-      }
+      },
+    },
+
+    mounted () {
+      this.roomtourHoverAnimation()
     },
   }
 </script>
@@ -132,7 +149,6 @@
         border-radius: vw(6);
       }
 
-
       img {
         width: 100%;
       }
@@ -152,7 +168,7 @@
         margin-bottom: vw(-17);
       }
 
-      a {
+      span {
         text-transform: uppercase;
         font-family: 'Wandeln';
         color: #dddddd;

@@ -1,7 +1,8 @@
 <?php
   $title = block_value('title');
   $link = block_value('link');
-  $position = block_value('position');
+  $positionY = block_value('up-and-down');
+  $positionX = block_value('position');
   $top = block_value('top');
   $left = block_value('left');
 ?>
@@ -18,7 +19,7 @@
   </a>
 </div>
 <div
-  class="p-editorRoomtour__item --<?php if($position): ?><?php echo $position; ?><?php endif; ?>"
+  class="p-editorRoomtour__item --<?php if($positionX): ?><?php echo $positionX; ?><?php endif; ?> --<?php if($positionY): ?><?php echo $positionY; ?><?php endif; ?>"
   style="
     <?php if($top): ?>top: <?php echo $top; ?>%;<?php endif; ?>
     <?php if($left): ?>left: <?php echo $left; ?>%;<?php endif; ?>

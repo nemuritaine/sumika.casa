@@ -106,7 +106,26 @@
 
 .c-sortTypeSelector {
   position: relative;
-  
+  border-radius: 6px;
+  overflow: hidden;
+
+  &:before {
+    content: '';
+    display: block;
+    width: 34px;
+    height: 100%;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0, #ffffff 24%);
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    pointer-events: none;
+
+    @include responsive(md, min) {
+      width: vw(42);
+    }
+  }
+
   &.--border {
     
     select {
@@ -124,11 +143,10 @@
     width: 100%;
     height: rem(40);
     padding-left: 17px;
-    border-radius: 6px;
     background-color: white;
     outline: none;
     color: color(text);
-    
+
     @include responsive(md, min) {
       @include vwfont(1280, 13, 18);
       width: vw(160);
@@ -143,6 +161,7 @@
     width: 11px;
     height: 11px;
     pointer-events: none;
+    z-index: 2;
     
     @include responsive(sm, min) {
       width: vw(11);

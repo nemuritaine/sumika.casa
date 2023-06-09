@@ -18,13 +18,31 @@
           </div>
           <dl class="p-elementDetailFacade__detail">
             <dt v-if="post.size">サイズ</dt>
-            <dd v-if="post.size">{{ post.size }}</dd>
+            <dd v-if="post.size" v-html="post.size"></dd>
             <dt v-if="post.price">値段</dt>
             <dd v-if="post.price">JPY {{ post.price }}</dd>
           </dl>
-          <div class="p-elementDetailFacade__button">
-            <a v-if="post.affiliate" :href="post.affiliate" target="_blank">詳しくみる</a>
-            <a v-else-if="post.store" :href="post.store" target="_blank">詳しくみる</a>
+          <div class="p-elementDetailFacade__aside">
+            <div class="p-elementDetailFacade__heart">
+              <button
+                :class="post.isLiked ? 'p-elementDetailFacadeHeart is-liked' : 'p-elementDetailFacadeHeart'"
+                @click="likePost(post.ID)"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+                  <path d="m45.03,7.81c-2.62-2.62-6.1-4.09-9.78-4.09s-7.16,1.43-9.78,4.05l-.45.45-.45-.45c-2.62-2.62-6.1-4.05-9.78-4.05s-7.12,1.43-9.74,4.05c-2.62,2.62-4.05,6.1-4.05,9.78s1.43,7.16,4.05,9.78l18.25,18.25c.45.45,1.06.7,1.72.7s1.27-.25,1.72-.7l18.21-18.21c2.62-2.62,4.05-6.1,4.05-9.78s-1.43-7.16-4.05-9.78h.08Z"/>
+                  <path d="m45.03,7.81c-2.62-2.62-6.1-4.09-9.78-4.09s-7.16,1.43-9.78,4.05l-.45.45-.45-.45c-2.62-2.62-6.1-4.05-9.78-4.05s-7.12,1.43-9.74,4.05c-2.62,2.62-4.05,6.1-4.05,9.78s1.43,7.16,4.05,9.78l18.25,18.25c.45.45,1.06.7,1.72.7s1.27-.25,1.72-.7l18.21-18.21c2.62-2.62,4.05-6.1,4.05-9.78s-1.43-7.16-4.05-9.78h.08Zm-18.29,5.69l2.25-2.25c1.68-1.68,3.93-2.62,6.3-2.62s4.62.94,6.3,2.62c1.68,1.68,2.62,3.93,2.62,6.3s-.94,4.62-2.62,6.3l-16.49,16.49L8.53,23.81c-1.68-1.68-2.62-3.93-2.62-6.3s.94-4.62,2.58-6.3c1.68-1.68,3.93-2.62,6.3-2.62s4.62.94,6.3,2.62l2.21,2.21c.94.9,2.46.94,3.44.04v.04Z"/>
+                </svg>
+                <span>{{ post.likes_count }}</span>
+              </button>
+            </div>
+            <div class="p-elementDetailFacade__button">
+              <a v-if="currentLink" 
+                @click="hideAffiliateLink" 
+                :href="currentLink" 
+                target="_blank">
+                {{ currentText }}
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -32,11 +50,12 @@
     <section class="p-elementDetailRoom" v-if="post.room_data && post.room_data.length > 0">
       <div class="p-elementDetailRoom__inner">
         <div class="p-elementDetailRoom__title">
-          <p>このアイテムを使ったお部屋</p>
+          <p v-if="post.room_presence">このアイテムを使ったお部屋</p>
+          <p v-else>おすすめのお部屋</p>
         </div>
         <div class="p-elementDetailRoom__item">
           <div v-for="room in post.room_data" :key="room.id" class="p-elementDetailRoomItem">
-            <a :href="`/article/${room.id}`" class="p-elementDetailRoomItem__link">
+            <a :href="`/post/${room.id}`" class="p-elementDetailRoomItem__link">
               <div class="p-elementDetailRoomItem__image">
                 <img :src="room.thumbnail" alt="" width="" height="">
               </div>
@@ -156,13 +175,19 @@
     <section class="p-elementDetailRelation" v-if="post.relation_data && post.relation_data.length > 0">
       <div class="p-elementDetailRelation__inner">
         <div class="p-elementDetailRelation__copy">
-          <span>Always</span>
-          <span>looking</span>
-          <span>for</span>
-          <span>innovative</span>
-          <span>and</span>
-          <span>unique</span>
-          <span>solutions</span>
+          <div class="p-elementDetailRelationCopy" v-if="quote">
+            <div class="p-elementDetailRelationCopy__en">
+              <div>
+                <span v-for="(word, index) in quote.en[0]" :key="index">{{ word }}</span>
+              </div>
+              <div>
+                <span v-for="(word, index) in quote.en[1]" :key="index">{{ word }}</span>
+              </div>
+            </div>
+            <div class="p-elementDetailRelationCopy__ja">
+              <p>{{ quote.ja }}</p>
+            </div>
+          </div>
         </div>
         <div class="p-elementDetailRelation__carousel splide">
           <div class="p-elementDetailRelation__heading">
@@ -323,7 +348,30 @@
 
   export default {
 
-    data() {
+    head () {
+      const defaultHead = this.$nuxt.$options.head
+      const titles = [
+        `${this.post.brand}の${this.post.title}`,
+        `${this.post.style_name}スタイルのお部屋に最適な${this.post.brand}の${this.post.title}`
+      ]
+      const title = titles[Math.floor(Math.random() * titles.length)]
+      const description = `${this.post.brand}の${this.post.title}は${this.post.style_name}スタイルとの相性が抜群です。${this.post.style_name}スタイルのおすすめのお部屋や、その他の相性の良いアイテムを紹介します。` || defaultHead.meta.find(meta => meta.hid === 'description').content
+      const image = this.post.style_slug ? `${process.env.BASE_URL}assets/images/element/ogp_${this.post.style_slug}.jpg` : defaultHead.meta.find(meta => meta.hid === 'og:image').content
+
+      return {
+        title,
+        meta: [
+          { hid: 'description', name: 'description', content: description },
+          { hid: 'og:title', property: 'og:title', content: title },
+          { hid: 'og:description', property: 'og:description', content: description },
+          { hid: 'og:url', property: 'og:url', content: `${process.env.BASE_URL}element/${this.post.ID}` },
+          { hid: 'og:image', property: 'og:image', content: image },
+        ],
+      }
+    },
+
+    data () {
+
       return {
         post: [],
         news: [],
@@ -331,16 +379,56 @@
         coordinationTotalSlides: 0,
         relationCurrentSlideNumber: 0,
         relationTotalSlides: 0,
+        isProcessingLike: false, // like処理中フラグ
         isProcessingRelationLike: false, // like処理中フラグ
         isProcessingCoordinationLike: false, // like処理中フラグ
+        showAffiliate: true,
+        quotes: [
+          {
+            en: ["When a room is dirty,", "the mind is also in disarray"],
+            ja: "部屋が汚れれば、心も混乱する - 秩序の欠如は、思考の整理ができない状態を象徴しています。"
+          },
+          {
+            en: ["The living space", "is a mirror of the mind"],
+            ja: "生活空間は心の鏡 - 私たちの部屋は、私たちの内面状態を反映しています。清潔な空間は明瞭な心を、乱雑な空間は混乱した心を示します。"
+          },
+          {
+            en: ["Organizing things", " isorganizing the mind"],
+            ja: "物の整理は心の整理 - 物を整理することは、自分自身の心を整理することと同じです。物が適切な位置にあるとき、心も落ち着きます。"
+          },
+          {
+            en: ["If the air in the room flows,", "thoughts also flow"],
+            ja: "部屋の空気が流れれば、思考も流れる - 窮屈な空間は思考の自由を妨げます。広々とした、整理された空間は新たなアイデアを呼び寄せます。"
+          },
+          {
+            en: ["A comfortable room produces", "comfortable thoughts"],
+            ja: "心地よい部屋は、心地よい思考を生む - 部屋が清潔で快適なら、それは豊かな創造性と高揚感を促します。"
+          },
+          {
+            en: ["The color of the room", "is the color of life"],
+            ja: "部屋の色は生活の色 - 部屋の色調は、我々の生活のエネルギーと情緒を反映しています。"
+          },
+          {
+            en: ["A beautiful room reflects", "a beautiful heart"],
+            ja: "美しい部屋は美しい心を映す - 部屋の美しさは、心の美しさを示します。あなたが大切にしているものは、あなたが価値を置くものです。"
+          },
+          {
+            en: ["The disarray of a room", "is ignoring oneself"],
+            ja: "部屋の乱れは、自己の無視 - 自分の部屋を無視することは、自分自身を無視することと同じです。自分自身を尊重することは、自分の空間を尊重することから始まります。"
+          }
+        ],
+        quote: {
+          en: [[], []],
+          ja: "",
+        },
       }
     },
 
     async asyncData({ app, params, $axios }) {
       
       try {
-        const responsePost = await $axios.$get(`${app.$url}/custom/v0/single_element?id=${params.id}`)
-        const responseNews = await $axios.get(`${app.$url}/custom/v0/news`)
+        const responsePost = await $axios.$get(`${app.$url}/custom/v0/element?id=${params.id}`)
+        const responseNews = await $axios.get(`${app.$url}/custom/v0/newses`)
         return {
           post: responsePost,
           news: responseNews.data,
@@ -354,6 +442,93 @@
     },
 
     methods: {
+
+      async likePost (postId) {
+
+        // 処理中なら何もしない
+        if (this.isProcessingLike) return
+        this.isProcessingLike = true // フラグを立てる
+
+        const storageKey = 'liked_posts'
+        let likedPosts
+        
+        // Cookieが利用可能か確認
+        const canUseCookies = navigator.cookieEnabled
+
+        let hasLiked
+        if (process.client) {
+          hasLiked = this.hasUserLiked(postId)
+        } else {
+          hasLiked = false
+        }
+
+        const isUnlike = hasLiked ? true : false
+
+        // ポストを探す
+        let post = this.post
+        if (!post) return
+
+        // オプティミスティックUI更新：サーバーレスポンスを待たずにUIを更新
+        post.isLiked = !isUnlike
+        post.likes_count = post.isLiked ? post.likes_count + 1 : post.likes_count - 1
+
+        try {
+
+          const response = await this.$axios.$post(`${this.$nuxt.$url}/likes/change/${postId}`, {
+            unlike: isUnlike ? '1' : '0',
+          })
+
+          // サーバーからのレスポンスを元に、最終的な値を更新
+          if (response.data && response.data.likes_count !== undefined) {
+            post.likes_count = response.data.likes_count
+          }
+
+          if (canUseCookies) {
+            
+            // Cookieが利用可能な場合、like情報をCookieに保存
+            likedPosts = this.$cookies.get(storageKey) || []
+
+            if (isUnlike) {
+
+              // Unlikeの場合、Cookieから情報を削除
+              likedPosts = likedPosts.filter(id => id !== postId)
+
+            } else {
+
+              // Likeの場合、情報をCookieに保存
+              likedPosts.push(postId)
+            }
+
+            this.$cookies.set(storageKey, likedPosts)
+
+          } else {
+
+            // Cookieが利用不可能な場合、like情報をローカルストレージに保存
+            likedPosts = JSON.parse(window.localStorage.getItem(storageKey)) || []
+            
+            if (isUnlike) {
+
+              // Unlikeの場合、ローカルストレージから情報を削除
+              likedPosts = likedPosts.filter(id => id !== postId)
+
+            } else {
+
+              // Likeの場合、情報をローカルストレージに保存
+              likedPosts.push(postId)
+            }
+
+            window.localStorage.setItem(storageKey, JSON.stringify(likedPosts))
+          }
+
+        } catch (error) {
+          // エラー発生時はUIを元に戻す
+          post.isLiked = isUnlike
+          post.likes_count = post.isLiked ? post.likes_count + 1 : post.likes_count - 1
+          console.error('Error liking post:', error)
+        } finally {
+          this.isProcessingLike = false // フラグを下す
+        }
+      },
 
       async relationLikePost (postId) {
 
@@ -527,25 +702,23 @@
         }
       },
 
-      async relationFetchLikesCount(postId) {
+      async fetchLikesCount () {
 
         try {
-          const response = await this.$axios.$get(`${this.$nuxt.$url}/likes/fetch/${postId}`)
-          let post = this.post.relation_data.find(item => item.id === postId)
-          if (post) post.likes_count = (response.data && response.data.likes_count) ? response.data.likes_count : 0
-        } catch (error) {
-          console.error('Error fetching likes count:', error)
-        }
-      },
+          const response = await this.$axios.$get(`${this.$nuxt.$url}/likes/fetch_all`)
+          const likesCount = response.data
 
-      async coordinationFetchLikesCount(postId) {
+          this.post.likes_count = likesCount[this.post.ID] ? likesCount[this.post.ID] : 0
 
-        try {
-          const response = await this.$axios.$get(`${this.$nuxt.$url}/likes/fetch/${postId}`)
-          let post = this.post.coordination_data.find(item => item.id === postId)
-          if (post) post.likes_count = (response.data && response.data.likes_count) ? response.data.likes_count : 0
+          this.post.relation_data.forEach(item => {
+            item.likes_count = likesCount[item.id] ? likesCount[item.id] : 0
+          })
+          this.post.coordination_data.forEach(item => {
+            item.likes_count = likesCount[item.id] ? likesCount[item.id] : 0
+          })
+
         } catch (error) {
-          console.error('Error fetching likes count:', error)
+          console.error('Error fetching all likes count:', error)
         }
       },
 
@@ -566,13 +739,15 @@
       
       likedInit () {
 
+        this.fetchLikesCount()
+
+        this.post.isLiked = this.hasUserLiked(this.post.ID)
+
         this.post.relation_data.forEach(item => {
-          this.relationFetchLikesCount(item.id)
           item.isLiked = this.hasUserLiked(item.id)
         })
 
         this.post.coordination_data.forEach(item => {
-          this.coordinationFetchLikesCount(item.id)
           item.isLiked = this.hasUserLiked(item.id)
         })
       },
@@ -702,18 +877,37 @@
           brandText.innerHTML = newTextContent
         }
       },
+
+      getRandomQuote () {
+        let randomIndex = Math.floor(Math.random() * this.quotes.length)
+        let selectedQuote = this.quotes[randomIndex]
+
+        this.quote.en[0] = selectedQuote.en[0].split(' ')
+        this.quote.en[1] = selectedQuote.en[1].split(' ')
+        this.quote.ja = selectedQuote.ja
+      },
+
+      hideAffiliateLink () {
+        
+        setTimeout(() => {
+          this.showAffiliate = false
+        }, 0)
+      }
     },
 
     created () {
+
       if (process.client) {
         this.likedInit()
       }
     },
-
+    
     mounted () {
       this.initCarousel()
       this.initNewsAccordions()
       this.adjustSpanText()
+      this.getRandomQuote()
+
       if (!process.client) {
         this.likedInit()
       }
@@ -768,6 +962,34 @@
 
       bodyClass () {
         return 'p-elementDetail'
+      },
+
+      currentLink () {
+
+        if (this.showAffiliate && this.post.affiliate) {
+          return this.post.affiliate
+        }
+        if (this.post.store) {
+          return this.post.store
+        }
+        if (this.post.affiliate) {
+          return this.post.affiliate
+        }
+        return null
+      },
+
+      currentText () {
+
+        if (this.showAffiliate && this.post.affiliate) {
+          return '詳しくみる'
+        }
+        if (this.post.store) {
+          return 'ストアリンク'
+        }
+        if (this.post.affiliate) {
+          return '詳しくみる'
+        }
+        return ''
       }
     },
   }
@@ -806,6 +1028,7 @@
     }
   }
 
+  // .p-elementDetailFacade__detail
   &__detail {
     display: flex;
     flex-wrap: wrap;
@@ -829,13 +1052,14 @@
 
     dt {
       @include font(14, 21, 40, 700);
-      width: per(120, 240);
+      width: 50%;
       border-bottom: 1px solid #D9D9D9;
       padding-top: rem(12);
       padding-bottom: rem(12);
 
       @include responsive(md, min) {
         @include vwfont(1280, 14);
+        width: per(90, 240);
         border-bottom: vw(1) solid #D9D9D9;
         padding-top: vw(12);
         padding-bottom: vw(12);
@@ -844,12 +1068,13 @@
 
     dd {
       @include font(14, 21, 40);
-      width: per(120, 240);
+      width: 50%;
       border-bottom: 1px solid #D9D9D9;
       padding-top: rem(12);
       padding-bottom: rem(12);
 
       @include responsive(md, min) {
+        width: per(150, 240);
         @include vwfont(1280, 14);
         border-bottom: vw(1) solid #D9D9D9;
         padding-top: vw(12);
@@ -896,12 +1121,13 @@
     }
   }
 
+  // .p-elementDetailFacade__image
   &__image {
+    pointer-events: none;
     display: flex;
     justify-content: center;
     position: relative;
     z-index: 1;
-    pointer-events: none;
 
     @include responsive(sm, max) {
       order: 2;
@@ -909,18 +1135,24 @@
     }
   }
 
-  &__button {
+  &__aside {
     position: fixed;
     bottom: rem(67);
     z-index: 10;
-    
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    column-gap: per(6, 350);
+
     @include responsive(sm, max) {
       left: 20px;
       width: calc(100% - 40px);
     }
-    
+
     @include responsive(sm, min) {
+      flex-direction: row;
       position: absolute;
+      column-gap: 10px;
       bottom: rem(16);
       right: 0;
       z-index: 2;
@@ -928,6 +1160,21 @@
 
     @include responsive(md, min) {
       bottom: vw(16);
+      column-gap: vw(10);
+    }
+  }
+
+  &__heart {
+
+    @include responsive(sm, max) {
+      width: per(72, 350);
+    }
+  }
+
+  &__button {
+
+    @include responsive(sm, max) {
+      width: per(272, 350);
     }
 
     a {
@@ -950,6 +1197,68 @@
         width: vw(180);
         height: vw(54);
         @include vwfont(1280, 16);
+      }
+    }
+  }
+}
+.p-elementDetailFacadeHeart {
+  width: 100%;
+  height: rem(54);
+  background-color: color(white);
+  border: 1px solid color(beige);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 4px;
+  border-radius: 6px;
+  color: color(beige);
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease;
+
+  @include responsive(sm, min) {
+    width: 72px;
+  }
+
+  @include responsive(md, min) {
+    width: vw(72);
+    height: vw(54);
+    border-width: vw(1);
+    column-gap: vw(4);
+    border-radius: vw(6);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+
+    @include responsive(md, min) {
+      width: vw(16);
+      height: vw(16);
+    }
+  }
+
+  span {
+    @include Optima;
+    @include font(16, 19, -100);
+  }
+
+  @include hover {
+    color: color(darkgray);
+    border-color: color(darkgray);
+  }
+
+  &.is-liked {
+    border-color: color(main);
+    color: color(main);
+
+    svg {
+      
+      path {
+
+        &:nth-of-type(1) {
+          display: none;
+        }
       }
     }
   }
@@ -993,7 +1302,9 @@
     height: vw(440);
   }
 
+  // p-elementDetailFacadeImage img
   img {
+    user-select: none;
     width: 100%;
     height: 100%;
     object-fit: contain;
@@ -1274,11 +1585,11 @@
         #{$this}__item {
   
           &:nth-of-type(1) {
-            animation: infiniteAnimation 80s -40s linear infinite reverse;
+            animation: infiniteAnimationX 80s -40s linear infinite reverse;
           }
           
           &:nth-of-type(2) {
-            animation: infiniteAnimationClone 80s linear infinite reverse;
+            animation: infiniteAnimationXClone 80s linear infinite reverse;
           }
         }
       }
@@ -1287,11 +1598,11 @@
   
         #{$this}__item {
           &:nth-of-type(1) {
-            animation: infiniteAnimation 80s -40s linear infinite;
+            animation: infiniteAnimationX 80s -40s linear infinite;
           }
           
           &:nth-of-type(2) {
-            animation: infiniteAnimationClone 80s linear infinite;
+            animation: infiniteAnimationXClone 80s linear infinite;
           }
         }
       }
@@ -1311,9 +1622,12 @@
   align-items: center;
   flex: 0 0 auto;
 
+  // .p-elementDetailCarouselItem__image
   &__image {
 
+    // .p-elementDetailCarouselItem__image img
     img {
+      user-select: none;
       width: 100%;
       height: 100%;
       max-width: 50px;
@@ -1460,33 +1774,9 @@
     @include inner(md);
   }
 
+  // .p-elementDetailRelation__copy
   &__copy {
     text-align: center;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    column-gap: 8px;
-    
-    @include responsive(sm, min) {
-      column-gap: 16px;
-    }
-
-    @include responsive(md, min) {
-      column-gap: vw(16);
-    }
-
-    span {
-      @include Wandeln;
-      @include font(48, 48, 0);
-
-      @include responsive(sm, min) {
-        @include font(64, 70, 0);
-      }
-
-      @include responsive(md, min) {
-        @include vwfont(1280, 64);
-      }
-    }
   }
 
   &__heading {
@@ -1521,6 +1811,57 @@
     @include responsive(sm, min) {
       display: flex;
       align-items: center;
+    }
+  }
+}
+
+.p-elementDetailRelationCopy {
+
+  &__en {
+
+    div {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      column-gap: 6px;
+      
+      @include responsive(sm, min) {
+        column-gap: 16px;
+      }
+
+      @include responsive(md, min) {
+        column-gap: vw(16);
+      }
+    }
+
+    span {
+      @include Wandeln;
+      @include font(48, 48, 0);
+
+      @include responsive(sm, min) {
+        @include font(64, 70, 0);
+      }
+
+      @include responsive(md, min) {
+        @include vwfont(1280, 64);
+      }
+    }
+  }
+
+  &__ja {
+    margin-top: rem(16);
+
+    @include responsive(md, min) {
+      margin-top: vw(16);
+    }
+
+    p {
+      color: color(darkgray);
+      @include font(12, 21, 20);
+
+      @include responsive(md, min) {
+        @include vwfont(1280, 12);
+      }
     }
   }
 }

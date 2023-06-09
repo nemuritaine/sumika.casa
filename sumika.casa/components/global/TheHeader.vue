@@ -137,7 +137,7 @@
           {
             id: 2,
             name: 'ARTICLE',
-            url: '/article'
+            url: '/post'
           },
           {
             id: 3,
@@ -152,40 +152,8 @@
           {
             id: 5,
             name: 'STORE',
-            url: 'https://store.sumika.casa/',
+            url: '', // https://store.sumika.casa/
             target: true
-          }
-        ],
-        menus: [
-          {
-            id: 1,
-            name: '北欧',
-            value: 'scandinavia'
-          },
-          {
-            id: 2,
-            name: '韓国',
-            value: 'korea'
-          },
-          {
-            id: 3,
-            name: 'ホワイト',
-            value: 'white'
-          },
-          {
-            id: 4,
-            name: 'シンプル',
-            value: 'simple'
-          },
-          {
-            id: 5,
-            name: 'ナチュラル',
-            value: 'natural'
-          },
-          {
-            id: 6,
-            name: 'IKEA',
-            value: 'ikea'
           }
         ],
         itemStyles: [],
@@ -451,6 +419,7 @@
     // .l-headerNavigationIcon--frame
     &--frame {
       display: flex;
+      position: relative;
       
       // .l-headerNavigationIcon--frame svg
       svg {
@@ -472,10 +441,12 @@
 
     &--arrow {
       @extend .l-headerNavigationIcon;
+      z-index: 1;
       
       svg {
         width: 15px;
         height: 18px;
+        transition: fill 0.3s ease;
 
         @include responsive(md, min) {
           width: vw(18);
@@ -536,6 +507,13 @@
             transform: rotate(-135deg);
           }
         }
+      }
+    }
+
+    a {
+
+      @include hover {
+
       }
     }
 

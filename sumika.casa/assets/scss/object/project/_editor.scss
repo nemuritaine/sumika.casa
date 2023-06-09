@@ -486,16 +486,14 @@
     }
   }
 
+  // .p-editorRoomtour__guidance
   &__guidance {
-    visibility: visible;
-    opacity: 1;
-    position: absolute;
-    left: 12px;
-    bottom: 12px;
-    z-index: 1;
-    pointer-events: none;
+    display: none;
 
     @include responsive(sm, min) {
+      display: block;
+      position: absolute;
+      pointer-events: none;
       bottom: 20px;
       left: 20px;
     }
@@ -525,6 +523,7 @@
       visibility 0.3s ease;
   }
 
+  // .p-editorRoomtour__item
   &__item {
     position: absolute;
     display: block;
@@ -545,6 +544,7 @@
       }
     }
 
+    // .p-editorRoomtour__item.--center
     &.--center {
       
       #{$this}__title {
@@ -570,10 +570,57 @@
         left: 85%;
       }
     }
+
+    &.--up {
+      
+      #{$this}__pointer {
+        transform: scaleY(0.65);
+      }
+
+      #{$this}__title {
+        top: rem(10);
+
+        @include responsive(sm, min) {
+          top: rem(11);
+        }
+
+        @include responsive(md, min) {
+          top: vw(11);
+        }
+      }
+    }
+
+    &.--down {
+
+      #{$this}__pointer {
+        transform: scaleY(0.65) rotate(-180deg);
+        position: relative;
+        bottom: rem(10);
+
+        @include responsive(sm, min) {
+          bottom: rem(10);
+        }
+
+        @include responsive(md, min) {
+          bottom: vw(10);
+        }
+      }
+
+      #{$this}__title {
+        bottom: rem(20);
+
+        @include responsive(sm, min) {
+          bottom: rem(21);
+        }
+
+        @include responsive(md, min) {
+          bottom: vw(21);
+        }
+      }
+    }
   }
 
   &__pointer {
-    transform: scaleY(0.65);
     display: block;
     
     span {
@@ -631,16 +678,10 @@
     position: absolute;
     display: block;
     color: color(white);
-    top: rem(10);
-
-    @include responsive(sm, min) {
-      top: rem(11);
-    }
 
     @include responsive(md, min) {
-      top: vw(11);
       max-width: vw(300);
-    } 
+    }
     
     // .p-editorRoomtour__title a
     a {

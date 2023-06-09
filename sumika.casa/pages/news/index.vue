@@ -63,7 +63,7 @@
           </div>
         </div>
       </aside>
-      <article class="p-archive__article" @scroll.passive="handleScroll">
+      <article class="p-archive__article" ref="archiveArticle" @scroll.passive="handleScroll">
         <ul class="p-newsIndex__item">
           <li class="p-newsIndexItem" v-for="news in news" :key="news.id">
             <nuxt-link
@@ -129,7 +129,7 @@
           </li>
         </ul>
       </article>
-      <div class="p-archive__sort">
+      <div class="p-archive__sort" ref="archiveSort">
         <div class="p-archiveSort" @click="animateAside">
           <div class="p-archiveSort__icon">
             <svg>
@@ -176,6 +176,10 @@
       window.addEventListener('resize', this.handleResize)
       this.initNewsAccordions()
 
+      this.sortOpacityResize()
+      window.addEventListener('resize', this.sortOpacityResize)
+      window.addEventListener('scroll', this.sortOpacityScroll)
+
       if (window.innerWidth <= 1024) {
         gsap.set('.p-archive__aside', { autoAlpha: 0 })
         this.initAsideAccordions()
@@ -184,6 +188,8 @@
 
     beforeDestroy() {
       window.removeEventListener('scroll', this.handleScroll)
+      window.removeEventListener('resize', this.sortOpacityResize)
+      window.removeEventListener('scroll', this.sortOpacityScroll)
     },
 
     watch: {
@@ -207,7 +213,7 @@
       try {
         // const responseYears = await $axios.get(`${app.$url}/custom/v0/news_year`)
         const responseCategories = await $axios.get(`${app.$url}/custom/v0/news_cat`)
-        const responseNews = await $axios.get(`${app.$url}/custom/v0/news`, {
+        const responseNews = await $axios.get(`${app.$url}/custom/v0/newses`, {
           params: {
             per_page: 20,
             page: 1,
@@ -238,7 +244,7 @@
 
       async fetchNews (page) {
         try {
-          const response = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/news`, {
+          const response = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/newses`, {
             params: {
               per_page: this.perPage,
               page: page,
@@ -275,6 +281,29 @@
         if (scrollTop + windowHeight >= articleHeight - 300) {
           this.currentPage += 1
           await this.fetchNews(this.currentPage)
+        }
+      },
+
+      sortOpacityResize () {
+
+        if (window.innerWidth <= 769 || window.innerWidth >= 1024) {
+          this.$refs.archiveSort.style.opacity = ''
+          this.$refs.archiveSort.style.visibility = ''
+        }
+      },
+
+      sortOpacityScroll () {
+
+        if (window.innerWidth >= 769 && window.innerWidth <= 1024) {
+          const scrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop
+          const articleBottom = this.$refs.archiveArticle.getBoundingClientRect().bottom + window.pageYOffset
+          const threshold = articleBottom - window.innerHeight
+
+          if (scrollPosition >= threshold) {
+            gsap.to(this.$refs.archiveSort, { autoAlpha: 0 })
+          } else {
+            gsap.to(this.$refs.archiveSort, { autoAlpha: 1 })
+          }
         }
       },
 
