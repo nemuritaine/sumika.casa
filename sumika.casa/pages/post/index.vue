@@ -20,25 +20,6 @@
             <div class="p-archiveAsideMenu">
               <div class="p-archiveAsideMenu__heading">
                 <div class="p-archiveAsideMenu__title">
-                  <p>カテゴリー</p>
-                </div>
-              </div>
-              <div class="p-archiveAsideMenu__body">
-                <ul class="p-archiveAsideMenu__item">
-                  <li class="p-archiveAsideMenuItem">
-                    <input type="checkbox" id="category-all" @change="selectAll('category', $event.target.checked)">
-                    <label for="category-all">すべて</label>
-                  </li>
-                  <li v-for="category in categories" :key="category.id" class="p-archiveAsideMenuItem">
-                    <input type="checkbox" :id="'category-' + category.id" :value="category.id" v-model="selectedCategories">
-                    <label :for="'category-' + category.id">{{ category.name }}</label>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="p-archiveAsideMenu is-accordion">
-              <div class="p-archiveAsideMenu__heading" @click="asideAccordion">
-                <div class="p-archiveAsideMenu__title">
                   <p>タグ</p>
                 </div>
                 <div class="p-archiveAsideMenu__icon">
@@ -47,7 +28,7 @@
                 </div>
               </div>
               <div class="p-archiveAsideMenu__body">
-                <ul class="p-archiveAsideMenu__item">
+                <ul class="p-archiveAsideMenu__item --button">
                   <li class="p-archiveAsideMenuItem">
                     <input type="checkbox" id="tag-all" @change="selectAll('tag', $event.target.checked)">
                     <label for="tag-all">すべて</label>
@@ -112,7 +93,6 @@
         categories: [],
         tags: [],
         articles: [],
-        selectedCategories: [],
         selectedTags: [],
         currentPage: 1,
         perPage: 20,
@@ -168,13 +148,6 @@
     },
 
     watch: {
-      selectedCategories: {
-        handler() {
-          this.resetPagination()
-          this.fetchArticles(this.currentPage)
-        },
-        deep: true,
-      },
       selectedTags: {
         handler() {
           this.resetPagination()
@@ -225,7 +198,6 @@
             params: {
               per_page: this.perPage,
               page: page,
-              categories: this.selectedCategories,
               tags: this.selectedTags,
             },
           })
@@ -291,13 +263,7 @@
       },
 
       selectAll (type, checked) {
-        if (type === 'category') {
-          if (checked) {
-            this.selectedCategories = this.categories.map(category => category.id)
-          } else {
-            this.selectedCategories = []
-          }
-        } else if (type === 'tag') {
+        if (type === 'tag') {
           if (checked) {
             this.selectedTags = this.tags.map(tag => tag.id)
           } else {
@@ -307,7 +273,6 @@
       },
 
       clearAll () {
-        this.selectedCategories = []
         this.selectedTags = []
       },
 

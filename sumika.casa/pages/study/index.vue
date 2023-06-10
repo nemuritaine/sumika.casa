@@ -24,7 +24,7 @@
                 </div>
               </div>
               <div class="p-archiveAsideMenu__body">
-                <ul class="p-archiveAsideMenu__item">
+                <ul class="p-archiveAsideMenu__item --button">
                   <li class="p-archiveAsideMenuItem">
                     <input type="checkbox" id="category-all" @change="selectAll('category', $event.target.checked)">
                     <label for="category-all">すべて</label>

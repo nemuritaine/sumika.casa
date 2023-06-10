@@ -7,6 +7,14 @@
     'orderby' => 'date',
     'order' => 'DESC',
     'paged' => $param['page'] ?: 1,
+    'post__not_in' => array('66', '44', '131', '1597'),
+    'tax_query' => array(
+      array(
+        'taxonomy' => 'category',
+        'field' => 'slug',
+        'terms' => 'interior',
+      ),
+    ),
   ];
   if (!empty($param['categories'])) {
     $post_args['category__in'] = $param['categories'];

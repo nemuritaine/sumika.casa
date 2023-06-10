@@ -17,8 +17,8 @@
             </div>
           </div>
           <div class="p-archiveAside__menu">
-            <div class="p-archiveAsideMenu is-accordion">
-              <div class="p-archiveAsideMenu__heading" @click="asideAccordion">
+            <div class="p-archiveAsideMenu">
+              <div class="p-archiveAsideMenu__heading">
                 <div class="p-archiveAsideMenu__title">
                   <p>スタイル</p>
                 </div>
@@ -28,7 +28,7 @@
                 </div>
               </div>
               <div class="p-archiveAsideMenu__body">
-                <ul class="p-archiveAsideMenu__item">
+                <ul class="p-archiveAsideMenu__item --button">
                   <li class="p-archiveAsideMenuItem">
                     <input type="checkbox" id="style-all" @change="selectAll('style', $event.target.checked)">
                     <label for="style-all">すべて</label>
@@ -51,7 +51,7 @@
                 </div>
               </div>
               <div class="p-archiveAsideMenu__body">
-                <ul class="p-archiveAsideMenu__item">
+                <ul class="p-archiveAsideMenu__item --button">
                   <li class="p-archiveAsideMenuItem">
                     <input type="checkbox" id="classes-all" @change="selectAll('class', $event.target.checked)">
                     <label for="classes-all">すべて</label>
@@ -74,7 +74,7 @@
                 </div>
               </div>
               <div class="p-archiveAsideMenu__body">
-                <ul class="p-archiveAsideMenu__item">
+                <ul class="p-archiveAsideMenu__item --checkbox">
                   <li class="p-archiveAsideMenuItem">
                     <input type="checkbox" id="brand-all" @change="selectAll('brand', $event.target.checked)">
                     <label for="brand-all">すべて</label>
@@ -97,7 +97,7 @@
                 </div>
               </div>
               <div class="p-archiveAsideMenu__body">
-                <ul class="p-archiveAsideMenu__item">
+                <ul class="p-archiveAsideMenu__item --checkbox">
                   <li class="p-archiveAsideMenuItem">
                     <input type="checkbox" id="price-all" @change="selectAll('price', $event.target.checked)">
                     <label for="price-all">すべて</label>
@@ -955,6 +955,8 @@
       width: per(125, 200);
       margin-right: auto;
       margin-left: auto;
+      position: relative;
+      z-index: 2;
       
       // .p-elementIndexItem__image img
       img {
