@@ -28,11 +28,10 @@
                 </div>
               </div>
               <div class="p-archiveAsideMenu__body">
+                <div class="p-archiveAsideMenu__reset">
+                  <p @click="selectAll('tag')">選択をクリア</p>
+                </div>
                 <ul class="p-archiveAsideMenu__item --button">
-                  <li class="p-archiveAsideMenuItem">
-                    <input type="checkbox" id="tag-all" @change="selectAll('tag', $event.target.checked)">
-                    <label for="tag-all">すべて</label>
-                  </li>
                   <li v-for="tag in tags" :key="tag.id" class="p-archiveAsideMenuItem">
                     <input type="checkbox" :id="'tag-' + tag.id" :value="tag.id" v-model="selectedTags">
                     <label :for="'tag-' + tag.id">{{ tag.name }}</label>
@@ -87,6 +86,19 @@
   import { gsap } from 'gsap'
 
   export default {
+
+    head () {
+      const defaultHead = this.$nuxt.$options.head
+      const title = `お部屋一覧 | ${defaultHead.title}`
+
+      return {
+        title,
+        meta: [
+          { hid: 'og:title', property: 'og:title', content: title },
+          { hid: 'og:url', property: 'og:url', content: `${process.env.BASE_URL}post` },
+        ],
+      }
+    },
 
     data () {
       return {
@@ -262,13 +274,9 @@
         }
       },
 
-      selectAll (type, checked) {
+      selectAll (type) {
         if (type === 'tag') {
-          if (checked) {
-            this.selectedTags = this.tags.map(tag => tag.id)
-          } else {
-            this.selectedTags = []
-          }
+          this.selectedTags = []
         }
       },
 

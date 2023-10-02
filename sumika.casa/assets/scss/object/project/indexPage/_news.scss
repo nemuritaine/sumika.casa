@@ -3,6 +3,16 @@
 
 .p-topNewsItemText {
 
+  a {
+    text-decoration: underline;
+    text-underline-offset: rem(4);
+    text-decoration-color: color(lightgray);
+
+    @include responsive(md, min) {
+      text-underline-offset: vw(4);
+    }
+  }
+
   p {
     @include font(14, 25.2, 40);
 

@@ -35,7 +35,7 @@
                       <div class="c-sortTypeSelector">
                         <select name="style" v-model="selectedItemStyle">
                           <option value="">すべて</option>
-                          <option v-for="style in itemStyles" :key="style.id" :value="`${style.cat_slug}`">{{ style.cat_name }}</option>
+                          <option v-for="style in itemDetails.style" :key="style.id" :value="`${style.cat_slug}`">{{ style.cat_name }}</option>
                         </select>
                         <div class="c-sortTypeSelector__icon">
                           <div class="c-sortTypeSelectorIcon"></div>
@@ -50,7 +50,7 @@
                       <div class="c-sortTypeSelector">
                         <select name="category" v-model="selectedItemCategory">
                           <option value="">すべて</option>
-                          <option v-for="item in itemClasses" :key="item.id" :value="`${item.cat_slug}`">{{ item.cat_name }}</option>
+                          <option v-for="item in itemDetails.class" :key="item.id" :value="`${item.cat_slug}`">{{ item.cat_name }}</option>
                         </select>
                         <div class="c-sortTypeSelector__icon">
                           <div class="c-sortTypeSelectorIcon"></div>
@@ -65,7 +65,7 @@
                       <div class="c-sortTypeSelector">
                         <select name="brand" v-model="selectedItemBrand">
                           <option value="">すべて</option>
-                          <option v-for="brand in itemBrands" :key="brand.id" :value="`${brand.cat_slug}`">{{ brand.cat_name }}</option>
+                          <option v-for="brand in itemDetails.brand" :key="brand.id" :value="`${brand.cat_slug}`">{{ brand.cat_name }}</option>
                         </select>
                         <div class="c-sortTypeSelector__icon">
                           <div class="c-sortTypeSelectorIcon"></div>
@@ -80,7 +80,7 @@
                       <div class="c-sortTypeSelector">
                         <select name="price" v-model="selectedItemPrice">
                           <option value="">すべて</option>
-                          <option v-for="price in itemPrices" :key="price.id" :value="`${price.cat_slug}`">{{ price.cat_name }}</option>
+                          <option v-for="price in itemDetails.price" :key="price.id" :value="`${price.cat_slug}`">{{ price.cat_name }}</option>
                         </select>
                         <div class="c-sortTypeSelector__icon">
                           <div class="c-sortTypeSelectorIcon"></div>
@@ -177,7 +177,7 @@
       <div class="p-topColumn__inner">
         <div class="p-topColumn__title">
           <div class="p-topColumnTitle">
-            <div class="p-topColumnTitle__text">Article</div>
+            <div class="p-topColumnTitle__text">Room</div>
             <div class="p-topColumnTitle__number">
               <div class="p-topColumnTitleNumber">
                 <div class="p-topColumnTitleNumber__brackets">(</div>
@@ -263,7 +263,7 @@
       </div>
     </div>
 
-    <div id="study" class="p-topStudy">
+    <!-- <div id="study" class="p-topStudy">
       <div class="p-topStudy__inner">
         <div class="p-topStudy__heading">
           <div class="p-topStudy__title">
@@ -310,30 +310,26 @@
           <div class="p-topStudyArticle">
             <ul class="p-topStudyArticle__item">
               <li v-for="study in studies" :key="study.id" class="p-topStudyArticleItem">
-                <span class="p-topStudyArticleItem__link">
-                <!-- <a :href="`/study/${study.id}`" class="p-topStudyArticleItem__link"> -->
+                <a :href="`/study/${study.id}`" class="p-topStudyArticleItem__link">
                   <span class="p-topStudyArticleItem__number">
                     <span class="p-topStudyArticleItemNumber">{{ study.order }}</span>
                   </span>
                   <span class="p-topStudyArticleItem__title">
                     <span class="p-topStudyArticleItemTitle">{{ study.title }}</span>
                   </span>
-                </span>
-                <!-- </a> -->
+                </a>
               </li>
             </ul>
             <ul class="p-topStudyArticle__item">
               <li v-for="study in studies" :key="study.id" class="p-topStudyArticleItem">
-                <span class="p-topStudyArticleItem__link">
-                <!-- <a :href="`/study/${study.id}`" class="p-topStudyArticleItem__link"> -->
+                <a :href="`/study/${study.id}`" class="p-topStudyArticleItem__link">
                   <span class="p-topStudyArticleItem__number">
                     <span class="p-topStudyArticleItemNumber">{{ study.order }}</span>
                   </span>
                   <span class="p-topStudyArticleItem__title">
                     <span class="p-topStudyArticleItemTitle">{{ study.title }}</span>
                   </span>
-                </span>
-                <!-- </a> -->
+                </a>
               </li>
             </ul>
           </div>
@@ -341,8 +337,7 @@
         <div class="p-topStudy__button">
           <div class="p-topButton">
             <div class="p-topButton__line"></div>
-            <span class="p-topButton__link">
-            <!-- <a class="p-topButton__link" href="/study"> -->
+            <a class="p-topButton__link" href="/study">
               <span class="p-topButton__text">
                 <span>VIEW ALL</span>
               </span>
@@ -351,12 +346,11 @@
                   <use href="@/static/assets/images/common/graphics.svg#ico_arrowRight"></use>
                 </svg>
               </span>
-            </span>
-            <!-- </a> -->
+            </a>
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     
     <div id="news" class="p-topNews">
       <div class="p-topNews__inner">
@@ -474,11 +468,10 @@
     data () {
       return {
         items: [],
-        itemClasses: [],
-        itemPrices: [],
+        itemDetails: [],
         articles: [],
-        studies: [],
-        studyCategories: [],
+        // studies: [],
+        // studyCategories: [],
         news: [],
         counts: [],
         selectedStudyCategory: '',
@@ -498,28 +491,17 @@
     async asyncData({ $axios, app }) {
       
       try {
-        const responseArticles = await $axios.get(`${app.$url}/custom/v0/posts`)
-        const responseNews = await $axios.get(`${app.$url}/custom/v0/newses`)
-        const responseStudies = await $axios.get(`${app.$url}/custom/v0/studies`)
-        const responseStudyCategories = await $axios.get(`${app.$url}/custom/v0/study_cat`)
-        const responseItems = await $axios.get(`${app.$url}/custom/v0/elements`)
-        const responseItemClasses = await $axios.get(`${app.$url}/custom/v0/element_class`)
-        const responseItemPrices = await $axios.get(`${app.$url}/custom/v0/element_price`)
-        const responseItemStyles = await $axios.get(`${app.$url}/custom/v0/element_style`)
-        const responseItembrands = await $axios.get(`${app.$url}/custom/v0/element_brand`)
-        const responsePostsCounts = await $axios.$get(`${app.$url}/custom/v0/counts`)
+        const responsePosts = await $axios.get(`${app.$url}/custom/v0/index`)
+        const responseItemDetails = await $axios.get(`${app.$url}/custom/v0/element_detail`)
         
         return {
-          articles: responseArticles.data,
-          news: responseNews.data,
-          studies: responseStudies.data,
-          studyCategories: responseStudyCategories.data,
-          items: responseItems.data,
-          itemClasses: responseItemClasses.data,
-          itemPrices: responseItemPrices.data,
-          itemStyles: responseItemStyles.data,
-          itemBrands: responseItembrands.data,
-          counts: responsePostsCounts,
+          articles: responsePosts.data.article,
+          news: responsePosts.data.news,
+          // studies: responsePosts.data.study,
+          // studyCategories: responsePosts.data.study_cat,
+          items: responsePosts.data.element,
+          itemDetails: responseItemDetails.data,
+          counts: responsePosts.data.counts,
         }
         
       } catch (error) {
@@ -527,13 +509,10 @@
         return {
           articles: [],
           news: [],
-          studies: [],
-          studyCategories: [],
+          // studies: [],
+          // studyCategories: [],
           items: [],
-          itemClasses: [],
-          itemPrices: [],
-          itemStyles: [],
-          itemBrands: [],
+          itemDetails: [],
           counts: [],
         }
       }
@@ -664,19 +643,19 @@
         })
       },
 
-      async fetchStudies () {
-        try {
-          const responseStudies = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/studies`, {
-            params: {
-              'categories[]': this.selectedStudyCategory,
-            },
-          })
-          this.studies = responseStudies.data
-        } catch (error) {
-          console.log(error)
-          this.studies = []
-        }
-      },
+      // async fetchStudies () {
+      //   try {
+      //     const responseStudies = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/studies`, {
+      //       params: {
+      //         'categories[]': this.selectedStudyCategory,
+      //       },
+      //     })
+      //     this.studies = responseStudies.data
+      //   } catch (error) {
+      //     console.log(error)
+      //     this.studies = []
+      //   }
+      // },
 
       async fetchItems () {
         try {
@@ -993,11 +972,12 @@
       }
     }
 
-    // .topElement__text
+    // .p-topElement__text
     &__text {
       
       @include responsive(sm, max) {
-        margin-top: rem(24);
+        display: none;
+        // margin-top: rem(24);
       }
 
       @include responsive(md, min) {
@@ -1010,7 +990,15 @@
     &__slider {
       // overflow-y: hidden;
       white-space: nowrap;
-      margin-top: rem(60);
+      margin-top: rem(32);
+
+      @include responsive(sm, min) {
+        margin-top: rem(60);
+      }
+
+      @include responsive(md, min) {
+        margin-top: vw(60);
+      }
     }
 
     &__button {
@@ -1287,6 +1275,9 @@
       @include Alokary;
       @include font(12, 24, 140);
       display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
 
       @include responsive(md, min) {
         @include vwfont(1280, 12);

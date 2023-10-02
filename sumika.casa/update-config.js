@@ -3,6 +3,31 @@ const fs = require('fs')
 const path = require('path')
 const axios = require('axios')
 
+// サイトマップを作成する
+const fetchAllRouteData = async (endpoint, name) => {
+  const response = await axios.get(`${process.env.VUE_APP_API_URL}/custom/v0/${endpoint}`, { params: { 'per_page': -1 }})
+  return response.data.map((post) => {
+    return {
+      route: `/${name}/${post.id}`,
+    }
+  })
+}
+const getAllRoutes = async () => {
+  const endpoints = [
+    { endpoint: 'posts', name: 'post' },
+    { endpoint: 'elements', name: 'element' },
+    { endpoint: 'newses', name: 'news' },
+    // { endpoint: 'studies', name: 'study' },
+  ]
+
+  const allRoutes = []
+  for (const endpoint of endpoints) {
+    const result = await fetchAllRouteData(endpoint.endpoint, endpoint.name)
+    allRoutes.push(...result)
+  }
+  return allRoutes
+}
+
 // 前回のビルド時のタイムスタンプを取得する関数
 const getLastBuildTimestamps = () => {
   const filePath = path.resolve(__dirname, 'last-build-timestamps.json')
@@ -29,7 +54,7 @@ const updateConfig = async () => {
 
   
   // Vueファイルのタイムスタンプを確認
-  const vueFilePaths = ['/element', '/news', '/post', '/study', '/']
+  const vueFilePaths = ['/element','/questions', '/news', '/post', '/study', '/']
   for (const filePath of vueFilePaths) {
     const fullPath = path.resolve(__dirname, `pages${filePath}/index.vue`)
     const fileStats = fs.statSync(fullPath)
@@ -75,6 +100,12 @@ const updateConfig = async () => {
   const config = await import('./nuxt.config.mjs')
   config.default.generate.exclude = excludePaths
   config.default.generate.routes = routesPaths
+  config.default.sitemap = {
+    exclude: [],
+    hostname: 'https://sumika.casa'
+  }
+  config.default.sitemap.exclude.push('/study')
+  config.default.sitemap.routes = await getAllRoutes() // sitemapのroutesに追加
 
   // 更新した設定をnuxt.config.mjsに書き戻す
   fs.writeFileSync('./nuxt.config.mjs', `export default ${JSON.stringify(config.default, null, 2)}`)

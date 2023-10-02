@@ -97,6 +97,9 @@
     @include Alokary;
     @include font(12, 24, 140);
     display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     @include responsive(md, min) {
       @include vwfont(1280, 12);

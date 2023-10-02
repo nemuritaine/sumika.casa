@@ -17,10 +17,10 @@
             </div>
           </div>
           <div class="p-archiveAside__menu">
-            <div class="p-archiveAsideMenu">
-              <div class="p-archiveAsideMenu__heading">
+            <div class="p-archiveAsideMenu is-accordion">
+              <div class="p-archiveAsideMenu__heading" @click="asideAccordion">
                 <div class="p-archiveAsideMenu__title">
-                  <p>スタイル</p>
+                  <p>値段</p>
                 </div>
                 <div class="p-archiveAsideMenu__icon">
                   <span></span>
@@ -28,14 +28,20 @@
                 </div>
               </div>
               <div class="p-archiveAsideMenu__body">
-                <ul class="p-archiveAsideMenu__item --button">
-                  <li class="p-archiveAsideMenuItem">
-                    <input type="checkbox" id="style-all" @change="selectAll('style', $event.target.checked)">
-                    <label for="style-all">すべて</label>
-                  </li>
-                  <li v-for="style in styles" :key="style.id" class="p-archiveAsideMenuItem">
-                    <input type="checkbox" :id="'style-' + style.id" :value="style.cat_slug" v-model="selectedStyles">
-                    <label :for="'style-' + style.id">{{ style.cat_name }}</label>
+                <!-- <vue-slider
+                  v-model="price"
+                  :min="0"
+                  :max="10000"
+                  :interval="100"
+                  @change="updatePrice"
+                /> -->
+                <div class="p-archiveAsideMenu__reset">
+                  <p @click="selectAll('price')">選択をクリア</p>
+                </div>
+                <ul class="p-archiveAsideMenu__item --checkbox">
+                  <li v-for="price in details.price" :key="price.id" class="p-archiveAsideMenuItem">
+                    <input type="checkbox" :id="'price-' + price.id" :value="price.cat_slug" v-model="selectedPrices">
+                    <label :for="'price-' + price.id">{{ price.cat_name }}</label>
                   </li>
                 </ul>
               </div>
@@ -51,14 +57,35 @@
                 </div>
               </div>
               <div class="p-archiveAsideMenu__body">
+                <div class="p-archiveAsideMenu__reset">
+                  <p @click="selectAll('class')">選択をクリア</p>
+                </div>
                 <ul class="p-archiveAsideMenu__item --button">
-                  <li class="p-archiveAsideMenuItem">
-                    <input type="checkbox" id="classes-all" @change="selectAll('class', $event.target.checked)">
-                    <label for="classes-all">すべて</label>
-                  </li>
-                  <li v-for="classes in classes" :key="classes.id" class="p-archiveAsideMenuItem">
+                  <li v-for="classes in details.class" :key="classes.id" class="p-archiveAsideMenuItem">
                     <input type="checkbox" :id="'classes-' + classes.id" :value="classes.cat_slug" v-model="selectedClasses">
                     <label :for="'classes-' + classes.id">{{ classes.cat_name }}</label>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="p-archiveAsideMenu is-accordion">
+              <div class="p-archiveAsideMenu__heading" @click="asideAccordion">
+                <div class="p-archiveAsideMenu__title">
+                  <p>スタイル</p>
+                </div>
+                <div class="p-archiveAsideMenu__icon">
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+              <div class="p-archiveAsideMenu__body">
+                <div class="p-archiveAsideMenu__reset">
+                  <p @click="selectAll('style')">選択をクリア</p>
+                </div>
+                <ul class="p-archiveAsideMenu__item --button">
+                  <li v-for="style in details.style" :key="style.id" class="p-archiveAsideMenuItem">
+                    <input type="checkbox" :id="'style-' + style.id" :value="style.cat_slug" v-model="selectedStyles">
+                    <label :for="'style-' + style.id">{{ style.cat_name }}</label>
                   </li>
                 </ul>
               </div>
@@ -74,37 +101,26 @@
                 </div>
               </div>
               <div class="p-archiveAsideMenu__body">
-                <ul class="p-archiveAsideMenu__item --checkbox">
-                  <li class="p-archiveAsideMenuItem">
-                    <input type="checkbox" id="brand-all" @change="selectAll('brand', $event.target.checked)">
-                    <label for="brand-all">すべて</label>
-                  </li>
-                  <li v-for="brand in brands" :key="brand.id" class="p-archiveAsideMenuItem">
+                <div class="p-archiveAsideMenu__input">
+                  <input
+                    type="text"
+                    @input="handleInput"
+                    placeholder="ブランドをさがす"
+                  />
+                </div>
+                <div class="p-archiveAsideMenu__reset">
+                  <p @click="selectAll('brand')">選択をクリア</p>
+                </div>
+                <ul v-if="searchBrands.length" class="p-archiveAsideMenu__item --brand">
+                  <li v-for="brand in searchBrands" :key="brand.id" class="p-archiveAsideMenuItem">
                     <input type="checkbox" :id="'brand-' + brand.id" :value="brand.cat_slug" v-model="selectedBrands">
-                    <label :for="'brand-' + brand.id">{{ brand.cat_name }}</label>
+                    <label :for="'brand-' + brand.id">{{ brand.name }}</label>
                   </li>
                 </ul>
-              </div>
-            </div>
-            <div class="p-archiveAsideMenu is-accordion">
-              <div class="p-archiveAsideMenu__heading" @click="asideAccordion">
-                <div class="p-archiveAsideMenu__title">
-                  <p>値段</p>
-                </div>
-                <div class="p-archiveAsideMenu__icon">
-                  <span></span>
-                  <span></span>
-                </div>
-              </div>
-              <div class="p-archiveAsideMenu__body">
-                <ul class="p-archiveAsideMenu__item --checkbox">
-                  <li class="p-archiveAsideMenuItem">
-                    <input type="checkbox" id="price-all" @change="selectAll('price', $event.target.checked)">
-                    <label for="price-all">すべて</label>
-                  </li>
-                  <li v-for="price in prices" :key="price.id" class="p-archiveAsideMenuItem">
-                    <input type="checkbox" :id="'price-' + price.id" :value="price.cat_slug" v-model="selectedPrices">
-                    <label :for="'price-' + price.id">{{ price.cat_name }}</label>
+                <ul v-else class="p-archiveAsideMenu__item --brand">
+                  <li v-for="brand in details.brand" :key="brand.id" class="p-archiveAsideMenuItem">
+                    <input type="checkbox" :id="'brand-' + brand.id" :value="brand.cat_slug" v-model="selectedBrands">
+                    <label :for="'brand-' + brand.id">{{ brand.cat_name }}</label>
                   </li>
                 </ul>
               </div>
@@ -197,16 +213,31 @@
 <script>
 
   import { gsap } from 'gsap'
+  // import VueSlider from 'vue-slider-component'
 
   export default {
 
+    head () {
+      const defaultHead = this.$nuxt.$options.head
+      const title = `家具一覧 | ${defaultHead.title}`
+
+      return {
+        title,
+        meta: [
+          { hid: 'og:title', property: 'og:title', content: title },
+          { hid: 'og:url', property: 'og:url', content: `${process.env.BASE_URL}element` },
+        ],
+      }
+    },
+
+    // components: {
+    //   VueSlider
+    // },
+
     data () {
       return {
+        details: [],
         elements: [],
-        classes: [],
-        brands: [],
-        prices: [],
-        styles: [],
         selectedClasses: [],
         selectedBrands: [],
         selectedPrices: [],
@@ -227,15 +258,15 @@
         isProcessingLike: false, // like処理中フラグ
         selectedSortOrder: 'date_desc', // 並び替え
         onlyLikedItems: false, // いいねのみ表示
+        searchBrands: [], // ブランド検索時に使用
+        price: [1000, 5000]
       }
     },
 
     async asyncData ({ $axios, query, app }) {
+
       try {
-        const responseClasses = await $axios.get(`${app.$url}/custom/v0/element_class`)
-        const responseBrands = await $axios.get(`${app.$url}/custom/v0/element_brand`)
-        const responsePrices = await $axios.get(`${app.$url}/custom/v0/element_price`)
-        const responseStyles = await $axios.get(`${app.$url}/custom/v0/element_style`)
+        const responseDetails = await $axios.get(`${app.$url}/custom/v0/element_detail`)
         const responseElements = await $axios.get(`${app.$url}/custom/v0/elements`, {
           params: {
             per_page: 20,
@@ -244,19 +275,13 @@
         })
 
         return {
-          classes: responseClasses.data,
-          brands: responseBrands.data,
-          prices: responsePrices.data,
-          styles: responseStyles.data,
+          details: responseDetails.data,
           elements: responseElements.data,
         }
       } catch (error) {
         console.error(error)
         return {
-          classes: [],
-          brands: [],
-          prices: [],
-          styles: [],
+          details: [],
           elements: [],
         }
       }
@@ -334,7 +359,7 @@
       selectedStyles: {
         handler: 'handleSelectionChange',
         deep: true,
-      },
+      }
     },
 
     methods: {
@@ -584,32 +609,15 @@
         }
       },
 
-      selectAll (type, checked) {
-        
+      selectAll (type) {
         if (type === 'class') {
-          if (checked) {
-            this.selectedClasses = this.classes.map(classes => classes.cat_slug)
-          } else {
-            this.selectedClasses = []
-          }
+          this.selectedClasses = []
         } else if (type === 'brand') {
-          if (checked) {
-            this.selectedBrands = this.brands.map(brand => brand.cat_slug)
-          } else {
-            this.selectedBrands = []
-          }
+          this.selectedBrands = []
         } else if (type === 'price') {
-          if (checked) {
-            this.selectedPrices = this.prices.map(price => price.cat_slug)
-          } else {
-            this.selectedPrices = []
-          }
+          this.selectedPrices = []
         } else if (type === 'style') {
-          if (checked) {
-            this.selectedStyles = this.styles.map(style => style.cat_slug)
-          } else {
-            this.selectedStyles = []
-          }
+          this.selectedStyles = []
         }
       },
 
@@ -864,6 +872,28 @@
           wrapper.style.height = null
         }
       },
+
+      handleInput(event) {
+        const inputValue = event.target.value
+        this.searchForBrand(inputValue)
+      },
+
+      async searchForBrand(query) {
+        if (query) {
+          const response = await this.$axios.$get(`${this.$nuxt.$url}/custom/v0/element_brand`, {
+            params: {
+              search: query,
+            },
+          })
+          this.searchBrands = response
+        } else {
+          this.searchBrands = []
+        }
+      },
+
+      updatePrice(value) {
+        this.$emit('input', value)
+      },
     },
   }
 </script>
@@ -924,7 +954,6 @@
       padding-top: rem(12);
       padding-right: 16px;
       padding-left: 16px;
-      z-index: 2;
       user-select: none;
       
       @include responsive(sm, min) {
@@ -955,8 +984,6 @@
       width: per(125, 200);
       margin-right: auto;
       margin-left: auto;
-      position: relative;
-      z-index: 2;
       
       // .p-elementIndexItem__image img
       img {
@@ -972,6 +999,9 @@
       @include Alokary;
       @include font(12, 24, 140);
       display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
 
       @include responsive(md, min) {
         @include vwfont(1280, 12);

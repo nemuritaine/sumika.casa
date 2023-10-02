@@ -136,17 +136,17 @@
           },
           {
             id: 2,
-            name: 'ARTICLE',
+            name: 'ROOM',
             url: '/post'
           },
           {
             id: 3,
-            name: 'STADY',
-            url: ''
+            name: 'PERSONALIZED',
+            url: '/questions'
           },
           {
             id: 4,
-            name: 'NEWS&EVENT',
+            name: 'NEWS',
             url: '/news'
           },
           {
@@ -165,8 +165,8 @@
 
     async fetch () {
       try {
-        const responseItemStyles = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/element_style`)
-        this.itemStyles = responseItemStyles.data
+        const responseItemStyles = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/element_detail`)
+        this.itemStyles = responseItemStyles.data.style
       } catch (error) {
         console.log(error)
       }
@@ -467,10 +467,10 @@
     &:first-child {
       
       #{$this}__link {
-        padding-left: 8px;
+        padding-left: 6px;
 
         @include responsive(md, min) {
-          padding-left: vw(8);
+          padding-left: vw(6);
         }
       }
     }
@@ -483,7 +483,7 @@
         padding-left: 7px;
 
         @include responsive(md, min) {
-          padding-left: vw(8);
+          padding-left: vw(7);
         }
       }
     }

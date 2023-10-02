@@ -1,93 +1,93 @@
 <?php
 
   $post_data = [];
+  $random_elements = [];
+  $excluded_posts = [];
   $post_args = [
     'post_type' => 'element',
-    'posts_per_page' => $param['per_page'] ?: 20,
     'post_status' => 'publish',
-    'paged' => $param['page'] ?: 1,
   ];
-
-  // sortパラメータに基づいてソートを設定
-  switch($param['sort']) {
-    case 'date_desc':
-      $post_args['orderby'] = 'date';
-      $post_args['order'] = 'DESC';
-      break;
-    case 'likes_desc':
-      $post_args['orderby'] = 'meta_value_num';
-      $post_args['meta_key'] = 'likes_count';
-      $post_args['order'] = 'DESC';
-      break;
-    case 'price_desc':
-      $post_args['orderby'] = 'meta_value_num';
-      $post_args['meta_key'] = 'p-elementItem__price';
-      $post_args['order'] = 'DESC';
-      break;
-    case 'price_asc':
-      $post_args['orderby'] = 'meta_value_num';
-      $post_args['meta_key'] = 'p-elementItem__price';
-      $post_args['order'] = 'ASC';
-      break;
-    default:
-      $post_args['orderby'] = 'date';
-      $post_args['order'] = 'DESC';
-  }
-
-  // orderパラメータがある場合
-  if (!empty($param['order'])) {
-    $post_args['orderby'] = $param['order'];
-  }
 
   // idパラメータがある場合
   if (!empty($param['id'])) {
     $post_args['post__in'] = $param['id'];
-  }
+    $post_args['orderby'] = 'post__in'; 
+    $post_args['posts_per_page'] = count($param['id']);
 
-  // excluded_idsパラメータがある場合
-  if (isset($param['excluded_ids'])) {
-    $excludedIdsArray = explode(",", $param['excluded_ids']);  // カンマ区切りの文字列を配列に変換
-    $post_args['post__not_in'] = $excludedIdsArray;
-  }
-
-  // liked_idsパラメータがある場合、それらのIDのアイテムだけを取得
-  if (!empty($param['liked_ids'])) {
-    $post_args['post__in'] = $param['liked_ids'];
-  }
-  
-  if (!empty($param['classes'])) {
-    $post_args['tax_query'][] = [
-      'taxonomy' => 'class',
-      'field' => 'slug',
-      'terms' => $param['classes'],
-    ];
-  }
-  if (!empty($param['brands'])) {
-    $post_args['tax_query'][] = [
-      'taxonomy' => 'brand',
-      'field' => 'slug',
-      'terms' => $param['brands'],
-    ];
-  }
-  if (!empty($param['prices'])) {
-    $post_args['tax_query'][] = [
-      'taxonomy' => 'price',
-      'field' => 'slug',
-      'terms' => $param['prices'],
-    ];
-  }
-  if (!empty($param['styles'])) {
-    $post_args['tax_query'][] = [
-      'taxonomy' => 'style',
-      'field' => 'slug',
-      'terms' => $param['styles'],
-    ];
-  }
-  $post_query = new WP_Query($post_args);
-  if ($post_query->have_posts()):
-    while ($post_query->have_posts()):
-      $post_query->the_post();
+    $post_query = new WP_Query($post_args);
+    while ($post_query->have_posts()): $post_query->the_post();
       global $post;
+
+      $brands = get_the_terms($post->ID, 'brand');
+      $brands_data = [];
+      if ($brands) {
+        foreach ($brands as $brand) {
+          $brands_data[] = [
+            'id' => $brand->term_id,
+            'name' => $brand->name,
+          ];
+        }
+      }
+  
+      $styles = get_the_terms($post->ID, 'style');
+      $styles_data = [];
+      if ($styles) {
+        foreach ($styles as $style) {
+          $styles_data[] = [
+            'id' => $style->term_id,
+            'slug' => $style->slug,
+            'name' => $style->name,
+          ];
+        }
+      }
+  
+      $post_data[] = [
+        'id' => $post->ID,
+        'image_src' => get_the_post_thumbnail_url($post->ID, 'full'),
+        'style' => $styles_data,
+        'brand' => $brands && !is_wp_error($brands) && isset($brands[0]) ? html_entity_decode($brands[0]->name) : '',
+        'likes_count' => get_field('likes_count'),
+        'link' => get_the_permalink()
+      ];
+
+    endwhile;
+    wp_reset_postdata();
+
+  } else {
+    
+    // orderパラメータがある場合
+    if (!empty($param['order'])) {
+      $post_args['orderby'] = $param['order'];
+    }
+    $post_args['posts_per_page'] = 1;
+    $tags = get_terms([
+      'taxonomy' => 'style',
+      'hide_empty' => false,
+    ]);
+
+    foreach ($tags as $tag) {
+      $post_args['tax_query'] = [];
+      $post_args['tax_query'][] = [
+        'taxonomy' => 'style',
+        'field' => 'id',
+        'terms' => $tag->term_id,
+      ];
+      $post_args['post__not_in'] = $excluded_posts; 
+  
+      $random_element = new WP_Query($post_args);
+  
+      if ($random_element->have_posts()) {
+        $random_elements[] = $random_element->posts[0];
+        $excluded_posts[] = $random_element->posts[0]->ID;
+      }
+    }
+  
+    shuffle($random_elements);
+    $random_elements = array_slice($random_elements, 0, 10); // 最終的に10件に収める
+  
+    // $random_elementsの各ポストに対してループ
+    foreach ($random_elements as $post) {
+      setup_postdata($post);
 
       $coordinations = get_field('p-elementItem__coordination', $post->ID);
       $coordination_data = [];
@@ -168,18 +168,7 @@
           }
         }
       }
-
-      $classes = get_the_terms($post->ID, 'class');
-      $classes_data = [];
-      if ($classes) {
-        foreach ($classes as $class) {
-          $classes_data[] = [
-            'id' => $class->term_id,
-            'name' => $class->name,
-          ];
-        }
-      }
-
+  
       $brands = get_the_terms($post->ID, 'brand');
       $brands_data = [];
       if ($brands) {
@@ -190,18 +179,7 @@
           ];
         }
       }
-
-      $prices = get_the_terms($post->ID, 'price');
-      $prices_data = [];
-      if ($prices) {
-        foreach ($prices as $price) {
-          $prices_data[] = [
-            'id' => $price->term_id,
-            'name' => $price->name,
-          ];
-        }
-      }
-
+  
       $styles = get_the_terms($post->ID, 'style');
       $styles_data = [];
       if ($styles) {
@@ -214,7 +192,7 @@
         }
       }
 
-      $price = get_field('p-elementItem__price');
+      $price = get_field('p-elementItem__price', $post->ID);
       if(is_numeric($price)) {
         if ($price == 0) {
           $price = "???";
@@ -222,24 +200,24 @@
           $price = number_format($price);
         }
       }
-
+  
       $post_data[] = [
         'id' => $post->ID,
-        'time' => get_the_time('Y.m.d'),
         'image_src' => get_the_post_thumbnail_url($post->ID, 'full'),
-        'title' => $post->post_title,
-        'excerpt' => get_the_excerpt(),
-        'classes' => $classes_data,
-        'style' => $styles_data,
         'brand' => $brands && !is_wp_error($brands) && isset($brands[0]) ? html_entity_decode($brands[0]->name) : '',
+        'title' => $post->post_title,
         'price' => $price,
-        'coordination_data' => $coordination_data,
         'size' => get_field('p-elementItem__size', $post->ID),
-        'likes_count' => get_field('likes_count'),
+        'style' => $styles_data,
+        'coordination_data' => $coordination_data,
+        'likes_count' => get_field('likes_count', $post->ID),
+        'affiliate' => get_field('p-elementItem__affiliate', $post->ID),
         'link' => get_the_permalink()
       ];
-    endwhile;
+    }
+
     wp_reset_postdata();
-  endif;
+  }
+
   return $post_data;
 ?>

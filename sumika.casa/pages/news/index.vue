@@ -28,11 +28,10 @@
                 </div>
               </div>
               <div class="p-archiveAsideMenu__body">
+                <div class="p-archiveAsideMenu__reset">
+                  <p @click="selectAll('category')">選択をクリア</p>
+                </div>
                 <ul class="p-archiveAsideMenu__item --button">
-                  <li class="p-archiveAsideMenuItem">
-                    <input type="checkbox" id="category-all" @change="selectAll('category', $event.target.checked)">
-                    <label for="category-all">すべて</label>
-                  </li>
                   <li v-for="category in categories" :key="category.id" class="p-archiveAsideMenuItem">
                     <input type="checkbox" :id="'category-' + category.id" :value="category.cat_slug" v-model="selectedCategories">
                     <label :for="'category-' + category.id">{{ category.cat_name }}</label>
@@ -149,6 +148,19 @@
   import { gsap } from 'gsap'
 
   export default {
+
+    head () {
+      const defaultHead = this.$nuxt.$options.head
+      const title = `お知らせ一覧 | ${defaultHead.title}`
+
+      return {
+        title,
+        meta: [
+          { hid: 'og:title', property: 'og:title', content: title },
+          { hid: 'og:url', property: 'og:url', content: `${process.env.BASE_URL}news` },
+        ],
+      }
+    },
 
     data() {
       return {
@@ -307,13 +319,9 @@
         }
       },
 
-      selectAll (type, checked) {
+      selectAll (type) {
         if (type === 'category') {
-          if (checked) {
-            this.selectedCategories = this.categories.map(category => category.cat_slug)
-          } else {
-            this.selectedCategories = []
-          }
+          this.selectedCategories = []
         }
       },
 

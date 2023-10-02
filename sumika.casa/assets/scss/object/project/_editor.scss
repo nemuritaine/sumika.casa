@@ -620,6 +620,7 @@
     }
   }
 
+  // .p-editorRoomtour__pointer
   &__pointer {
     display: block;
     
@@ -1030,6 +1031,228 @@
 
     @include responsive(md, min) {
       margin-top: vw(50);
+    }
+  }
+}
+
+.p-editorCard {
+  margin-top: rem(20);
+
+  @include responsive(md, min) {
+    margin-top: vw(20);
+  }
+
+  &__item {
+    display: flex;
+
+    @include responsive(sm, max) {
+      white-space: nowrap;
+      overflow-x: scroll;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      width: calc(100% + 40px);
+      margin-left: -20px !important;
+      padding-left: 20px !important;
+      padding-right: 20px !important;
+    }
+  }
+}
+
+.p-editorCardItem {
+  width: per(160, 335);
+  display: inline-block;
+  white-space: normal;
+  vertical-align: top;
+  position: relative;
+  flex-shrink: 0;
+
+  @include responsive(sm, min) {
+    width: per(185, 800);
+  }
+
+  @include responsive(md, min) {
+    width: vw(185);
+  }
+
+  // .p-editorCardItem:not(:first-child)
+  &:not(:first-child) {
+    margin-left: per(15, 335);
+
+    @include responsive(sm, min) {
+      margin-left: per(20, 800);
+    }
+
+    @include responsive(md, min) {
+      margin-left: vw(20);
+    }
+  }
+
+  // .p-editorCardItem__link
+  &__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-color: color(white);
+    border-radius: rem(10);
+    aspect-ratio: 192 / 226;
+    padding-top: rem(14);
+
+    @include responsive(md, min) {
+      padding-top: vw(14);
+    }
+  }
+
+  // .p-editorCardItem__detail
+  &__detail {
+    user-select: none;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-top: rem(12);
+    padding-right: 16px;
+    padding-left: 16px;
+
+    @include responsive(sm, min) {
+      padding-right: 17px;
+      padding-left: 17px;
+    }
+    
+    @include responsive(md, min) {
+      padding-top: rem(12);
+      padding-right: vw(17);
+      padding-left: vw(17);
+    }
+  }
+
+  &__like {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+  }
+
+  // .p-editorCardItem__image
+  &__image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: per(120, 192);
+    margin-right: auto;
+    margin-left: auto;
+    
+    // .p-editorCardItem__image img
+    img {
+      user-select: none;
+      object-fit: contain;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+    }
+  }
+
+  // .p-editorCardItem__title
+  &__title {
+    @include Alokary;
+    @include font(12, 24, 140);
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @include responsive(md, min) {
+      @include vwfont(1280, 12);
+    }
+  }
+
+  // .p-editorCardItem__price
+  &__price {
+    @include Wandeln;
+    @include font(12, 18, 0);
+    display: block;
+
+    @include responsive(md, min) {
+      @include vwfont(1280, 12);
+    }
+  }
+}
+
+.p-editorCardItemLike {
+  $this: &;
+  display: flex;
+  align-items: center;
+  padding: rem(15) 15px;
+
+  @include responsive(md, min) {
+    padding: vw(15);
+  }
+
+  @include hover {
+
+    #{$this}__icon {
+      color: color(darkgray);
+    }
+
+    #{$this}__text {
+      color: color(darkgray);
+    }
+  }
+
+  &.is-liked {
+
+    #{$this}__icon {
+      color: color(main);
+
+      svg {
+        
+        path {
+  
+          &:nth-of-type(1) {
+            display: none;
+          }
+        }
+      }
+    }
+
+    #{$this}__text {
+      color: color(main);
+    }
+  }
+
+  // .p-editorCardItemLike__icon
+  &__icon {
+    display: flex;
+    color: color(beige);
+    transition: color 0.3s ease;
+        
+    svg {
+      width: 11px;
+      height: 11px;
+
+      @include responsive(md, min) {
+        width: vw(11);
+        height: vw(11);
+      }
+
+      path {
+
+        &:nth-of-type(1) {
+          display: block;
+        }
+      }
+    }
+  }
+
+  &__text {
+    @include Optima;
+    @include font(10, 12, -100);
+    color: color(beige);
+    margin-left: 3px;
+    transition: color 0.3s ease;
+    
+    @include responsive(md, min) {
+      @include vwfont(1280, 10);
+      margin-left: vw(3);
     }
   }
 }

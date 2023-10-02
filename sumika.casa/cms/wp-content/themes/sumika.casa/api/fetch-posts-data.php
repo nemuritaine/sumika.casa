@@ -22,6 +22,13 @@
   if (!empty($param['tags'])) {
     $post_args['tag__in'] = $param['tags'];
   }
+  if (!empty($param['tags_slug'])) {
+    $post_args['tag_slug__and'] = $param['tags_slug'];
+  }
+  // orderパラメータがある場合
+  if (!empty($param['order'])) {
+    $post_args['orderby'] = $param['order'];
+  }
   $post_query = new WP_Query($post_args);
   if ($post_query->have_posts()):
     while ($post_query->have_posts()):
@@ -60,6 +67,7 @@
         foreach ($tags as $tag) {
           $tags_data[] = [
             'id' => $tag->term_id,
+            'slug' => $tag->slug,
             'name' => $tag->name,
           ];
         }
@@ -76,6 +84,9 @@
         'excerpt' => nl2br(get_the_excerpt()),
         'categories' => $categories_data,
         'tags' => $tags_data,
+        'name' => get_field('p-postProfile__name', $post->ID),
+        'sns' => get_field('p-postProfile__link', $post->ID),
+        'url' => get_field('p-postProfile__url', $post->ID),
         //リンク
         'link' => get_the_permalink(),
       ];

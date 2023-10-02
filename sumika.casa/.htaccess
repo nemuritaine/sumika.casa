@@ -3,6 +3,7 @@ Options +FollowSymlinks
 RewriteEngine on
 
 # 特定のURLへのリダイレクト
+RewriteRule ^cms/$ https://sumika.casa [R=301,L]
 RewriteRule ^article/000040/$ https://sumika.casa/post/1638 [R=301,L]
 RewriteRule ^article/000039/$ https://sumika.casa/post/1597 [R=301,L]
 RewriteRule ^article/000038/$ https://sumika.casa/post/1566 [R=301,L]

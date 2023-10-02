@@ -57,15 +57,15 @@ function add_custom_endpoint() {
     ]
   );
 
-	// 投稿データ取得
+	// トップページデータ取得
 	register_rest_route(
 		'custom/v0', // ネームスペース
-		'/all', // ベースURL
+		'/index', // ベースURL
 		[ // オプション
 			'methods'  =>  WP_REST_Server::READABLE,
 			// 'permission_callback' => 'rest_permission', // 関数名指定
 			'permission_callback' => '__return_true', // どこからでもアクセス可能
-			'callback' => 'fetch_all_data'
+			'callback' => 'fetch_index_data'
 		]
 	);
 
@@ -228,27 +228,15 @@ function add_custom_endpoint() {
 		]
 	);
 
-	// エレメントクラスデータ取得
+	// エレメントディティールデータ取得
 	register_rest_route(
 		'custom/v0', // ネームスペース
-		'/element_class', // ベースURL
+		'/element_detail', // ベースURL
 		[ // オプション
 			'methods'  =>  WP_REST_Server::READABLE,
 			// 'permission_callback' => 'rest_permission', // 関数名指定
 			'permission_callback' => '__return_true', // どこからでもアクセス可能
-			'callback' => 'fetch_element_class_data'
-		]
-	);
-
-	// エレメントプライスデータ取得
-	register_rest_route(
-		'custom/v0', // ネームスペース
-		'/element_price', // ベースURL
-		[ // オプション
-			'methods'  =>  WP_REST_Server::READABLE,
-			// 'permission_callback' => 'rest_permission', // 関数名指定
-			'permission_callback' => '__return_true', // どこからでもアクセス可能
-			'callback' => 'fetch_element_price_data'
+			'callback' => 'fetch_element_detail_data'
 		]
 	);
 
@@ -264,18 +252,7 @@ function add_custom_endpoint() {
 		]
 	);
 
-	// エレメントスタイルデータ取得
-	register_rest_route(
-		'custom/v0', // ネームスペース
-		'/element_style', // ベースURL
-		[ // オプション
-			'methods'  =>  WP_REST_Server::READABLE,
-			// 'permission_callback' => 'rest_permission', // 関数名指定
-			'permission_callback' => '__return_true', // どこからでもアクセス可能
-			'callback' => 'fetch_element_style_data'
-		]
-	);
-	
+
 	// エレメント詳細データ取得
 	register_rest_route(
 		'custom/v0',
@@ -284,6 +261,17 @@ function add_custom_endpoint() {
 			'methods' => WP_REST_Server::READABLE,
 			'permission_callback' => '__return_true', // どこからでもアクセス可能
 			'callback' => 'fetch_single_elements_data',
+		]
+	);
+
+	// エレメント診断データ取得
+	register_rest_route(
+		'custom/v0', // ネームスペース
+		'/questions', // ベースURL
+		[ // オプション
+			'methods'  =>  WP_REST_Server::READABLE,
+			'permission_callback' => '__return_true', // どこからでもアクセス可能
+			'callback' => 'fetch_questions_data'
 		]
 	);
 
@@ -444,9 +432,9 @@ function change_like_data($param) {
 	return rest_response('change-like-data', $param);
 }
 
-// 投稿データ取得
-function fetch_all_data($param) {
-	return rest_response('fetch-all-data', $param);
+// トップページデータ取得
+function fetch_index_data($param) {
+	return rest_response('fetch-index-data', $param);
 }
 
 // 投稿データ取得
@@ -469,11 +457,6 @@ function fetch_single_studies_data($param) {
 	return rest_response('fetch-single_studies-data', $param);
 }
 
-// エレメント詳細データ取得
-function fetch_single_elements_data($param) {
-	return rest_response('fetch-single_elements-data', $param);
-}
-
 // ニュースデータ取得
 function fetch_news_data($param) {
 	return rest_response('fetch-news-data', $param);
@@ -494,29 +477,29 @@ function fetch_studies_category_data($param) {
 	return rest_response('fetch-studies_category-data', $param);
 }
 
+// エレメント詳細データ取得
+function fetch_single_elements_data($param) {
+	return rest_response('fetch-single_elements-data', $param);
+}
+
 // エレメント複数データ取得
 function fetch_elements_data($param) {
 	return rest_response('fetch-elements-data', $param);
 }
 
-// エレメント分類データ取得
-function fetch_element_class_data($param) {
-	return rest_response('fetch-element_class-data', $param);
+// エレメント診断データ取得
+function fetch_questions_data($param) {
+	return rest_response('fetch-questions-data', $param);
 }
 
-// エレメント値段データ取得
-function fetch_element_price_data($param) {
-	return rest_response('fetch-element_price-data', $param);
+// エレメントディティールデータ取得（家具一覧ページのサイドバー用）
+function fetch_element_detail_data($param) {
+	return rest_response('fetch-element_detail-data', $param);
 }
 
-// エレメントブランドデータ取得
+// エレメントのブランドデータ取得（ブランド検索用）
 function fetch_element_brand_data($param) {
 	return rest_response('fetch-element_brand-data', $param);
-}
-
-// エレメントスタイルデータ取得
-function fetch_element_style_data($param) {
-	return rest_response('fetch-element_style-data', $param);
 }
 
 // カテゴリーデータ取得
@@ -883,6 +866,32 @@ function custom_tax_init () {
 	);
 	register_taxonomy('style', 'element', $style_args);
 
+	// エレメント用カラーの追加
+	$color_labels = array(
+		'name' => 'カラー',
+		'singular_name' => 'カラー',
+		'add_new' => '新しく追加',
+		'add_new_item' => '新しく追加',
+		'edit_item' => '編集',
+		'new_item' => '新しいアイテム',
+		'view_item' => '記事を見る',
+		'search_items' => '検索する',
+		'not_found' => '見つかりませんでした',
+		'not_found_in_trash' => 'ゴミ箱には見つかりませんでした',
+		'parent_item_colon' => ''
+	);
+	$color_args = array(
+		'labels' => $color_labels,
+		'label' => 'カラー',
+		'public' => true,
+		'show_ui' => true,
+		'show_admin_item' => true,
+		'hierarchical' => true,
+		'rewrite' => array('slug' => 'element'),
+		'show_in_rest' => true
+	);
+	register_taxonomy('color', 'element', $color_args);
+
 	// ニュース用カテゴリーの追加
 	$news_cat_labels = array(
 		'name' => 'カテゴリー',
@@ -925,5 +934,123 @@ function custom_blocks_editor_styles() {
 	);
 }
 add_action('enqueue_block_editor_assets', 'custom_blocks_editor_styles');
+
+// 管理画面の投稿一覧にサムネイルのカラムを追加
+function add_element_thumbnail_column($columns) {
+	$new = array();
+	foreach($columns as $key => $title) {
+		if ($key == 'title') // タイトルの前に新しい列を追加
+			$new['element_thumbnail'] = 'サムネイル';
+		$new[$key] = $title;
+	}
+	return $new;
+}
+add_filter('manage_edit-element_columns', 'add_element_thumbnail_column');
+
+function display_element_thumbnail_column($column_name, $post_id) {
+	if($column_name === 'element_thumbnail') {
+		$thumbnail_url = get_post_meta($post_id, '_knawatfibu_url', true);
+		if ($thumbnail_url) {
+			echo '<img src="' . esc_url( $thumbnail_url ) . '" style="max-width:60px; max-height:60px; display:block; margin:auto;" />';
+		}
+	}
+}
+add_action('manage_element_posts_custom_column', 'display_element_thumbnail_column', 5, 2);
+
+function admin_custom_css() {
+	echo '
+		<style>
+		/* カスタム投稿タイプelementのサムネイル列の幅を狭める */
+		.manage-column.column-element_thumbnail {
+			width: 80px;
+		}
+		</style>
+	';
+}
+add_action('admin_head', 'admin_custom_css');
+
+// ブランドタクソノミーの編集ページにフィールドを追加
+function add_brand_fields($taxonomy) {
+?>
+	<div class="form-field">
+		<label for="brand_japanese_reading">日本語読み</label>
+		<input type="text" name="brand_japanese_reading" id="brand_japanese_reading" value="">
+	</div>
+<?php
+}
+add_action('brand_add_form_fields', 'add_brand_fields', 10, 2);
+
+// ブランドタクソノミーの編集ページのフィールドの値を保存
+function save_brand_fields($term_id) {
+	if (isset($_POST['brand_japanese_reading'])) {
+		update_term_meta($term_id, 'brand_japanese_reading', sanitize_text_field($_POST['brand_japanese_reading']));
+	}
+}
+add_action('edited_brand', 'save_brand_fields', 10, 2);
+add_action('create_brand', 'save_brand_fields', 10, 2);
+
+// 既存のブランドタクソノミーの編集ページにフィールドを追加
+function edit_brand_fields($term, $taxonomy) {
+	$value = get_term_meta($term->term_id, 'brand_japanese_reading', true);
+	?>
+	<tr class="form-field">
+		<th scope="row" valign="top"><label for="brand_japanese_reading">日本語読み</label></th>
+		<td><input type="text" name="brand_japanese_reading" id="brand_japanese_reading" value="<?php echo esc_attr($value); ?>"></td>
+	</tr>
+	<?php
+}
+add_action('brand_edit_form_fields', 'edit_brand_fields', 10, 2);
+
+// ブランドタクソノミーのクイック編集用のフィールドの追加
+function brand_quick_edit_custom_box($column_name, $screen, $name) {
+	if ($column_name == 'brand_japanese_reading' && $name == 'brand') {
+		?>
+		<fieldset>
+			<div class="inline-edit-col">
+				<label>
+					<span class="title">日本語読み</span>
+					<span class="input-text-wrap">
+						<input type="text" name="brand_japanese_reading" class="ptitle" value="">
+					</span>
+				</label>
+			</div>
+		</fieldset>
+		<?php
+	}
+}
+add_action('quick_edit_custom_box', 'brand_quick_edit_custom_box', 10, 3);
+
+// カスタムタクソノミーブランドの日本語読みのカラム追加
+function add_brand_columns($columns) {
+	// 一時的に$columnsを新しい配列に格納
+	$new_columns = array();
+
+	$index = 0;
+	foreach ($columns as $key => $value) {
+		if ($index == 2) { // 2つ目のカラムの後に追加するために、インデックスを2としています。
+			$new_columns['brand_japanese_reading'] = '<a href="#"><span>日本語読み</span><span class="sorting-indicator"></span></a>';
+		}
+		$new_columns[$key] = $value;
+		$index++;
+	}
+
+	return $new_columns;
+}
+add_filter('manage_edit-brand_columns', 'add_brand_columns');
+
+// カスタムタクソノミーブランドの日本語読みのカラムの中身表示
+function manage_brand_custom_column($content, $column_name, $term_id) {
+	if ($column_name !== 'brand_japanese_reading') {
+		return $content;
+	}
+	$term_id = absint($term_id);
+	$brand_japanese_reading = get_term_meta($term_id, 'brand_japanese_reading', true);
+
+	if (!empty($brand_japanese_reading)) {
+		$content .= esc_attr($brand_japanese_reading);
+	}
+	return $content;
+}
+add_filter('manage_brand_custom_column', 'manage_brand_custom_column', 10, 3);
 
 ?>

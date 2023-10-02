@@ -88,3 +88,7 @@ sw.*
 
 # Vim swap files
 *.swp
+
+# 自分で追加
+static/assets/images
+README.md

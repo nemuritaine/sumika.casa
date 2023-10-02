@@ -45,11 +45,23 @@
       }
     },
 
-    async asyncData({ app, params, $axios }) {
 
-      const post = await $axios.$get(`${app.$url}/custom/v0/news?id=${params.id}`)
-      return {
-        post
+    async asyncData({ app, params, payload, $axios }) {
+
+      if (payload) {
+        
+        // generate時に取得したデータを使用
+        return {
+          post: payload.currentPost,
+        }
+
+      } else {
+
+        // クライアントサイドでレンダリングされる場合はAPIからデータを取得
+        const post = await $axios.$get(`${app.$url}/custom/v0/news?id=${params.id}`)
+        return {
+          post
+        }
       }
     },
 

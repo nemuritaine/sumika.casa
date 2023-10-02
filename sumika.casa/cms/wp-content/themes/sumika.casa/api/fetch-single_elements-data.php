@@ -9,6 +9,35 @@
   $targets = $single_post;
   $room_presence;
   $result = [];
+
+  $news_args = [
+    'post_type'  => 'news',
+    'posts_per_page' => 3,
+    'post_status' => 'publish',
+    'orderby' => 'date',
+    'order' => 'DESC',
+  ];
+  $news_post = get_posts($news_args);
+  $news_data = [];
+  foreach($news_post as $post):
+    if ($post) {
+      $category = get_the_terms($post->ID, 'news_cat');
+      $cat_name = $category[0]->name;
+      $cat_slug = $category[0]->slug;
+      $data = array(
+        'id' => $post->ID, // 記事ID
+        'title' => $post->post_title,
+        'time' => get_the_time('Y.m.d', $post->ID), // 公開日
+        'category' => $cat_name,
+        'category_slug' => $cat_slug,
+        'icon' => get_field('p-topNewsItem__icon', $post->ID),
+        'content' => $post->post_content,
+        'link' => get_the_permalink() // リンク
+      );
+      array_push($news_data, $data);
+    }
+  endforeach;
+
   foreach($targets as $post):
     $brands = get_the_terms($post->ID, 'brand');
     $styles = get_the_terms($post->ID, 'style');
@@ -21,9 +50,9 @@
         $room_item = array(
           'id' => $room,
           'title' => get_the_title($room),
+          'name' => get_field('p-postProfile__name', $room),
           'tags' => get_the_terms($room, 'post_tag'),
           'thumbnail' => get_the_post_thumbnail_url($room, 'full'),
-          // 'custom_field' => get_field('カスタムフィールドのキー', $room),
           'link' => get_permalink($room),
         );
         array_push($room_data, $room_item);
@@ -67,6 +96,7 @@
           $room_item = array(
             'id' => $room_post->ID,
             'title' => get_the_title($room_post->ID),
+            'name' => get_field('p-postProfile__name', $room_post->ID),
             'tags' => get_the_terms($room_post->ID, 'post_tag'),
             'thumbnail' => get_the_post_thumbnail_url($room_post->ID, 'full'),
             'link' => get_permalink($room_post->ID),
@@ -179,7 +209,11 @@
 
             $price = get_field('p-elementItem__price', $style_post->ID);
             if(is_numeric($price)) {
-              $price = number_format($price);
+              if ($price == 0) {
+                $price = "???";
+              } else {
+                $price = number_format($price);
+              }
             }
 
             if (!in_array($style_post->ID, $added_ids)) {
@@ -239,7 +273,11 @@
 
             $price = get_field('p-elementItem__price', $related_post->ID);
             if(is_numeric($price)) {
-              $price = number_format($price);
+              if ($price == 0) {
+                $price = "???";
+              } else {
+                $price = number_format($price);
+              }
             }
 
             $relation_item = array(
@@ -258,7 +296,11 @@
 
     $price = get_field('p-elementItem__price', $post->ID);
     if(is_numeric($price)) {
-      $price = number_format($price);
+      if ($price == 0) {
+        $price = "???";
+      } else {
+        $price = number_format($price);
+      }
     }
 
     $data = array(
@@ -267,7 +309,7 @@
       'slug' => $post->post_name,
       'modified' => $post->post_modified,
       'title' => $post->post_title,
-      'brand' => $brands && !is_wp_error($brands) && isset($brands[0]) ? $brands[0]->name : '',
+      'brand' => $brands && !is_wp_error($brands) && isset($brands[0]) ? html_entity_decode($brands[0]->name) : '',
       'price' => $price,
       'size' => get_field('p-elementItem__size', $post->ID),
       'affiliate' => get_field('p-elementItem__affiliate', $post->ID),
@@ -281,6 +323,7 @@
       'likes_count' => get_field('likes_count', $post->ID),
       'style_name' => $styles && !is_wp_error($styles) && isset($styles[0]) ? $styles[0]->name : '',
       'style_slug' => $styles && !is_wp_error($styles) && isset($styles[0]) ? $styles[0]->slug : '',
+      'news' => $news_data,
     );
     array_push($result, $data);
   endforeach;

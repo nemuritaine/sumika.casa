@@ -61,7 +61,9 @@
               </div>
               <div class="p-elementDetailRoomItem__detail">
                 <div class="p-elementDetailRoomItem__title">
-                  <span>room</span>
+                  <span v-html="wrapNumbersWithSpan(room.name)"></span>
+                  <span class="is-apostrophe">'</span>
+                  <span>s room</span>
                 </div>
                 <div class="p-elementDetailRoomItem__text">
                   <h3>{{ room.title }}</h3>
@@ -192,7 +194,7 @@
         <div class="p-elementDetailRelation__carousel splide">
           <div class="p-elementDetailRelation__heading">
             <div class="p-elementDetailRelation__title">
-              <p>関連するアイテム</p>
+              <p>同じブランドのアイテム</p>
             </div>
             <div class="p-elementDetailRelation__controller">
               <div class="c-controller">
@@ -271,7 +273,7 @@
             </div>
           </div>
           <ul class="p-elementDetailNews__item">
-            <li v-for="item in news" :key="item.id" class="p-elementDetailNewsItem">
+            <li v-for="item in post.news" :key="item.id" class="p-elementDetailNewsItem">
               <a
                 v-if="item.icon === 'arrow'"
                 :href="`/news/${item.id}`"
@@ -352,7 +354,7 @@
       const defaultHead = this.$nuxt.$options.head
       const titles = [
         `${this.post.brand}の${this.post.title}`,
-        `${this.post.style_name}スタイルのお部屋に最適な${this.post.brand}の${this.post.title}`
+        `${this.post.style_name}スタイルのお部屋におすすめな${this.post.brand}の${this.post.title}`
       ]
       const title = titles[Math.floor(Math.random() * titles.length)]
       const description = `${this.post.brand}の${this.post.title}は${this.post.style_name}スタイルとの相性が抜群です。${this.post.style_name}スタイルのおすすめのお部屋や、その他の相性の良いアイテムを紹介します。` || defaultHead.meta.find(meta => meta.hid === 'description').content
@@ -374,7 +376,6 @@
 
       return {
         post: [],
-        news: [],
         coordinationCurrentSlideNumber: 0,
         coordinationTotalSlides: 0,
         relationCurrentSlideNumber: 0,
@@ -424,19 +425,27 @@
       }
     },
 
-    async asyncData({ app, params, $axios }) {
+    async asyncData({ app, params, payload, $axios }) {
       
-      try {
-        const responsePost = await $axios.$get(`${app.$url}/custom/v0/element?id=${params.id}`)
-        const responseNews = await $axios.get(`${app.$url}/custom/v0/newses`)
+      if (payload) {
+
+        // generate時に取得したデータを使用
         return {
-          post: responsePost,
-          news: responseNews.data,
+          post: payload.currentPost,
         }
-      } catch (error) {
-        return {
-          post: [],
-          news: [],
+
+      } else {
+
+        // クライアントサイドでレンダリングされる場合はAPIからデータを取得
+        try {
+          const responsePost = await $axios.$get(`${app.$url}/custom/v0/element?id=${params.id}`)
+          return {
+            post: responsePost,
+          }
+        } catch (error) {
+          return {
+            post: [],
+          }
         }
       }
     },
@@ -892,6 +901,10 @@
         setTimeout(() => {
           this.showAffiliate = false
         }, 0)
+      },
+
+      wrapNumbersWithSpan(str) { // おすすめの部屋のユーザー名に数字が入っていた場合の処理
+        return str.replace(/\d+/g, match => `<span class="is-different">${match}</span>`);
       }
     },
 
@@ -1036,7 +1049,7 @@
     
     @include responsive(sm, max) {
       order: 4;
-      margin-top: rem(8);
+      margin-top: rem(12);
     }
     
     @include responsive(sm, min) {
@@ -1064,6 +1077,17 @@
         padding-top: vw(12);
         padding-bottom: vw(12);
       }
+
+      &:nth-of-type(1) {
+        @include responsive(sm, max) {
+          order: 3;
+        }
+      }
+      &:nth-of-type(2) {
+        @include responsive(sm, max) {
+          order: 1;
+        }
+      }
     }
 
     dd {
@@ -1080,19 +1104,32 @@
         padding-top: vw(12);
         padding-bottom: vw(12);
       }
+
+      &:nth-of-type(1) {
+        @include responsive(sm, max) {
+          order: 4;
+        }
+      }
+      &:nth-of-type(2) {
+        @include responsive(sm, max) {
+          order: 2;
+        }
+      }
     }
   }
 
   // .p-elementDetailFacade__brand
   &__brand {
-
+    
     @include responsive(sm, max) {
-      order: 1;
+      order: 2;
+      margin-top: rem(46);
     }
   }
 
+  // .p-elementDetailFacade__title
   &__title {
-    margin-top: rem(115);
+    margin-top: rem(2);
     
     @include responsive(sm, max) {
       order: 3;
@@ -1109,7 +1146,7 @@
     }
 
     p {
-      @include font(16, 24, 40, 700);
+      @include font(14, 21, 40, 700);
 
       @include responsive(sm, min) {
         @include font(18);
@@ -1130,8 +1167,8 @@
     z-index: 1;
 
     @include responsive(sm, max) {
-      order: 2;
-      margin-top: rem(16);
+      order: 1;
+      // margin-top: rem(16);
     }
   }
 
@@ -1269,12 +1306,7 @@
   flex-wrap: wrap;
   column-gap: 12px;
   @include Wandeln;
-  @include font(62, 60, -48);
-  
-  @include responsive(sm, max) {
-    justify-content: center;
-    height: rem(60);
-  }
+  @include font(48, 48, -48);
   
   @include responsive(sm, min) {
     @include font(96, 76.8);
@@ -1414,10 +1446,11 @@
     }
   }
 
+  // .p-elementDetailRoomItem__title
   &__title {
 
+    // .p-elementDetailRoomItem__title span
     span {
-      display: block;
       @include Alokary;
       @include font(24, 36, 100);
 
@@ -1427,6 +1460,44 @@
 
       @include responsive(md, min) {
         @include vwfont(1280, 32);
+      }
+    }
+
+    :deep(.is-different) {
+      @include Wandeln;
+      @include font(44, 0, -30);
+      margin-left: -2px;
+
+      @include responsive(sm, min) {
+        @include font(56);
+      }
+
+      @include responsive(md, min) {
+        @include vwfont(1280, 56);
+        margin-left: vh(-2);
+      }
+    }
+
+    .is-apostrophe {
+      font-family: "游ゴシック体", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+      margin-left: -5px;
+      margin-right: -5px;
+      @include font(34, 0, 0);
+      position: relative;
+      top: rem(-2);
+      
+      @include responsive(sm, min) {
+        @include font(40);
+        margin-left: -5px;
+        margin-right: -5px;
+        top: rem(-7);
+      }
+      
+      @include responsive(md, min) {
+        margin-left: vw(-5);
+        margin-right: vw(-5);
+        @include vwfont(1280, 40);
+        top: vw(-7);
       }
     }
   }

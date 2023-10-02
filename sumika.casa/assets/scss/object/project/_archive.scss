@@ -202,7 +202,7 @@
     padding-right: 20px;
     padding-left: 20px;
     padding-bottom: rem(20);
-    height: 70%;
+    height: 80%;
     width: 100%;
   }
 
@@ -273,7 +273,7 @@
     }
 
     p {
-      @include font(14, 21, 0, 700);
+      @include font(14, 18, 0, 700);
     }
   }
 
@@ -365,6 +365,7 @@
     }
   }
 
+  // .p-archiveAsideMenu__icon
   &__icon {
     display: none;
     position: absolute;
@@ -397,9 +398,11 @@
 
   // .p-archiveAsideMenu__item
   &__item {
+    margin-top: rem(10);
     margin-bottom: rem(20);
-
+    
     @include responsive(md, min) {
+      margin-top: vw(10);
       margin-bottom: vw(20);
     }
 
@@ -506,6 +509,118 @@
             width: calc(100% - vw(20) - vw(9));
           }
         }
+      }
+    }
+
+    &.--brand {
+      max-height: 200px;
+      overflow: scroll;
+
+      @include responsive(md, min) {
+        max-height: vh(200);
+      }
+
+      #{$this}Item {
+        display: flex;
+        width: 100%;
+        cursor: pointer;
+        padding-top: 6px;
+        padding-bottom: 6px;
+    
+        @include responsive(md, min) {
+          padding-top: vw(6);
+          padding-bottom: vw(6);
+        }
+    
+        &:first-of-type {
+          margin-top: rem(-6);
+    
+          @include responsive(md, min) {
+            margin-top: vw(-6);
+          }
+        }
+    
+        input[type="checkbox"] {
+          cursor: pointer;
+          background-color: color(beige);
+          width: 20px;
+          height: 20px;
+          border-radius: 4px;
+          margin-top: rem(1);
+      
+          @include responsive(md, min) {
+            width: vw(20);
+            height: vw(20);
+            border-radius: vw(4);
+            margin-top: vw(1);
+          }
+      
+          &:checked {
+            background-image: url(/assets/images/common/ico_check.svg);
+            background-color: color(main);
+            background-size: 13px;
+            background-position: center;
+            background-repeat: no-repeat;
+      
+            @include responsive(md, min) {
+              background-size: vw(13);
+            }
+          }
+        }
+      
+        label {
+          @include font(14, 21, 0);
+          width: calc(100% - 20px);
+          padding-left: 9px;
+
+          @include responsive(md, min) {
+            @include vwfont(1280, 14);
+            width: calc(100% - vw(20));
+          }
+        }
+      }
+    }
+  }
+
+  &__input { // ブランド検索フォーム
+    
+    input {
+      @include font(14, 21, 0);
+      border-radius: 4px;
+      border: 2px solid color(smoke);
+      width: 100%;
+      padding: 10px 16px;
+      margin-bottom: 14px;
+          
+      @include responsive(md, min) {
+        @include vwfont(1280, 14);
+        border-width: vw(2);
+        border-radius: vw(4);
+        padding: vw(10) vw(16);
+        margin-bottom: vw(14);
+      }
+
+      &:focus {
+        outline-color: color(beige);
+      }
+    }
+  }
+
+  &__reset {
+
+    p {
+      @include font(12, 18, 0);
+      cursor: pointer;
+      color: color(grayish);
+      display: inline-block;
+      transition: color 0.3s ease;
+
+      @include responsive(md, min) {
+        @include vwfont(1280, 12);
+      }
+
+      @include hover {
+        color: color(darkgray);
       }
     }
   }

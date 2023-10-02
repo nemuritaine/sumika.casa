@@ -54,7 +54,7 @@
                   <line class="st0" x1="34" y1="34" x2="47" y2="47"/>
                 </svg>
               </span>
-              <span class="l-footerMenuItem__text">アイテム</span>
+              <span class="l-footerMenuItem__text">家具検索</span>
             </a>
           </li>
           <li class="l-footerMenuItem">
@@ -68,21 +68,19 @@
                   <line class="st0" x1="18" y1="24" x2="39" y2="24"/>
                 </svg>
               </span>
-              <span class="l-footerMenuItem__text">お部屋紹介</span>
+              <span class="l-footerMenuItem__text">お部屋検索</span>
             </a>
           </li>
           <li class="l-footerMenuItem">
-            <span class="l-footerMenuItem__link">
-            <!-- <a href="/study" class="l-footerMenuItem__link"> -->
+            <a href="/questions" class="l-footerMenuItem__link">
               <span class="l-footerMenuItem__icon --compass">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
                   <circle class="st0" cx="25" cy="25" r="22"/>
                   <path class="fi0" d="m19.45,19.45l-6.93,18.03,18.03-6.93,6.93-18.03-18.03,6.93Zm5.55,8.55c-1.65,0-3-1.35-3-3s1.35-3,3-3,3,1.35,3,3-1.35,3-3,3Z"/>
                 </svg>
               </span>
-              <span class="l-footerMenuItem__text">勉強（準備中）</span>
-            </span>
-            <!-- </a> -->
+              <span class="l-footerMenuItem__text">インテリア診断</span>
+            </a>
           </li>
           <li class="l-footerMenuItem">
             <a href="/news" class="l-footerMenuItem__link">
@@ -92,7 +90,7 @@
                   <path class="st0" d="m41,15s-3-12-16-12S9,15,9,15l-4,23h40l-4-23Z"/>
                 </svg>
               </span>
-              <span class="l-footerMenuItem__text">ニュース</span>
+              <span class="l-footerMenuItem__text">お知らせ</span>
             </a>
           </li>
         </ul>
