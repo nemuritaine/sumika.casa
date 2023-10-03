@@ -28,13 +28,21 @@
                 </div>
               </div>
               <div class="p-archiveAsideMenu__body">
-                <!-- <vue-slider
-                  v-model="price"
-                  :min="0"
-                  :max="10000"
-                  :interval="100"
+                <VueSlider
+                  v-model="priceRange"
                   @change="updatePrice"
-                /> -->
+                  :min="0"
+                  :max="100000"
+                  :interval="100"
+                />
+                <dl>
+                  <dt>min</dt>
+                  <dt>{{ priceRange[0] }}</dt>
+                </dl>
+                <dl>
+                  <dt>max</dt>
+                  <dt>{{ priceRange[1] }}</dt>
+                </dl>
                 <div class="p-archiveAsideMenu__reset">
                   <p @click="selectAll('price')">選択をクリア</p>
                 </div>
@@ -213,7 +221,7 @@
 <script>
 
   import { gsap } from 'gsap'
-  // import VueSlider from 'vue-slider-component'
+  import { debounce } from 'lodash'
 
   export default {
 
@@ -229,10 +237,6 @@
         ],
       }
     },
-
-    // components: {
-    //   VueSlider
-    // },
 
     data () {
       return {
@@ -259,7 +263,7 @@
         selectedSortOrder: 'date_desc', // 並び替え
         onlyLikedItems: false, // いいねのみ表示
         searchBrands: [], // ブランド検索時に使用
-        price: [1000, 5000]
+        priceRange: [1000, 5000],
       }
     },
 
@@ -890,10 +894,23 @@
           this.searchBrands = []
         }
       },
-
-      updatePrice(value) {
-        this.$emit('input', value)
+      
+      async fetchPriceData() {
+        const response = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/element_price_sort`, {
+          params: {
+            min_price: this.priceRange[0],
+            max_price: this.priceRange[1],
+          }
+        })
+        console.log(this.priceRange[0])
+        console.log(this.priceRange[1])
+        console.log(response.data)
+        this.elements = response.data
       },
+
+      updatePrice: debounce(function() {
+        this.fetchPriceData()
+      }, 300) // 300ミリ秒のデバウンス時間を設定
     },
   }
 </script>

@@ -16,20 +16,37 @@
   endforeach;
 
   $price_data = [];
-  $price_args = [
-    'taxonomy' => 'price',
-    'orderby' => 'menu_order',
-    'order' => 'ASC',
-    'hide_empty' => false,
+  // $price_args = [
+  //   'taxonomy' => 'price',
+  //   'orderby' => 'menu_order',
+  //   'order' => 'ASC',
+  //   'hide_empty' => false,
+  // ];
+  // $price = get_terms($price_args);
+  // foreach ($price as $term):
+  //   $price_data[] = [
+  //     'id' => $term->term_id,
+  //     'cat_name' => $term->name,
+  //     'cat_slug' => $term->slug
+  //   ];
+  // endforeach;
+
+  global $wpdb;
+  $sql = $wpdb->prepare(
+    "SELECT
+      min(meta_value) as min_price,
+      max(meta_value) as max_price
+    FROM
+      $wpdb->postmeta
+    WHERE
+      meta_key = %s",
+    'p-elementItem__price'
+  );
+  $min_max_prices = $wpdb->get_row($sql);
+  $price_data = [
+    'min_price' => (int) $min_max_prices->min_price,
+    'max_price' => (int) $min_max_prices->max_price
   ];
-  $price = get_terms($price_args);
-  foreach ($price as $term):
-    $price_data[] = [
-      'id' => $term->term_id,
-      'cat_name' => $term->name,
-      'cat_slug' => $term->slug
-    ];
-  endforeach;
 
   $class_data = [];
   $class_args = [

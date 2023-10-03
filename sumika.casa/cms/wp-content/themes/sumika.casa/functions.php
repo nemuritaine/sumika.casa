@@ -252,6 +252,18 @@ function add_custom_endpoint() {
 		]
 	);
 
+	// エレメント値段ソートデータ取得
+	register_rest_route(
+		'custom/v0', // ネームスペース
+		'/element_price_sort', // ベースURL
+		[ // オプション
+			'methods'  =>  WP_REST_Server::READABLE,
+			// 'permission_callback' => 'rest_permission', // 関数名指定
+			'permission_callback' => '__return_true', // どこからでもアクセス可能
+			'callback' => 'fetch_element_price_sort_data'
+		]
+	);
+
 
 	// エレメント詳細データ取得
 	register_rest_route(
@@ -485,6 +497,11 @@ function fetch_single_elements_data($param) {
 // エレメント複数データ取得
 function fetch_elements_data($param) {
 	return rest_response('fetch-elements-data', $param);
+}
+
+// エレメント値段ソートデータ取得
+function fetch_element_price_sort_data($param) {
+	return rest_response('fetch-element_price-sort-data', $param);
 }
 
 // エレメント診断データ取得

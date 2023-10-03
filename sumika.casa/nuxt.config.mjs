@@ -95,7 +95,11 @@ export default {
     "scss": "@/assets/scss/_global.scss"
   },
   "plugins": [
-    "~/plugins/api.js"
+    "~/plugins/api.js",
+    {
+      "src": "~/plugins/vue-slider.js",
+      "mode": "client"
+    }
   ],
   "components": true,
   "buildModules": [
@@ -2431,10 +2435,9 @@ export default {
   "generate": {
     "fallback": true,
     "interval": 0,
-    "routes": [
-      "/element/6475"
-    ],
+    "routes": [],
     "exclude": [
+      "/element",
       "/questions",
       "/news",
       "/post",
@@ -2686,6 +2689,7 @@ export default {
       "/element/6481",
       "/element/6479",
       "/element/6477",
+      "/element/6475",
       "/element/6473",
       "/element/6471",
       "/element/6469",
