@@ -28,30 +28,58 @@
                 </div>
               </div>
               <div class="p-archiveAsideMenu__body">
-                <VueSlider
-                  v-model="priceRange"
-                  @change="updatePrice"
-                  :min="0"
-                  :max="100000"
-                  :interval="100"
-                />
-                <dl>
-                  <dt>min</dt>
-                  <dt>{{ priceRange[0] }}</dt>
-                </dl>
-                <dl>
-                  <dt>max</dt>
-                  <dt>{{ priceRange[1] }}</dt>
-                </dl>
-                <div class="p-archiveAsideMenu__reset">
-                  <p @click="selectAll('price')">選択をクリア</p>
+                <div class="p-archiveAsideMenu__price">
+                  <div class="p-archiveAsideMenuPrice">
+                    <div class="p-archiveAsideMenuPrice__slider">
+                      <VueSlider
+                        v-model="sliderValue"
+                        @change="updatePrice"
+                        :min="0"
+                        :max="1"
+                        :dotSize="dynamicDotSize"
+                        :interval="0.01"
+                        tooltip="none"
+                      />
+                    </div>
+                    <div class="p-archiveAsideMenu__reset">
+                      <p @click="selectAll('price')">選択をクリア</p>
+                    </div>
+                    <div class="p-archiveAsideMenuPrice__range">
+                      <input
+                        name="priceMin"
+                        type="text"
+                        placeholder="下限なし"
+                        inputmode="numeric"
+                        class=""
+                        :value="formatCurrency(priceMin)"
+                        @focus="clearFormatting"
+                        @input="enforceNumericInput"
+                        @blur="updateInputPrice(0, $event)"
+                        @keydown.enter="$event.target.blur()"
+                      >
+                      <span>-</span>
+                      <input
+                        name="priceMax"
+                        type="text"
+                        placeholder="上限なし"
+                        inputmode="numeric"
+                        class=""
+                        :value="formatCurrency(priceMax)"
+                        @focus="clearFormatting"
+                        @input="enforceNumericInput"
+                        @blur="updateInputPrice(1, $event)"
+                        @keydown.enter="$event.target.blur()"
+                      >
+                    </div>
+                  </div>
                 </div>
-                <ul class="p-archiveAsideMenu__item --checkbox">
+                
+                <!-- <ul class="p-archiveAsideMenu__item --checkbox">
                   <li v-for="price in details.price" :key="price.id" class="p-archiveAsideMenuItem">
                     <input type="checkbox" :id="'price-' + price.id" :value="price.cat_slug" v-model="selectedPrices">
                     <label :for="'price-' + price.id">{{ price.cat_name }}</label>
                   </li>
-                </ul>
+                </ul> -->
               </div>
             </div>
             <div class="p-archiveAsideMenu is-accordion">
@@ -68,12 +96,45 @@
                 <div class="p-archiveAsideMenu__reset">
                   <p @click="selectAll('class')">選択をクリア</p>
                 </div>
-                <ul class="p-archiveAsideMenu__item --button">
-                  <li v-for="classes in details.class" :key="classes.id" class="p-archiveAsideMenuItem">
-                    <input type="checkbox" :id="'classes-' + classes.id" :value="classes.cat_slug" v-model="selectedClasses">
-                    <label :for="'classes-' + classes.id">{{ classes.cat_name }}</label>
-                  </li>
-                </ul>
+                <div class="p-archiveAsideMenu__category">
+                  <div v-for="classes in details.organizedClasses" :key="classes.id" class="p-archiveAsideMenuCategory">
+                    <div class="p-archiveAsideMenuCategory__parent" @click="asideAccordion">
+                      <input
+                        type="checkbox" 
+                        :id="'classes-' + classes.id" 
+                        :value="classes.cat_slug" 
+                        v-model="parentClassesChecked[classes.cat_slug]" 
+                        @change="onParentChecked(classes)"
+                      >
+                      <label :for="'classes-' + classes.id">
+                        <div class="p-archiveAsideMenuCategory__image">
+                          <img :src="classes.thumbnail_url" alt="" width="" height="" />
+                        </div>
+                        <div class="p-archiveAsideMenuCategory__title">
+                          <p>{{ classes.cat_name }}</p>
+                        </div>
+                      </label>
+                    </div>
+                    <div class="p-archiveAsideMenuCategory__child">
+                      <div v-for="child in classes.children" :key="child.id">
+                        <input
+                          type="checkbox" 
+                          :id="'classes-' + child.id" 
+                          :value="child.cat_slug" 
+                          v-model="selectedClasses" 
+                        > 
+                        <label :for="'classes-' + child.id">
+                          <div class="p-archiveAsideMenuCategory__image">
+                            <img :src="child.thumbnail_url" alt="" width="" height="" />
+                          </div>
+                          <div class="p-archiveAsideMenuCategory__title">
+                            <p>{{ child.cat_name }}</p>
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="p-archiveAsideMenu is-accordion">
@@ -113,22 +174,34 @@
                   <input
                     type="text"
                     @input="handleInput"
+                    @focus="increaseFontSize"
+                    @blur="resetFontSize"
                     placeholder="ブランドをさがす"
                   />
                 </div>
                 <div class="p-archiveAsideMenu__reset">
                   <p @click="selectAll('brand')">選択をクリア</p>
                 </div>
-                <ul v-if="searchBrands.length" class="p-archiveAsideMenu__item --brand">
-                  <li v-for="brand in searchBrands" :key="brand.id" class="p-archiveAsideMenuItem">
-                    <input type="checkbox" :id="'brand-' + brand.id" :value="brand.cat_slug" v-model="selectedBrands">
-                    <label :for="'brand-' + brand.id">{{ brand.name }}</label>
+                <ul v-if="searchBrands.length" class="p-archiveAsideMenu__brand">
+                  <li v-for="brand in searchBrands" :key="brand.id" class="p-archiveAsideMenuBrand">
+                    <label :for="'brand-' + brand.id">
+                      <input type="checkbox" :id="'brand-' + brand.id" :value="brand.cat_slug" v-model="selectedBrands">
+                      <div class="p-archiveAsideMenuBrand__heading">
+                        <span>{{ brand.name }}</span>
+                        <span>{{ brand.name_jp }}</span>
+                      </div>
+                    </label>
                   </li>
                 </ul>
-                <ul v-else class="p-archiveAsideMenu__item --brand">
-                  <li v-for="brand in details.brand" :key="brand.id" class="p-archiveAsideMenuItem">
-                    <input type="checkbox" :id="'brand-' + brand.id" :value="brand.cat_slug" v-model="selectedBrands">
-                    <label :for="'brand-' + brand.id">{{ brand.cat_name }}</label>
+                <ul v-else class="p-archiveAsideMenu__brand">
+                  <li v-for="brand in details.brand" :key="brand.id" class="p-archiveAsideMenuBrand">
+                    <label :for="'brand-' + brand.id">
+                      <input type="checkbox" :id="'brand-' + brand.id" :value="brand.cat_slug" v-model="selectedBrands">
+                      <div class="p-archiveAsideMenuBrand__heading">
+                        <span>{{ brand.cat_name }}</span>
+                        <span>{{ brand.name_jp }}</span>
+                      </div>
+                    </label>
                   </li>
                 </ul>
               </div>
@@ -141,7 +214,7 @@
           </div>
         </div>
       </aside>
-      <article class="p-archive__article" ref="archiveArticle" @scroll.passive="handleScroll">
+      <article class="p-archive__article" ref="archiveArticle">
         <div class="p-archive__order">
           <div class="p-archiveOrder__like">
             <div class="p-archiveOrderLike">
@@ -173,7 +246,7 @@
             </div>
           </div>
         </div>
-        <div class="p-elementIndex__item">
+        <div class="p-elementIndex__item" ref="archiveItem" @scroll.passive="handleScroll">
           <li v-for="element in elements" :key="element.id" class="p-elementIndexItem">
             <nuxt-link :to="`/element/${element.id}`" class="p-elementIndexItem__link">
               <span class="p-elementIndexItem__detail">
@@ -240,8 +313,10 @@
 
     data () {
       return {
+        windowWidth: 0,
         details: [],
         elements: [],
+        parentClassesChecked: {},
         selectedClasses: [],
         selectedBrands: [],
         selectedPrices: [],
@@ -263,7 +338,7 @@
         selectedSortOrder: 'date_desc', // 並び替え
         onlyLikedItems: false, // いいねのみ表示
         searchBrands: [], // ブランド検索時に使用
-        priceRange: [1000, 5000],
+        sliderValue: [0, 1]
       }
     },
 
@@ -278,14 +353,33 @@
           },
         })
 
+        // クラスのデータの整理
+        const organizedClasses = responseDetails.data.class.filter(item => item.parent === 0).map(parent => {
+          return {
+            ...parent,
+            children: responseDetails.data.class.filter(child => child.parent === parent.id)
+          }
+        })
+
         return {
           details: responseDetails.data,
+          details: {
+            ...responseDetails.data,
+            class: undefined, // details.classを取り除く
+            organizedClasses, // 整理されたクラスデータ
+          },
           elements: responseElements.data,
         }
       } catch (error) {
         console.error(error)
         return {
-          details: [],
+          details: {
+            style: [],
+            price: [],
+            price_range: [],
+            organizedClasses: [],
+            brand: []
+          },
           elements: [],
         }
       }
@@ -293,9 +387,49 @@
 
     computed: {
 
-      bodyClass () {
+      bodyClass() {
         return 'p-elementIndex p-archive'
-      }
+      },
+
+      // サイドバー：値段で記事ソートする下限を100の位で四捨五入して計算
+      priceMin() {
+        const price = this.scale(this.sliderValue[0])
+        return Math.round(price / 100) * 100
+      },
+      // サイドバー：値段で記事ソートする上限を100の位で四捨五入して計算
+      priceMax() {
+        const price = this.scale(this.sliderValue[1])
+        return Math.round(price / 100) * 100
+      },
+
+      scale() {
+        const { min_price, percentile_25, percentile_50, percentile_75, max_price } = this.details.price_range
+        const domain = [0, 0.25, 0.5, 0.75, 1]
+        const range = [Number(min_price), Number(percentile_25), Number(percentile_50), Number(percentile_75), Number(max_price)]
+        // 非線形スケールを作成
+        return value => {
+          if (value <= domain[1]) {
+            return this.linearScale(value, domain[0], domain[1], range[0], range[1])
+          } else if (value <= domain[2]) {
+            return this.linearScale(value, domain[1], domain[2], range[1], range[2])
+          } else if (value <= domain[3]) {
+            return this.linearScale(value, domain[2], domain[3], range[2], range[3])
+          } else {
+            return this.linearScale(value, domain[3], domain[4], range[3], range[4])
+          }
+        }
+      },
+
+      // サイドバー：値段で記事ソートするスライドボタンの大きさ変更
+      dynamicDotSize() {
+        if (this.windowWidth >= 1025) {
+          return this.vwEquivalent(18)
+        } else if (this.windowWidth <= 768) {
+          return 20
+        } else {
+          return 14
+        }
+      },
     },
 
     created () {
@@ -305,17 +439,22 @@
     },
 
     mounted () {
+      // サーバーサイドでは利用できないため
+      this.windowWidth = window.innerWidth
+
       this.boundAsideSticky = this.asideSticky.bind(this)
       this.updateSelectionsFromURL()
-      this.initAsideAccordions()
+      this.initAsideAccordions() // アサイド：マウント時のアコーディオンをデフォルトで隠す
       if (!process.client) {
         this.likedInit()
       }
       this.sortOpacityResize()
 
       this.onResize = () => {
+        this.windowWidth = window.innerWidth
         this.sortOpacityResize()
         this.boundAsideSticky()
+        this.dynamicDotSize
       }
 
       this.onScroll = () => {
@@ -356,7 +495,7 @@
         handler: 'handleSelectionChange',
         deep: true,
       },
-      selectedPrices: {
+      selectedPrices: { // 消すコード
         handler: 'handleSelectionChange',
         deep: true,
       },
@@ -532,6 +671,8 @@
               brands: this.selectedBrands,
               prices: this.selectedPrices,
               styles: this.selectedStyles,
+              min_price: this.priceMin,
+              max_price: this.priceMax,
               liked_ids: this.onlyLikedItems ? likedPosts : undefined, // onlyLikedItemsがtrueの場合、いいねした投稿のIDをパラメータに含める
             },
           })
@@ -578,7 +719,7 @@
 
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop
         const windowHeight = window.innerHeight
-        const articleElement = this.$refs.archiveArticle
+        const articleElement = this.$refs.archiveItem
         const articleHeight = articleElement.scrollHeight
 
         if (scrollTop + windowHeight >= articleHeight - 300) {
@@ -590,6 +731,7 @@
         }
       },
 
+      // ソートボタン：画面サイズが769px以下または1024px以上の時に非表示にする
       sortOpacityResize () {
 
         if (window.innerWidth <= 769 || window.innerWidth >= 1024) {
@@ -616,39 +758,62 @@
       selectAll (type) {
         if (type === 'class') {
           this.selectedClasses = []
+          this.parentClassesChecked = []
+          this.closeAllAccordions()
         } else if (type === 'brand') {
           this.selectedBrands = []
         } else if (type === 'price') {
-          this.selectedPrices = []
+          this.sliderValue = [0, 1] // 元々のコードはthis.selectedPrices = []
         } else if (type === 'style') {
           this.selectedStyles = []
         }
       },
 
+      // サイドバー：スマホ時の検索ボックスにあるクリアボタンを押すと全てクリアに
       clearAll () {
         this.selectedStyles = []
         this.selectedClasses = []
+        this.parentClassesChecked = []
+        this.closeAllAccordions()
         this.selectedBrands = []
-        this.selectedPrices = []
+        this.sliderValue = [0, 1] // 元々のコードはthis.selectedPrices = []
       },
       
+      // サイドバー：絞り込みをクリックした際にアサイドを表示する
       animateAside () {
-
         if (window.innerWidth <= 1024) {
-          gsap.to('.p-archive__aside', { autoAlpha: 1 })
+          gsap.to('.p-archive__aside', {
+            autoAlpha: 1,
+            duration: 0.2,
+            onComplete: () => {
+              document.body.style.overflow = 'hidden' // スクロールを無効にする
+            }
+          })
         }
       },
 
+      // アサイド：検索するをクリックした際にアサイドを隠す
       hideAside () {
-
         if (window.innerWidth <= 1024) {
-          gsap.to('.p-archive__aside', { autoAlpha: 0 })
+          gsap.to('.p-archive__aside', {
+            autoAlpha: 0,
+            duration: 0.2,
+            onComplete: () => {
+              document.body.style.overflow = '' // スクロールを有効にする
+            }
+          })
         }
       },
 
+      // アサイド：マウント時のアコーディオンをデフォルトで隠す
       initAsideAccordions () {
-        const asideAccordionMenu = document.querySelectorAll('.p-archiveAsideMenu.is-accordion .p-archiveAsideMenu__body')
-        asideAccordionMenu.forEach((menu) => {
+        // const asideAccordionMenu = document.querySelectorAll('.p-archiveAsideMenu.is-accordion .p-archiveAsideMenu__body')
+        // asideAccordionMenu.forEach((menu) => {
+        //   gsap.set(menu, { height: 0, autoAlpha: 0 })
+        // })
+
+        const asideAccordionMenuCategory = document.querySelectorAll('.p-archiveAsideMenuCategory__child')
+        asideAccordionMenuCategory.forEach((menu) => {
           gsap.set(menu, { height: 0, autoAlpha: 0 })
         })
       },
@@ -672,10 +837,16 @@
 
             if (gsap.getProperty(contentElement, 'autoAlpha') == 0) {
               tl.to(contentElement, { height: 'auto', autoAlpha: 1, duration: 0.3, onComplete: resolve })
-                .to(iconElement[1], { rotate: 0, duration: 0.3 }, '<')
+              // iconElementが存在し、その中に2番目の要素がある場合のみ、アニメーションを追加
+              if (iconElement && iconElement[1]) {
+                tl.to(iconElement[1], { rotate: 0, duration: 0.3 }, '<')
+              }
             } else {
               tl.to(contentElement, { height: 0, autoAlpha: 0, duration: 0.3, onComplete: resolve })
-                .to(iconElement[1], { rotate: -90, duration: 0.3 }, '<')
+              // iconElementが存在し、その中に2番目の要素がある場合のみ、アニメーションを追加
+              if (iconElement && iconElement[1]) {
+                tl.to(iconElement[1], { rotate: -90, duration: 0.3 }, '<')
+              }
             }
           })
 
@@ -727,6 +898,7 @@
         })
       },
 
+      // 画面幅1280pxを基準にしてpxをwvに変換
       vwEquivalent (pxValueAt1280) {
         const referenceViewportWidth = 1280
         let currentViewportWidth = window.innerWidth
@@ -734,6 +906,7 @@
         return currentPxValue
       },
 
+      // アサイド：スクロールに応じてアサイドを追従
       asideSticky () {
         const wrapper = this.$refs.archiveAside
         const sidebar = this.$refs.archiveSidebar
@@ -894,23 +1067,136 @@
           this.searchBrands = []
         }
       },
-      
-      async fetchPriceData() {
-        const response = await this.$axios.get(`${this.$nuxt.$url}/custom/v0/element_price_sort`, {
-          params: {
-            min_price: this.priceRange[0],
-            max_price: this.priceRange[1],
-          }
-        })
-        console.log(this.priceRange[0])
-        console.log(this.priceRange[1])
-        console.log(response.data)
-        this.elements = response.data
+
+      // スケールした値を0~1の値に戻す
+      scaleInverse(value) {
+        const { min_price, percentile_25, percentile_50, percentile_75, max_price } = this.details.price_range
+        if (value < percentile_25) {
+          const range = percentile_25 - min_price
+          return (value - min_price) / (4 * range)
+        } else if (value < percentile_50) {
+          const range = percentile_50 - percentile_25
+          return 0.25 + (value - percentile_25) / (4 * range)
+        } else if (value < percentile_75) {
+          const range = percentile_75 - percentile_50
+          return 0.5 + (value - percentile_50) / (4 * range)
+        } else {
+          const range = max_price - percentile_75
+          return 0.75 + (value - percentile_75) / (4 * range)
+        }
+      },
+
+      linearScale(value, domainMin, domainMax, rangeMin, rangeMax) {
+        const factor = (value - domainMin) / (domainMax - domainMin)
+        return rangeMin + factor * (rangeMax - rangeMin)
+      },
+
+      // サイドバー：値段での記事ソートフォーカスが外れた時
+      updateInputPrice(index, value) {
+        this.resetFontSize(value) // スマホでのズームを防ぐ
+        const numericValue = Number(value.target.value.replace(/\D/g, '')) // 入力値から非数字の文字を削除し、数値に変換します
+        const { max_price } = this.details.price_range // 最大値を取得します
+        let newSliderValue
+        if (numericValue <= 100) { // 入力値が100以下の場合、最大値を設定します
+          newSliderValue = index === 0 ? 0 : 1  // indexが0の場合は最小値を0に、1の場合は最大値に設定します
+        }
+        else if (numericValue > max_price) { // 入力値が最大値を超える場合、処理を終了します
+          newSliderValue = 1
+        }
+        else { // それ以外の場合、入力値を使用します
+          newSliderValue = this.scaleInverse(numericValue) // スケールした値を0~1の値に戻す
+        }
+        this.sliderValue.splice(index, 1, newSliderValue) // スライドの位置を正確な場所に移動させる
+        this.updatePrice()
       },
 
       updatePrice: debounce(function() {
-        this.fetchPriceData()
-      }, 300) // 300ミリ秒のデバウンス時間を設定
+        this.handleSelectionChange()
+      }, 300), // 300ミリ秒のデバウンス時間を設定
+
+      // サイドバー：値段での記事ソート時に日本円表記に変換
+      formatCurrency(value) {
+        return new Intl.NumberFormat('ja-JP').format(value) + '円'
+      },
+
+      // サイドバー：値段での記事ソートフォーカス時に数字以外の文字を削除
+      clearFormatting(event) {
+        this.increaseFontSize(event) // スマホでのズームを防ぐ
+        const value = event.target.value.replace(/[,\円]/g, '')
+        event.target.value = value
+      },
+
+      // サイドバー：値段での記事ソート入力時に全角の数字を半角に変換
+      convertToHalfWidth(str) {
+        return str.replace(/[０-９]/g, function(s) {
+          return String.fromCharCode(s.charCodeAt(0) - 0xFEE0)
+        })
+      },
+
+      // サイドバー：値段での記事ソート入力時に数字以外の文字を削除
+      enforceNumericInput(event) {
+        let value = event.target.value
+        value = this.convertToHalfWidth(value) // 全角を半角に変換
+        value = value.replace(/\D/g, '') // 数字以外の文字を削除
+        event.target.value = value
+      },
+
+      // サイドバー：値段での記事ソート入力時にスマホでのズームを防ぐ
+      increaseFontSize(event) {
+        if (window.innerWidth <= 768) { 
+          event.target.style.fontSize = '16px'
+        }
+      },
+
+      // サイドバー：値段での記事ソート入力時にスマホでのズームを防ぐ
+      resetFontSize(event) {
+        if (window.innerWidth <= 768) { 
+          event.target.style.fontSize = ''
+        }
+      },
+
+      // サイドバー：親カテゴリーがチェックされたら子カテゴリーも全てチェックする
+      onParentChecked(parent) {
+        if (this.parentClassesChecked[parent.cat_slug]) {
+          // 親がチェックされたら、子もチェックする
+          if (parent.children && parent.children.length > 0) {
+            // 子要素が存在する場合は子要素のcat_slugを追加
+            parent.children.forEach(child => {
+              if (!this.selectedClasses.includes(child.cat_slug)) {
+                this.selectedClasses.push(child.cat_slug)
+              }
+            })
+          } else {
+            // 子要素が存在しない場合は親要素自体のcat_slugを追加
+            if (!this.selectedClasses.includes(parent.cat_slug)) {
+              this.selectedClasses.push(parent.cat_slug)
+            }
+          }
+        } else {
+          // 親のチェックが外されたら、子のチェックも外す
+          if (parent.children && parent.children.length > 0) {
+            // 子要素が存在する場合は子要素のcat_slugを取り除く
+            parent.children.forEach(child => {
+              const index = this.selectedClasses.indexOf(child.cat_slug)
+              if (index !== -1) {
+                this.selectedClasses.splice(index, 1)
+              }
+            })
+          } else {
+            // 子要素が存在しない場合は親要素自体のcat_slugを取り除く
+            const index = this.selectedClasses.indexOf(parent.cat_slug)
+            if (index !== -1) {
+              this.selectedClasses.splice(index, 1)
+            }
+          }
+        }
+      },
+
+      // サイドバー：カテゴリーのすべてのアコーディオンを閉じる
+      closeAllAccordions() {
+        const allAccordionContents = document.querySelectorAll('.p-archiveAsideMenuCategory__child')
+        gsap.to(allAccordionContents, { height: 0, autoAlpha: 0, duration: 0.3 })
+      }
     },
   }
 </script>

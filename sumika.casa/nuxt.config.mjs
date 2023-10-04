@@ -2437,7 +2437,6 @@ export default {
     "interval": 0,
     "routes": [],
     "exclude": [
-      "/element",
       "/questions",
       "/news",
       "/post",

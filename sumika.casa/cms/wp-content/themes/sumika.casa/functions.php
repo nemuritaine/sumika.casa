@@ -252,19 +252,6 @@ function add_custom_endpoint() {
 		]
 	);
 
-	// エレメント値段ソートデータ取得
-	register_rest_route(
-		'custom/v0', // ネームスペース
-		'/element_price_sort', // ベースURL
-		[ // オプション
-			'methods'  =>  WP_REST_Server::READABLE,
-			// 'permission_callback' => 'rest_permission', // 関数名指定
-			'permission_callback' => '__return_true', // どこからでもアクセス可能
-			'callback' => 'fetch_element_price_sort_data'
-		]
-	);
-
-
 	// エレメント詳細データ取得
 	register_rest_route(
 		'custom/v0',
@@ -497,11 +484,6 @@ function fetch_single_elements_data($param) {
 // エレメント複数データ取得
 function fetch_elements_data($param) {
 	return rest_response('fetch-elements-data', $param);
-}
-
-// エレメント値段ソートデータ取得
-function fetch_element_price_sort_data($param) {
-	return rest_response('fetch-element_price-sort-data', $param);
 }
 
 // エレメント診断データ取得
@@ -988,12 +970,12 @@ add_action('admin_head', 'admin_custom_css');
 
 // ブランドタクソノミーの編集ページにフィールドを追加
 function add_brand_fields($taxonomy) {
-?>
+	?>
 	<div class="form-field">
 		<label for="brand_japanese_reading">日本語読み</label>
 		<input type="text" name="brand_japanese_reading" id="brand_japanese_reading" value="">
 	</div>
-<?php
+	<?php
 }
 add_action('brand_add_form_fields', 'add_brand_fields', 10, 2);
 
@@ -1069,5 +1051,71 @@ function manage_brand_custom_column($content, $column_name, $term_id) {
 	return $content;
 }
 add_filter('manage_brand_custom_column', 'manage_brand_custom_column', 10, 3);
+
+// カスタムタクソノミー分類にサムネイルを追加するDOMを追加
+function create_class_image_field() {
+	?>
+	<div class="form-field">
+		<label for="thumbnail_url">サムネイルURL</label>
+		<input type="text" name="thumbnail_url" id="thumbnail_url" value="">
+		<p class="description">サムネイルのURLを入力してください。</p>
+	</div>
+	<?php
+}
+add_action('class_add_form_fields', 'create_class_image_field', 10, 2);
+
+// カスタムタクソノミー分類のターム編集画面にサムネイルを追加するDOMを追加
+function edit_class_image_field($term) {
+	$thumbnail_url = get_term_meta($term->term_id, 'thumbnail_url', true);
+	?>
+	<tr class="form-field">
+		<th scope="row" valign="top"><label for="thumbnail_url">サムネイルURL</label></th>
+		<td>
+			<input type="text" name="thumbnail_url" id="thumbnail_url" value="<?php echo esc_attr($thumbnail_url); ?>">
+			<p class="description">サムネイルのURLを入力してください。</p>
+		</td>
+	</tr>
+	<?php
+}
+add_action('class_edit_form_fields', 'edit_class_image_field', 10, 2);
+
+// カスタムタクソノミー分類のタームが追加または更新されたときに、入力されたURLを保存
+function save_class_image_field($term_id) {
+	if (isset($_POST['thumbnail_url'])) {
+		$thumbnail_url = $_POST['thumbnail_url'];
+		update_term_meta($term_id, 'thumbnail_url', $thumbnail_url);
+	}
+}
+add_action('edited_class', 'save_class_image_field', 10, 2);
+add_action('create_class', 'save_class_image_field', 10, 2);
+
+// カスタムタクソノミー分類のターム一覧ページに新しいカラム「サムネイル」を追加
+function add_thumbnail_column_to_class( $columns ) {
+	$new_columns = array();
+	$new_columns['cb'] = $columns['cb']; // チェックボックスを先頭に追加
+	// サムネイルカラムを追加
+	$new_columns['thumbnail'] = '<a href="#"><span>サムネイル</span><span class="sorting-indicator"></span></a>';
+	// 他のカラムを追加
+	unset($columns['cb']); // チェックボックスは既に追加したので削除
+	foreach ( $columns as $key => $value ) {
+		$new_columns[ $key ] = $value;
+	}
+	return $new_columns;
+}
+add_filter('manage_edit-class_columns', 'add_thumbnail_column_to_class');
+
+// カスタムタクソノミー分類のターム一覧ページの「サムネイル」カラムに、各タームのサムネイルを表示
+function display_thumbnail_column_for_class( $content, $column_name, $term_id ) {
+	if ( $column_name == 'thumbnail' ) {
+		$thumbnail_url = get_term_meta( $term_id, 'thumbnail_url', true );
+		if ( $thumbnail_url ) {
+			$content = '<img src="' . esc_url( $thumbnail_url ) . '" alt="サムネイル" style="max-width:60px; max-height:60px; display:block; margin:auto;">'; // 画像のサイズは適宜調整してください
+		} else {
+			$content = ''; // サムネイルがない場合の表示内容
+		}
+	}
+	return $content;
+}
+add_filter( 'manage_class_custom_column', 'display_thumbnail_column_for_class', 10, 3 );
 
 ?>

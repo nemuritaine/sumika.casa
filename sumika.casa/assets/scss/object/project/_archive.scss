@@ -199,10 +199,8 @@
   @include responsive(md, max) {
     background-color: color(white);
     border-radius: rem(6);
-    padding-right: 20px;
-    padding-left: 20px;
     padding-bottom: rem(20);
-    height: 80%;
+    height: 100%;
     width: 100%;
   }
 
@@ -234,7 +232,7 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    left: 0;
+    left: 20px;
     color: color(main);
     cursor: pointer;
 
@@ -266,7 +264,7 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    right: 4px;
+    right: 24px;
 
     @include responsive(md, min) {
       display: none;
@@ -282,6 +280,8 @@
     @include responsive(md, max) {
       margin-top: rem(4);
       height: calc(100% - rem(70) - rem(54) - rem(20));
+      padding-right: 20px;
+      padding-left: 20px;
       overflow-y: scroll;
       white-space: nowrap;
       overflow-x: scroll;
@@ -307,6 +307,8 @@
 
     @include responsive(md, max) {
       margin-top: rem(20);
+      padding-right: 20px;
+      padding-left: 20px;
     }
 
     @include responsive(md, min) {
@@ -329,9 +331,10 @@
       cursor: pointer;
     }
 
+    // .p-archiveAsideMenu__body
     #{$this}__body {
-      height: 0;
-      overflow: hidden;
+      // height: 0;
+      // overflow: hidden;
     }
 
     #{$this}__icon {
@@ -391,7 +394,7 @@
       &:nth-of-type(2) {
         height: 2px;
         border-radius: 1px;
-        transform: translate(-50%, -50%) rotate(-90deg);
+        transform: translate(-50%, -50%); // rotate(-90deg)
       }
     }
   }
@@ -511,83 +514,17 @@
         }
       }
     }
-
-    &.--brand {
-      max-height: 200px;
-      overflow: scroll;
-
-      @include responsive(md, min) {
-        max-height: vh(200);
-      }
-
-      #{$this}Item {
-        display: flex;
-        width: 100%;
-        cursor: pointer;
-        padding-top: 6px;
-        padding-bottom: 6px;
-    
-        @include responsive(md, min) {
-          padding-top: vw(6);
-          padding-bottom: vw(6);
-        }
-    
-        &:first-of-type {
-          margin-top: rem(-6);
-    
-          @include responsive(md, min) {
-            margin-top: vw(-6);
-          }
-        }
-    
-        input[type="checkbox"] {
-          cursor: pointer;
-          background-color: color(beige);
-          width: 20px;
-          height: 20px;
-          border-radius: 4px;
-          margin-top: rem(1);
-      
-          @include responsive(md, min) {
-            width: vw(20);
-            height: vw(20);
-            border-radius: vw(4);
-            margin-top: vw(1);
-          }
-      
-          &:checked {
-            background-image: url(/assets/images/common/ico_check.svg);
-            background-color: color(main);
-            background-size: 13px;
-            background-position: center;
-            background-repeat: no-repeat;
-      
-            @include responsive(md, min) {
-              background-size: vw(13);
-            }
-          }
-        }
-      
-        label {
-          @include font(14, 21, 0);
-          width: calc(100% - 20px);
-          padding-left: 9px;
-
-          @include responsive(md, min) {
-            @include vwfont(1280, 14);
-            width: calc(100% - vw(20));
-          }
-        }
-      }
-    }
   }
 
+  // .p-archiveAsideMenu__input
   &__input { // ブランド検索フォーム
     
+    // .p-archiveAsideMenu__input input
     input {
-      @include font(14, 21, 0);
+      @include font(16, 24, 0);
       border-radius: 4px;
       border: 2px solid color(smoke);
+      color: color(grayish);
       width: 100%;
       padding: 10px 16px;
       margin-bottom: 14px;
@@ -602,6 +539,7 @@
 
       &:focus {
         outline-color: color(beige);
+        -webkit-tap-highlight-color: transparent;
       }
     }
   }
@@ -621,6 +559,339 @@
 
       @include hover {
         color: color(darkgray);
+      }
+    }
+  }
+
+  &__brand {
+    max-height: 200px;
+    overflow: scroll;
+    margin-top: rem(5);
+    padding-top: rem(5);
+    margin-bottom: rem(20);
+    margin-left: -8px;
+    width: calc(100% + 16px);
+
+    @include responsive(md, min) {
+      max-height: vh(200);
+      margin-top: vw(5);
+      padding-top: vw(5);
+      margin-bottom: vw(20);
+      width: calc(100% + vw(16));
+      margin-left: vw(-8);
+    }
+  }
+
+  &__price {
+
+  }
+
+  &__category {
+    column-gap: 8px;
+    row-gap: rem(9);
+    margin-top: rem(10);
+    margin-bottom: rem(20);
+    
+    @include responsive(md, min) {
+      column-gap: vw(8);
+      row-gap: vw(9);
+      margin-top: vw(10);
+      margin-bottom: vw(20);
+    }
+  }
+}
+
+.p-archiveAsideMenuCategory {
+  margin-top: rem(9);
+  border: 2px solid color(smoke);
+  border-radius: rem(4);
+  overflow: hidden;
+
+  @include responsive(md, min) {
+    margin-top: vw(9);
+    border-radius: vw(4);
+  }
+
+  
+  &__parent {
+    
+  }
+
+  &__child {
+    
+  }
+
+  input[type="checkbox"] {
+    display: none;
+
+    &:checked {
+
+      & + label {
+        background-color: color(smoke);
+      }
+    }
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    padding-top: rem(7);
+    padding-right: 14px;
+    padding-bottom: rem(7);
+    padding-left: 14px;
+    column-gap: 12px;
+    position: relative;
+
+    @include responsive(sm, min) {
+      padding-right: 16px;
+      padding-left: 16px;
+      column-gap: 10px;
+    }
+
+    @include responsive(md, min) {
+      border-width: vw(1);
+      padding-top: vw(7);
+      padding-right: vw(16);
+      padding-bottom: vw(7);
+      padding-left: vw(16);
+      column-gap: vw(10);
+    }
+  }
+
+  &__image {
+    width: 24px;
+    height: 24px;
+
+    @include responsive(md, min) {
+      width: vw(24);
+      height: vw(24);
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  &__title {
+
+    p {
+      color: color(grayish);
+      @include font(14, 21, 0);
+
+      @include responsive(md, min) {
+        @include vwfont(1280, 14);
+      }
+    }
+  }
+}
+
+.p-archiveAsideMenuBrand {
+  
+  &:first-of-type {
+
+    label {
+      margin-top: rem(-5);
+  
+      @include responsive(md, min) {
+        margin-top: vw(-5);
+      }
+    }
+  }
+
+  label {
+    display: flex;
+    width: 100%;
+    cursor: pointer;
+    padding-top: 5px;
+    padding-bottom: 7px;
+    padding-left: 8px;
+    padding-right: 8px;
+    position: relative;
+
+    @include responsive(md, min) {
+      padding-top: vw(5);
+      padding-bottom: vw(7);
+      padding-left: vw(8);
+      padding-right: vw(8);
+    }
+
+    @include hover {
+      
+      &::before {
+        background-color: color(smoke);
+      }
+    }
+
+    &::before {
+      content: "";
+      display: block;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 4px;
+
+      @include responsive(md, min) {
+        border-radius: vw(4);
+      }
+    }
+  }
+
+  input[type="checkbox"] {
+    cursor: pointer;
+    background-color: color(beige);
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-top: rem(3);
+    position: relative;
+    z-index: 1;
+
+    @include responsive(md, min) {
+      width: vw(20);
+      height: vw(20);
+      border-radius: vw(4);
+      margin-top: vw(3);
+    }
+
+    &:checked {
+      background-image: url(/assets/images/common/ico_check.svg);
+      background-color: color(main);
+      background-size: 13px;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      @include responsive(md, min) {
+        background-size: vw(13);
+      }
+    }
+  }
+  
+  &__heading {
+    width: calc(100% - 20px);
+    padding-left: 9px;
+    position: relative;
+    z-index: 1;
+  
+    @include responsive(md, min) {
+      width: calc(100% - vw(20));
+    }
+
+    span {
+      display: block;
+      @include font(14, 21, 0);
+  
+      @include responsive(md, min) {
+        @include vwfont(1280, 14);
+      }
+  
+      &:nth-of-type(1) {
+        @include font(14, 21, 0);
+  
+        @include responsive(md, min) {
+          @include vwfont(1280, 14);
+        }
+      }
+  
+      &:nth-of-type(2) {
+        @include font(10, 12.5, 0);
+        color: color(darkgray);
+  
+        @include responsive(md, min) {
+          @include vwfont(1280, 10);
+        }
+      }
+    }
+  }
+}
+
+.p-archiveAsideMenuPrice {
+
+  // .p-archiveAsideMenuPrice__slider
+  &__slider {
+    margin-bottom: rem(10);
+    
+    @include responsive(md, min) {
+      margin-bottom: vw(10);
+    }
+
+    .vue-slider-process {
+      background-color: color(main);
+    }
+
+    .vue-slider-rail {
+      background-color: color(beige);
+    }
+
+    .vue-slider-dot-handle {
+      box-shadow: none;
+      border: solid 2px color(beige);
+    }
+  }
+
+  // .p-archiveAsideMenuPrice__range
+  &__range {
+    display: flex;
+    align-items: center;
+    margin-top: rem(10);
+    margin-bottom: rem(20);
+    
+    @include responsive(md, min) {
+      margin-top: vw(10);
+      margin-bottom: vw(20);
+    }
+
+    // .p-archiveAsideMenuPrice__range input
+    input {
+      @include font(16, 21, 0);
+      border-radius: 4px;
+      border: 2px solid color(smoke);
+      padding: 10px 12px;
+      text-align: right;
+      width: calc(per(50, 100) - 24px / 2);
+      color: color(grayish);
+
+      @include responsive(sm, min) {
+        width: calc(per(50, 100) - 30px / 2);
+      }
+          
+      @include responsive(md, min) {
+        @include vwfont(1280, 14);
+        border-width: vw(2);
+        border-radius: vw(4);
+        padding: vw(10) vw(12);
+        width: calc(per(50, 100) - vw(20) / 2);
+      }
+
+      &:focus {
+        outline-color: color(beige);
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      &::-webkit-inner-spin-button,
+      &::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    }
+
+    span {
+      display: block;
+      @include font(14, 21, 0);
+      text-align: center;
+      width: 24px;
+
+      @include responsive(sm, min) {
+        width: 30px;
+      }
+          
+      @include responsive(md, min) {
+        width: vw(20);
+        @include vwfont(1280, 14);
       }
     }
   }

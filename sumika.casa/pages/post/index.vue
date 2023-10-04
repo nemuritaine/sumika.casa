@@ -284,17 +284,30 @@
         this.selectedTags = []
       },
 
+      // アサイド：絞り込みをクリックした際にアサイドを表示する
       animateAside () {
-
         if (window.innerWidth <= 1024) {
+          gsap.to('.p-archive__aside', {
+            autoAlpha: 1,
+            duration: 0.2,
+            onComplete: () => {
+              document.body.style.overflow = 'hidden' // スクロールを無効にする
+            }
+          })
         }
-        gsap.to('.p-archive__aside', { autoAlpha: 1 })
       },
 
+      // アサイド：検索するをクリックした際にアサイドを隠す
       hideAside () {
         if (window.innerWidth <= 1024) {
+          gsap.to('.p-archive__aside', {
+            autoAlpha: 0,
+            duration: 0.2,
+            onComplete: () => {
+              document.body.style.overflow = '' // スクロールを有効にする
+            }
+          })
         }
-        gsap.to('.p-archive__aside', { autoAlpha: 0 })
       },
 
       initAsideAccordions () {

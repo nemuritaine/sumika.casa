@@ -39,6 +39,16 @@
     $post_args['orderby'] = $param['order'];
   }
 
+  // min_priceパラメータまたはmax_priceパラメータがある場合
+  if (!empty($param['min_price']) || !empty($param['max_price'])) {
+    $post_args['meta_query'][] = [
+      'key' => 'p-elementItem__price',
+      'value' => array($param['min_price'], $param['max_price']),
+      'compare' => 'BETWEEN',
+      'type' => 'NUMERIC',
+    ];
+  }
+
   // idパラメータがある場合
   if (!empty($param['id'])) {
     $post_args['post__in'] = $param['id'];

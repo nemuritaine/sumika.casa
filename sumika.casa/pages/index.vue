@@ -50,7 +50,14 @@
                       <div class="c-sortTypeSelector">
                         <select name="category" v-model="selectedItemCategory">
                           <option value="">すべて</option>
-                          <option v-for="item in itemDetails.class" :key="item.id" :value="`${item.cat_slug}`">{{ item.cat_name }}</option>
+                          <option 
+                            v-for="item in itemDetails.class" 
+                            v-if="item.parent === 0"
+                            :key="item.id" 
+                            :value="`${item.cat_slug}`"
+                          >
+                            {{ item.cat_name }}
+                          </option>
                         </select>
                         <div class="c-sortTypeSelector__icon">
                           <div class="c-sortTypeSelectorIcon"></div>

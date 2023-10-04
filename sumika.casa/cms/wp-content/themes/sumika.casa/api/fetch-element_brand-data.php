@@ -4,8 +4,8 @@
 
   $brand_args = [
     'taxonomy' => 'brand',
-    'orderby' => 'menu_order',
-    'order' => 'ASC',
+    'orderby' => 'count', // タームのカウント（使用回数）に基づいて並び替え
+    'order' => 'DESC', // 降順に並び替えて、最も使用されているタームを先頭にする
     'hide_empty' => false
   ];
 
@@ -17,12 +17,10 @@
 
     // 日本語名での検索
     $jp_query_args = $brand_args;
-    $jp_query_args['meta_query'] = [
-      [
-        'key' => 'brand_japanese_reading',
-        'value' => $search_query,
-        'compare' => 'LIKE'
-      ]
+    $jp_query_args['meta_query'][] = [
+      'key' => 'brand_japanese_reading',
+      'value' => $search_query,
+      'compare' => 'LIKE'
     ];
     $brands_by_jp = get_terms($jp_query_args);
 

@@ -76,6 +76,26 @@ textarea {
   font: inherit;
 }
 
+input,
+textarea {
+  &::placeholder {
+    color: color(grayish);
+    font-family:
+      "游ゴシック体",
+      YuGothic,
+      "游ゴシック Medium",
+      "Yu Gothic Medium",
+      "游ゴシック",
+      "Yu Gothic",
+      "Helvetica Neue",
+      Arial,
+      "Hiragino Kaku Gothic ProN",
+      "Hiragino Sans",
+      Meiryo,
+      sans-serif;
+  }
+}
+
 label,
 button,
 select {
